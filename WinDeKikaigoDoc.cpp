@@ -38,6 +38,10 @@ BOOL CWinDeKikaigoDoc::OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
+	for (int i = 0; i<256; i++) {
+		testBytes[i] = i;
+	}
+
 	return TRUE;
 }
 

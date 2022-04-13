@@ -9,6 +9,7 @@
 #include "RightView.h" // ForTest
 
 #include "BinView.h"
+#include "BinViewV2.h"
 #include "ValueView.h"
 #include "AsmView.h"
 
@@ -107,7 +108,7 @@ BOOL CMainFrame::OnCreateClient(
 		return FALSE;
 
 	if (!m_wndSplitter1.CreateView(
-			0, 0, RUNTIME_CLASS(CBinView),
+			0, 0, RUNTIME_CLASS(CBinViewV2),
 			CSize(100, 100),
 			pContext) ||
 		!m_wndSplitter1.CreateView(

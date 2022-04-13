@@ -3,31 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "MDIPractice"=.\MDIPractice\MDIPractice.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "ViewPractice"=.\ViewPractice\ViewPractice.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "WinDeKikaigo"=.\WinDeKikaigo.dsp - Package Owner=<4>
+Project: "ViewPractice"=".\ViewPractice.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{

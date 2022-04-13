@@ -64,7 +64,7 @@ protected:
 };
 
 #ifndef _DEBUG  // .cpp ファイルがデバッグ環境の時使用されます。
-inline CWinDeKikaigoDoc* CLeftView::GetDocument()
+inline CWinDeKikaigoDoc* CAsmView::GetDocument()
    { return (CWinDeKikaigoDoc*)m_pDocument; }
 #endif
 

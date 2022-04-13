@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="WinDeKikaigo" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="ViewPractice" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** 編集しないでください **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
-CFG=WinDeKikaigo - Win32 Debug
+CFG=ViewPractice - Win32 Debug
 !MESSAGE これは有効なﾒｲｸﾌｧｲﾙではありません。 このﾌﾟﾛｼﾞｪｸﾄをﾋﾞﾙﾄﾞするためには NMAKE を使用してください。
 !MESSAGE [ﾒｲｸﾌｧｲﾙのｴｸｽﾎﾟｰﾄ] ｺﾏﾝﾄﾞを使用して実行してください
 !MESSAGE 
-!MESSAGE NMAKE /f "WinDeKikaigo.mak".
+!MESSAGE NMAKE /f "ViewPractice.mak".
 !MESSAGE 
 !MESSAGE NMAKE の実行時に構成を指定できます
 !MESSAGE ｺﾏﾝﾄﾞ ﾗｲﾝ上でﾏｸﾛの設定を定義します。例:
 !MESSAGE 
-!MESSAGE NMAKE /f "WinDeKikaigo.mak" CFG="WinDeKikaigo - Win32 Debug"
+!MESSAGE NMAKE /f "ViewPractice.mak" CFG="ViewPractice - Win32 Debug"
 !MESSAGE 
 !MESSAGE 選択可能なﾋﾞﾙﾄﾞ ﾓｰﾄﾞ:
 !MESSAGE 
-!MESSAGE "WinDeKikaigo - Win32 Release" ("Win32 (x86) Application" 用)
-!MESSAGE "WinDeKikaigo - Win32 Debug" ("Win32 (x86) Application" 用)
+!MESSAGE "ViewPractice - Win32 Release" ("Win32 (x86) Application" 用)
+!MESSAGE "ViewPractice - Win32 Debug" ("Win32 (x86) Application" 用)
 !MESSAGE 
 
 # Begin Project
@@ -29,25 +29,25 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "WinDeKikaigo - Win32 Release"
+!IF  "$(CFG)" == "ViewPractice - Win32 Release"
 
-# PROP BASE Use_MFC 5
+# PROP BASE Use_MFC 6
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "Release"
 # PROP BASE Intermediate_Dir "Release"
 # PROP BASE Target_Dir ""
-# PROP Use_MFC 6
+# PROP Use_MFC 5
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
+# ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
-# ADD BASE RSC /l 0x411 /d "NDEBUG"
-# ADD RSC /l 0x411 /d "NDEBUG" /d "_AFXDLL"
+# ADD BASE RSC /l 0x411 /d "NDEBUG" /d "_AFXDLL"
+# ADD RSC /l 0x411 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -55,25 +55,25 @@ LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
 # ADD LINK32 /nologo /entry:"wWinMainCRTStartup" /subsystem:windows /machine:I386
 
-!ELSEIF  "$(CFG)" == "WinDeKikaigo - Win32 Debug"
+!ELSEIF  "$(CFG)" == "ViewPractice - Win32 Debug"
 
-# PROP BASE Use_MFC 5
+# PROP BASE Use_MFC 6
 # PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "Debug"
 # PROP BASE Intermediate_Dir "Debug"
 # PROP BASE Target_Dir ""
-# PROP Use_MFC 6
+# PROP Use_MFC 5
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /D "_AFXDLL" /FR /Yu"stdafx.h" /FD /GZ /c
+# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /FR /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
-# ADD BASE RSC /l 0x411 /d "_DEBUG"
-# ADD RSC /l 0x411 /d "_DEBUG" /d "_AFXDLL"
+# ADD BASE RSC /l 0x411 /d "_DEBUG" /d "_AFXDLL"
+# ADD RSC /l 0x411 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -85,34 +85,18 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "WinDeKikaigo - Win32 Release"
-# Name "WinDeKikaigo - Win32 Debug"
+# Name "ViewPractice - Win32 Release"
+# Name "ViewPractice - Win32 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\AsmView.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\BinView.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\BinViewV2.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\LeftView.cpp
+SOURCE=.\ChildFrm.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\MainFrm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\RightView.cpp
 # End Source File
 # Begin Source File
 
@@ -121,19 +105,51 @@ SOURCE=.\StdAfx.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ValueView.cpp
+SOURCE=.\ViewPractice.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\WinDeKikaigo.cpp
+SOURCE=.\ViewPractice.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\WinDeKikaigo.rc
+SOURCE=.\ViewPracticeCView.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\WinDeKikaigoDoc.cpp
+SOURCE=.\ViewPracticeDoc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeFormView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeHtmlView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeListView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeMainView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeRichView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeScrollView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeTreeView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeView.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -141,19 +157,7 @@ SOURCE=.\WinDeKikaigoDoc.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\AsmView.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\BinView.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\BinViewV2.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\LeftView.h
+SOURCE=.\ChildFrm.h
 # End Source File
 # Begin Source File
 
@@ -165,23 +169,51 @@ SOURCE=.\Resource.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\RightView.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\StdAfx.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ValueView.h
+SOURCE=.\ViewPractice.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\WinDeKikaigo.h
+SOURCE=.\ViewPracticeCView.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\WinDeKikaigoDoc.h
+SOURCE=.\ViewPracticeDoc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeFormView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeHtmlView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeListView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeMainView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeRichView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeScrollView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeTreeView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ViewPracticeView.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
@@ -193,16 +225,20 @@ SOURCE=.\res\Toolbar.bmp
 # End Source File
 # Begin Source File
 
-SOURCE=.\res\WinDeKikaigo.ico
+SOURCE=.\res\ViewPractice.ico
 # End Source File
 # Begin Source File
 
-SOURCE=.\res\WinDeKikaigo.rc2
+SOURCE=.\res\ViewPractice.rc2
 # End Source File
 # Begin Source File
 
-SOURCE=.\res\WinDeKikaigoDoc.ico
+SOURCE=.\res\ViewPracticeDoc.ico
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=.\ReadMe.txt
+# End Source File
 # End Target
 # End Project
