@@ -21,13 +21,19 @@ public:
 	CWinDeKikaigoDoc* GetDocument();
 
 // オペレーション
-public:
+protected:
 	CFont m_font;
-	DWORD m_fontWidth;	// test!
-	DWORD m_fontHeight;	// test!
-	DWORD m_fontRowMargin;
+	DWORD m_dwFontWidth;	// test!
+	DWORD m_dwFontHeight;	// test!
+	DWORD m_dwRowMargin;
 	DWORD m_dwMaxColumn;
 	DWORD m_dwSel;
+	BOOL  m_bIsSecond;
+
+// 定数
+protected:
+	static const DWORD DATA_KEY2HEX[];
+	static const DWORD DATA_KEY2HEX10[];
 
 // オーバーライド
 	// ClassWizard は仮想関数のオーバーライドを生成します。

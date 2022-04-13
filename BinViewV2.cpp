@@ -13,6 +13,19 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
+// 定数
+const DWORD CBinViewV2::DATA_KEY2HEX[] = {
+	// 0123456789:;<=>?
+	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0, 0, 0, 0, 0, 0,
+	// @ABCDEF
+	0, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F
+};
+const DWORD CBinViewV2::DATA_KEY2HEX10[] = {
+	0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0, 0, 0, 0, 0, 0,
+	0, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xF0
+};
+
+/////////////////////////////////////////////////////////////////////////////
 // CBinViewV2
 
 IMPLEMENT_DYNCREATE(CBinViewV2, CView)
@@ -46,7 +59,7 @@ void CBinViewV2::OnDraw(CDC* pDC)
 	pFontOld = pDC->SelectObject(&m_font);
 
 	// 初期化テスト！
-	DWORD NEXT = m_fontHeight + m_fontRowMargin;
+	DWORD NEXT = m_dwFontHeight + m_dwRowMargin;
 	DWORD ofs = 0;
 	DWORD height = 0;
 
@@ -108,18 +121,18 @@ CWinDeKikaigoDoc* CBinViewV2::GetDocument() // 非デバッグ バージョンはインライン
 
 BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext) 
 {
-	// ビューのフォントを SYSTEM_FIXED_FONT に変更します
 	BOOL bResult = CWnd::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
 
 	// メンバ初期化
-	m_fontHeight = 16;
-//	m_fontWidth = 8; // m_font.CreateFont 関数後に取得する.
-	m_fontRowMargin = 1;
-	m_dwMaxColumn = 4;
+	m_dwFontHeight = 16;
+//	m_dwFontWidth = 8; // m_font.CreateFont 関数後に取得する.
+	m_dwRowMargin = 1;
+	m_dwMaxColumn = 16;
 	m_dwSel = 0;
+	m_bIsSecond = FALSE;
 
 	m_font.CreateFont(
-		m_fontHeight, 0,	// 高さ、幅
+		m_dwFontHeight, 0,	// 高さ、幅
 		0, 0, FW_DONTCARE,		// 角度、角度、太さ
 		FALSE, FALSE, FALSE,	// 斜体、下線、取消線
 		ANSI_CHARSET,			// 文字セット
@@ -130,12 +143,12 @@ BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwS
 		_T("ＭＳ ゴシック")		// タイプフェイス名
 		);
 
-	// 横幅取得
+	// フォント横幅取得
 	CDC* pDC = GetDC();
 	CFont* oldFont = pDC->SelectObject(&m_font);
 	SIZE size;
 	::GetTextExtentPointW(pDC->m_hDC, L"0", 1 , &size);
-	m_fontWidth = size.cx;
+	m_dwFontWidth = size.cx;
 	pDC->SelectObject(&oldFont);
 	ReleaseDC(pDC);
 
@@ -148,27 +161,27 @@ BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwS
 
 void CBinViewV2::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
-	CWinDeKikaigoDoc* pDoc = GetDocument();
+//	CWinDeKikaigoDoc* pDoc = GetDocument();
 }
 
 void CBinViewV2::OnLButtonDown(UINT nFlags, CPoint point) 
 {
 	// 座標計算
-	DWORD x, row, n;
-	x = (point.x + m_fontWidth/2) / m_fontWidth;
-	x /= 3;	// "XX " を1単位とする
-	row = point.y / (m_fontHeight + m_fontRowMargin);
+	DWORD x, row;
+	x = (point.x + m_dwFontWidth/2) / m_dwFontWidth;
+	x /= 3;	// "XX " で1単位とする
+	row = point.y / (m_dwFontHeight + m_dwRowMargin);
 	m_dwSel = row * m_dwMaxColumn + x;
 	
 	// 出力
 	CString buf;
-	buf.Format(L"Down! x:%d, y:%d, n:%d, max:%d\r\n", point.x, point.y, n, m_dwMaxColumn);
+	buf.Format(L"Down! x:%d, y:%d, m_dwSel:%d, max:%d\r\n", point.x, point.y, m_dwSel, m_dwMaxColumn);
 	OutputDebugString(buf);
 
 	// キャレット設定
 	CPoint fixPoint;
-	fixPoint.x = (m_dwSel%m_dwMaxColumn) * (m_fontWidth*3);
-	fixPoint.y = (m_dwSel/m_dwMaxColumn) * (m_fontHeight+m_fontRowMargin);
+	fixPoint.x = (m_dwSel%m_dwMaxColumn) * (m_dwFontWidth*3);
+	fixPoint.y = (m_dwSel/m_dwMaxColumn) * (m_dwFontHeight+m_dwRowMargin);
 	SetFocus();
 	SetCaretPos(fixPoint);
 
@@ -184,10 +197,24 @@ void CBinViewV2::OnLButtonUp(UINT nFlags, CPoint point)
 
 void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
+	CWinDeKikaigoDoc* pDoc = GetDocument();
+	BYTE* b = pDoc->testBytes;
+
 	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
 	switch (nChar) {
-	case '9': m_dwMaxColumn--; break;
-	case '0': m_dwMaxColumn++; break;
+	case VK_LEFT: m_dwMaxColumn--; break;
+	case VK_RIGHT: m_dwMaxColumn++; break;
+	case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7':
+	case '8': case '9': case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': 
+		if (!m_bIsSecond) {
+			b[m_dwSel] = DATA_KEY2HEX10[nChar-0x30];
+			m_bIsSecond = TRUE;
+		} else {
+			b[m_dwSel] |= DATA_KEY2HEX[nChar-0x30];
+			m_bIsSecond = FALSE;
+			m_dwSel++;
+		}
+		break;
 	}
 	RedrawWindow();
 
