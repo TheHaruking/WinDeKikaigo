@@ -18,6 +18,8 @@ protected:
 
 // アトリビュート
 public:
+	void DigitDown();
+	void DigitUp();
 	CWinDeKikaigoDoc* GetDocument();
 
 // オペレーション
@@ -29,11 +31,19 @@ protected:
 	DWORD m_dwMaxColumn;
 	DWORD m_dwSel;
 	BOOL  m_bIsSecond;
+	enum KINDDIGIT {
+		DIGIT_BYTE = 1,
+		DIGIT_WORD = 2,
+		DIGIT_DWORD = 4,
+		DIGIT_QWORD = 8
+	};
+	KINDDIGIT m_eDigit;
 
 // 定数
 protected:
 	static const DWORD DATA_KEY2HEX[];
 	static const DWORD DATA_KEY2HEX10[];
+	static const LPTSTR DATA_HEX2FMT[];
 
 // オーバーライド
 	// ClassWizard は仮想関数のオーバーライドを生成します。
