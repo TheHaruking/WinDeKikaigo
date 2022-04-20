@@ -18,6 +18,7 @@ protected:
 
 // アトリビュート
 public:
+	void CaretPosUpdate();
 	void DigitDown();
 	void DigitUp();
 	CWinDeKikaigoDoc* GetDocument();
@@ -25,8 +26,8 @@ public:
 // オペレーション
 protected:
 	CFont m_font;
-	DWORD m_dwFontWidth;	// test!
-	DWORD m_dwFontHeight;	// test!
+	DWORD m_dwFontWidth;
+	DWORD m_dwFontHeight;
 	DWORD m_dwRowMargin;
 	DWORD m_dwMaxColumn;
 	DWORD m_dwSel;
@@ -41,8 +42,8 @@ protected:
 
 // 定数
 protected:
-	static const DWORD DATA_KEY2HEX[];
-	static const DWORD DATA_KEY2HEX10[];
+	static const BYTE DATA_KEY2HEX[];
+	static const BYTE DATA_KEY2HEX10[];
 	static const LPTSTR DATA_HEX2FMT[];
 
 // オーバーライド

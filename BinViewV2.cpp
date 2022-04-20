@@ -14,13 +14,13 @@ static char THIS_FILE[] = __FILE__;
 
 /////////////////////////////////////////////////////////////////////////////
 // 定数
-const DWORD CBinViewV2::DATA_KEY2HEX[] = {
+const BYTE CBinViewV2::DATA_KEY2HEX[] = {
 	// 0123456789:;<=>?
 	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0, 0, 0, 0, 0, 0,
 	// @ABCDEF
 	0, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F
 };
-const DWORD CBinViewV2::DATA_KEY2HEX10[] = {
+const BYTE CBinViewV2::DATA_KEY2HEX10[] = {
 	0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0, 0, 0, 0, 0, 0,
 	0, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xF0
 };
@@ -75,7 +75,7 @@ void CBinViewV2::OnDraw(CDC* pDC)
 		ofs = i*m_dwMaxColumn;
 		
 		bufLine.Format(L"");
-		for (int j = 0; j < m_dwMaxColumn; j++) {
+		for (DWORD j = 0; j < m_dwMaxColumn; j++) {
 			switch (m_eDigit) {
 			case DIGIT_BYTE: dw = b[ofs+j]; break;
 			case DIGIT_WORD: dw = ((WORD*)b)[ofs+j]; break;
@@ -115,6 +115,52 @@ CWinDeKikaigoDoc* CBinViewV2::GetDocument() // 非デバッグ バージョンはインライン
 #endif //_DEBUG
 
 /////////////////////////////////////////////////////////////////////////////
+// CBinViewV2 内部関数
+
+void CBinViewV2::DigitUp()
+{
+	switch (m_eDigit) {
+	case DIGIT_BYTE:
+		m_eDigit = DIGIT_WORD;
+		m_dwMaxColumn /= 2;
+		break;
+	case DIGIT_WORD:
+		m_eDigit = DIGIT_DWORD;
+		m_dwMaxColumn /= 2;
+		break;
+	}
+}
+
+void CBinViewV2::DigitDown()
+{
+	switch (m_eDigit) {
+	case DIGIT_WORD:
+		m_eDigit = DIGIT_BYTE;
+		m_dwMaxColumn *= 2;
+		break;
+	case DIGIT_DWORD:
+		m_eDigit = DIGIT_WORD;
+		m_dwMaxColumn *= 2;
+		break;
+	}
+}
+
+void CBinViewV2::CaretPosUpdate()
+{
+	CPoint fixPoint;
+	const DWORD GROUPNUM = m_eDigit*2+1; // "XX " で1単位とする
+
+	DWORD sel = m_dwSel/m_eDigit;
+	fixPoint.x = (sel%m_dwMaxColumn) * (m_dwFontWidth*GROUPNUM);
+	fixPoint.y = (sel/m_dwMaxColumn) * (m_dwFontHeight+m_dwRowMargin);
+
+	DWORD selmod = m_dwSel % m_eDigit;
+	fixPoint.x += selmod * m_dwFontWidth*2;
+	SetFocus();
+	SetCaretPos(fixPoint);
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // CBinViewV2 メッセージ ハンドラ
 
 BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext) 
@@ -122,16 +168,16 @@ BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwS
 	BOOL bResult = CWnd::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
 
 	// メンバ初期化
-	m_dwFontHeight = 16;
-//	m_dwFontWidth = 8; // m_font.CreateFont 関数後に取得する.
-	m_dwRowMargin = 1;
-	m_dwMaxColumn = 2;
-	m_dwSel = 0;
-	m_bIsSecond = FALSE;
-	m_eDigit = DIGIT_DWORD; // DIGIT_BYTE
+	m_dwFontHeight = 16;	// フォントの高さ
+//	m_dwFontWidth = 8;		// フォントの幅 (m_font.CreateFont 関数後に取得する)
+	m_dwRowMargin = 1;		// フォントの行余白
+	m_dwMaxColumn = 2;		// 列数
+	m_dwSel = 0;			// 選択中の番号
+	m_bIsSecond = FALSE;	// 下位4ビット編集中か？
+	m_eDigit = DIGIT_DWORD; // 編集モード(桁)
 
 	m_font.CreateFont(
-		m_dwFontHeight, 0,	// 高さ、幅
+		m_dwFontHeight, 0,		// 高さ、幅
 		0, 0, FW_DONTCARE,		// 角度、角度、太さ
 		FALSE, FALSE, FALSE,	// 斜体、下線、取消線
 		ANSI_CHARSET,			// 文字セット
@@ -184,15 +230,7 @@ void CBinViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	OutputDebugString(buf);
 
 	// キャレット設定
-	CPoint fixPoint;
-	DWORD sel = m_dwSel/m_eDigit;
-	fixPoint.x = (sel%m_dwMaxColumn) * (m_dwFontWidth*GROUPNUM);
-	fixPoint.y = (sel/m_dwMaxColumn) * (m_dwFontHeight+m_dwRowMargin);
-
-	DWORD selmod = m_dwSel % m_eDigit;
-	fixPoint.x += selmod * m_dwFontWidth*2;
-	SetFocus();
-	SetCaretPos(fixPoint);
+	CaretPosUpdate();
 
 	CView::OnLButtonDown(nFlags, point);
 }
@@ -218,8 +256,8 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	case VK_LEFT:  m_dwSel--; break;
 	case VK_RIGHT: m_dwSel++; break;
-	case VK_UP:    m_dwSel -= m_dwMaxColumn; break;
-	case VK_DOWN:  m_dwSel += m_dwMaxColumn; break;
+	case VK_UP:    m_dwSel -= m_dwMaxColumn*m_eDigit; break;
+	case VK_DOWN:  m_dwSel += m_dwMaxColumn*m_eDigit; break;
 
 	case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7':
 	case '8': case '9': case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': 
@@ -242,35 +280,8 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 
 	// 画面に反映
+	CaretPosUpdate();
 	RedrawWindow();
 
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
-}
-
-void CBinViewV2::DigitUp()
-{
-	switch (m_eDigit) {
-	case DIGIT_BYTE:
-		m_eDigit = DIGIT_WORD;
-		m_dwMaxColumn /= 2;
-		break;
-	case DIGIT_WORD:
-		m_eDigit = DIGIT_DWORD;
-		m_dwMaxColumn /= 2;
-		break;
-	}
-}
-
-void CBinViewV2::DigitDown()
-{
-	switch (m_eDigit) {
-	case DIGIT_WORD:
-		m_eDigit = DIGIT_BYTE;
-		m_dwMaxColumn *= 2;
-		break;
-	case DIGIT_DWORD:
-		m_eDigit = DIGIT_WORD;
-		m_dwMaxColumn *= 2;
-		break;
-	}
 }

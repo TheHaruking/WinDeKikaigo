@@ -138,11 +138,7 @@ void CBinView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CBinView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	switch (nChar) {
-	default:
-		return;
-	}
-//	CEditView::OnChar(nChar, nRepCnt, nFlags);
+	CEditView::OnChar(nChar, nRepCnt, nFlags);
 }
 
 LRESULT CBinView::WindowProc(UINT message, WPARAM wParam, LPARAM lParam) 
