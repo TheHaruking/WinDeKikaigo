@@ -96,6 +96,14 @@ SOURCE=.\AsmView.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\AsmViewDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\AsmViewV2.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\BinView.cpp
 # End Source File
 # Begin Source File
@@ -142,6 +150,14 @@ SOURCE=.\WinDeKikaigoDoc.cpp
 # Begin Source File
 
 SOURCE=.\AsmView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\AsmViewDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\AsmViewV2.h
 # End Source File
 # Begin Source File
 

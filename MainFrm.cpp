@@ -12,6 +12,7 @@
 #include "BinViewV2.h"
 #include "ValueView.h"
 #include "AsmView.h"
+#include "AsmViewV2.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -116,7 +117,7 @@ BOOL CMainFrame::OnCreateClient(
 			CSize(100, 100), 
 			pContext) ||
 		!m_wndSplitter1.CreateView(
-			2, 0, RUNTIME_CLASS(CAsmView), 
+			2, 0, RUNTIME_CLASS(CAsmViewV2), 
 			CSize(100, 100), 
 			pContext)
 			)
@@ -124,6 +125,9 @@ BOOL CMainFrame::OnCreateClient(
 		m_wndSplitter1.DestroyWindow();
 		return FALSE;
 	}
+
+	// 起動時フォーカスを設定
+	SetActiveView((CView*)m_wndSplitter1.GetPane(0,0));
 
 	// 完了.
 	return TRUE;

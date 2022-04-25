@@ -171,10 +171,10 @@ BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwS
 	m_dwFontHeight = 16;	// フォントの高さ
 //	m_dwFontWidth = 8;		// フォントの幅 (m_font.CreateFont 関数後に取得する)
 	m_dwRowMargin = 1;		// フォントの行余白
-	m_dwMaxColumn = 2;		// 列数
+	m_dwMaxColumn = 4;		// 列数
 	m_dwSel = 0;			// 選択中の番号
 	m_bIsSecond = FALSE;	// 下位4ビット編集中か？
-	m_eDigit = DIGIT_DWORD; // 編集モード(桁)
+	m_eDigit = DIGIT_BYTE; // 編集モード(桁)
 
 	m_font.CreateFont(
 		m_dwFontHeight, 0,		// 高さ、幅
@@ -282,6 +282,7 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	// 画面に反映
 	CaretPosUpdate();
 	RedrawWindow();
+	pDoc->UpdateAllViews(this);
 
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
