@@ -74,8 +74,8 @@ BOOL CWinDeKikaigoApp::InitInstance()
 	// コマンドラインでディスパッチ コマンドを指定します。
 	if (!ProcessShellCommand(cmdInfo))
 		return FALSE;
-	m_pMainWnd->ShowWindow(SW_SHOW);
-//	m_pMainWnd->ShowWindow(SW_MAXIMIZE); // 最大化して表示.
+//	m_pMainWnd->ShowWindow(SW_SHOW);
+	m_pMainWnd->ShowWindow(SW_MAXIMIZE); // 最大化して表示.
 	m_pMainWnd->UpdateWindow();
 
 	return TRUE;

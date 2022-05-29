@@ -91,7 +91,7 @@ BOOL CMainFrame::OnCreateClient(
 	LPCREATESTRUCT /*lpcs*/, // 未使用
 	CCreateContext* pContext)
 {
-#if 0
+#if 1
 	// 親分割ウィンドウ (m_wndSplitter) を作成します
 	if (!m_wndSplitter.CreateStatic(this, 1, 2)) // 縦x横
 		return FALSE;
