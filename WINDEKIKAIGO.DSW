@@ -39,7 +39,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "WinDeKikaigo"=.\WinDeKikaigo.dsp - Package Owner=<4>
+Project: "WinDeKikaigo"=.\WinDeKikaigo\WinDeKikaigo.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
