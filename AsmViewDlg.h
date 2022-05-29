@@ -19,7 +19,7 @@ public:
 // ダイアログ データ
 	//{{AFX_DATA(CAsmViewDlg)
 	enum { IDD = IDD_ASMDLG };
-		// メモ: ClassWizard はこの位置にデータ メンバを追加します。
+	CButton	m_btnLda;
 	//}}AFX_DATA
 
 
@@ -32,10 +32,12 @@ public:
 
 // インプリメンテーション
 protected:
+	CImageList m_imageList;
+	CToolBar m_toolBar;
 
 	// 生成されたメッセージ マップ関数
 	//{{AFX_MSG(CAsmViewDlg)
-		// メモ: ClassWizard はこの位置にメンバ関数を追加します。
+	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -21,8 +21,8 @@ protected: // シリアライズ機能のみから作成します。
 
 // アトリビュート
 protected:
-	CSplitterWnd m_wndSplitter;
-	CSplitterWnd m_wndSplitter1;
+	CSplitterWnd m_wndSplitter;		// 左ペイン-右ペイン
+	CSplitterWnd m_wndSplitter1;	// 右上ペイン-右下ペイン
 public:
 
 // オペレーション
@@ -38,6 +38,7 @@ public:
 
 // インプリメンテーション
 public:
+	void OnSplitLeft();
 	virtual ~CMainFrame();
 	CRightView* GetRightPane();
 #ifdef _DEBUG

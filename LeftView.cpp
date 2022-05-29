@@ -22,9 +22,9 @@ BEGIN_MESSAGE_MAP(CLeftView, CTreeView)
 	//{{AFX_MSG_MAP(CLeftView)
 	//}}AFX_MSG_MAP
 	// 標準印刷コマンド
-	ON_COMMAND(ID_FILE_PRINT, CTreeView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_DIRECT, CTreeView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_PREVIEW, CTreeView::OnFilePrintPreview)
+	//ON_COMMAND(ID_FILE_PRINT, CTreeView::OnFilePrint)
+	//ON_COMMAND(ID_FILE_PRINT_DIRECT, CTreeView::OnFilePrint)
+	//ON_COMMAND(ID_FILE_PRINT_PREVIEW, CTreeView::OnFilePrintPreview)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////

@@ -31,6 +31,10 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	//}}AFX_MSG_MAP
 	ON_UPDATE_COMMAND_UI_RANGE(AFX_ID_VIEW_MINIMUM, AFX_ID_VIEW_MAXIMUM, OnUpdateViewStyles)
 	ON_COMMAND_RANGE(AFX_ID_VIEW_MINIMUM, AFX_ID_VIEW_MAXIMUM, OnViewStyle)
+
+	// テスト
+	ON_COMMAND(ID_SPLIT_LEFT, OnSplitLeft)
+
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -87,6 +91,7 @@ BOOL CMainFrame::OnCreateClient(
 	LPCREATESTRUCT /*lpcs*/, // 未使用
 	CCreateContext* pContext)
 {
+#if 0
 	// 親分割ウィンドウ (m_wndSplitter) を作成します
 	if (!m_wndSplitter.CreateStatic(this, 1, 2)) // 縦x横
 		return FALSE;
@@ -102,7 +107,8 @@ BOOL CMainFrame::OnCreateClient(
 
 	// 子分割ウィンドウ (m_wndSplitter1) を作成します
 	if (!m_wndSplitter1.CreateStatic(
-			&m_wndSplitter, 3, 1, // X 列 1行
+//			&m_wndSplitter, 3, 1, // X 列 1行
+			&m_wndSplitter, 2, 1, // X 列 1行
 			WS_CHILD | WS_VISIBLE | WS_BORDER,  // スタイル WS_BORDER が必要です。
 			m_wndSplitter.IdFromRowCol(0, 1)
 			)) // 縦x横
@@ -112,12 +118,12 @@ BOOL CMainFrame::OnCreateClient(
 			0, 0, RUNTIME_CLASS(CBinViewV2),
 			CSize(100, 100),
 			pContext) ||
-		!m_wndSplitter1.CreateView(
+/*		!m_wndSplitter1.CreateView(
 			1, 0, RUNTIME_CLASS(CValueView), 
 			CSize(100, 100), 
 			pContext) ||
-		!m_wndSplitter1.CreateView(
-			2, 0, RUNTIME_CLASS(CAsmViewV2), 
+*/		!m_wndSplitter1.CreateView(
+			1, 0, RUNTIME_CLASS(CAsmViewV2), 
 			CSize(100, 100), 
 			pContext)
 			)
@@ -131,6 +137,11 @@ BOOL CMainFrame::OnCreateClient(
 
 	// 完了.
 	return TRUE;
+#else
+	// 親分割ウィンドウ (m_wndSplitter) を作成します
+	m_wndSplitter.Create(this, 1, 2, CSize(10, 10), pContext); // 縦x横
+	return TRUE;
+#endif
 }
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
@@ -256,4 +267,33 @@ void CMainFrame::OnViewStyle(UINT nCommandID)
 		if (dwStyle != -1)
 			pView->ModifyStyle(LVS_TYPEMASK, dwStyle);
 	}
+}
+
+/*******************************************************************/
+// 左ペインをトグルする
+void CMainFrame::OnSplitLeft()
+{
+//	MessageBox(L"Hello!");
+
+	m_wndSplitter.SetColumnInfo(0, 100, 90);
+	m_wndSplitter.RecalcLayout();
+
+//	CWnd * pCurView = m_wndSplitter.GetPane(0, 0);
+	
+	//m_wndSplitter.DeleteView(0, 0);
+/*
+	if( !pCurView == NULL )
+	{
+		if(0)
+		{
+			pCurView->ShowWindow(SW_SHOW);
+			m_wndSplitter.RecalcLayout();
+		}
+		else
+		{
+			pCurView->ShowWindow(SW_HIDE);
+			m_wndSplitter.RecalcLayout();
+		}
+	}
+	*/
 }
