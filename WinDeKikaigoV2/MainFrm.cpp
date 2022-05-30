@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "WinDeKikaigoV2.h"
+#include "WinDeKikaigoV2View.h"
 
 #include "MainFrm.h"
 
@@ -53,7 +54,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP
-		| CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
+		/*| CBRS_GRIPPER*/ | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
 		!m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
 	{
 		TRACE0("Failed to create toolbar\n");
@@ -70,9 +71,25 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// TODO: ツール バーをドッキング可能にしない場合は以下の３行を削除
 	//       してください。
-	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
-	EnableDocking(CBRS_ALIGN_ANY);
-	DockControlBar(&m_wndToolBar);
+	//m_wndToolBar.EnableDocking(CBRS_ALIGN_TOP);
+	//EnableDocking(CBRS_ALIGN_ANY);
+	//DockControlBar(&m_wndToolBar);
+
+	// 左ペイン
+	if (!m_wndDialogBar_L.Create(this,
+			IDD_DIALOGBAR_L, CBRS_LEFT, 0))
+	{
+		TRACE0("Failed to create status bar\n");
+		return -1;      // 作成に失敗
+	}
+
+	// 右ペイン
+	if (!m_wndDialogBar_R.Create(this,
+			IDD_DIALOGBAR_R, CBRS_RIGHT, 0))
+	{
+		TRACE0("Failed to create status bar\n");
+		return -1;      // 作成に失敗
+	}
 
 	return 0;
 }
@@ -106,3 +123,33 @@ void CMainFrame::Dump(CDumpContext& dc) const
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame メッセージ ハンドラ
 
+
+BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext) 
+{
+	// TODO: この位置に固有の処理を追加するか、または基本クラスを呼び出してください
+	// return CFrameWnd::OnCreateClient(lpcs, pContext);
+	
+		// 親分割ウィンドウ (m_wndSplitter) を作成します
+	if (!m_wndSplitter.CreateStatic(this, 2, 1)) // 縦x横
+		return FALSE;
+
+	if (!m_wndSplitter.CreateView(
+			0, 0, RUNTIME_CLASS(CWinDeKikaigoV2View),
+			CSize(100, 1000),
+			pContext) ||
+		!m_wndSplitter.CreateView(
+			1, 0, RUNTIME_CLASS(CWinDeKikaigoV2View),
+			CSize(100, 10),
+			pContext)	
+			)
+	{
+		m_wndSplitter.DestroyWindow();
+		return FALSE;
+	}
+
+	// 起動時フォーカスを設定
+	SetActiveView((CView*)m_wndSplitter.GetPane(0,0));
+
+	// 完了.
+	return TRUE;
+}

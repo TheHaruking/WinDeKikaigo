@@ -9,6 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "WinDeKikaigoV2Doc.h"
 
 class CWinDeKikaigoV2View : public CView
 {

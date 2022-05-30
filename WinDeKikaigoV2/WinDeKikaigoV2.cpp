@@ -61,7 +61,7 @@ BOOL CWinDeKikaigoV2App::InitInstance()
 	// 設定が保存される下のレジストリ キーを変更します。
 	// TODO: この文字列を、会社名または所属など適切なものに
 	// 変更してください。
-	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
+	//SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
 	LoadStdProfileSettings();  // 標準の INI ファイルのオプションをローﾄﾞします (MRU を含む)
 
@@ -85,7 +85,8 @@ BOOL CWinDeKikaigoV2App::InitInstance()
 		return FALSE;
 
 	// メイン ウィンドウが初期化されたので、表示と更新を行います。
-	m_pMainWnd->ShowWindow(SW_SHOW);
+	// m_pMainWnd->ShowWindow(SW_SHOW);
+	m_pMainWnd->ShowWindow(SW_MAXIMIZE);
 	m_pMainWnd->UpdateWindow();
 
 	return TRUE;

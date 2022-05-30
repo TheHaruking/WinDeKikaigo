@@ -25,7 +25,10 @@ public:
 // オーバーライド
 	// ClassWizard は仮想関数のオーバーライドを生成します。
 	//{{AFX_VIRTUAL(CMainFrame)
+	public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	protected:
+	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 	//}}AFX_VIRTUAL
 
 // インプリメンテーション
@@ -39,6 +42,10 @@ public:
 protected:  // コントロール バー用メンバ
 	CStatusBar  m_wndStatusBar;
 	CToolBar    m_wndToolBar;
+	// 追加
+	CDialogBar  m_wndDialogBar_L;
+	CDialogBar  m_wndDialogBar_R;
+	CSplitterWnd m_wndSplitter;
 
 // 生成されたメッセージ マップ関数
 protected:
