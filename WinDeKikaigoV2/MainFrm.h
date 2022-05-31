@@ -51,8 +51,8 @@ protected:  // コントロール バー用メンバ
 protected:
 	//{{AFX_MSG(CMainFrame)
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-		// メモ - ClassWizard はこの位置にメンバ関数を追加または削除します。
-		//        この位置に生成されるコードを編集しないでください。
+	afx_msg void OnAppLeftpane();
+	afx_msg void OnAppRightpane();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

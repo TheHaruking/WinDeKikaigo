@@ -20,9 +20,9 @@ IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	//{{AFX_MSG_MAP(CMainFrame)
-		// メモ - ClassWizard はこの位置にマッピング用のマクロを追加または削除します。
-		//        この位置に生成されるコードを編集しないでください。
 	ON_WM_CREATE()
+	ON_COMMAND(ID_APP_LEFTPANE, OnAppLeftpane)
+	ON_COMMAND(ID_APP_RIGHTPANE, OnAppRightpane)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -152,4 +152,18 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 
 	// 完了.
 	return TRUE;
+}
+
+void CMainFrame::OnAppLeftpane() 
+{
+	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
+	BOOL bVisible = m_wndDialogBar_L.IsWindowVisible();
+	this->ShowControlBar(&m_wndDialogBar_L, bVisible^1, FALSE);
+}
+
+void CMainFrame::OnAppRightpane() 
+{
+	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
+	BOOL bVisible = m_wndDialogBar_R.IsWindowVisible();
+	this->ShowControlBar(&m_wndDialogBar_R, bVisible^1, FALSE);
 }
