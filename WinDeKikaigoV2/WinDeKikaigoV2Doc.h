@@ -18,6 +18,7 @@ protected: // シリアライズ機能のみから作成します。
 
 // アトリビュート
 public:
+	BYTE m_data[0xffff]; // テスト用仮データ
 
 // オペレーション
 public:

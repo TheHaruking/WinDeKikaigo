@@ -54,6 +54,7 @@ void CWinDeKikaigoV2View::OnDraw(CDC* pDC)
 	CWinDeKikaigoV2Doc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	// TODO: ‚±‚ÌêŠ‚ÉƒlƒCƒeƒBƒu ƒf[ƒ^—p‚Ì•`‰æƒR[ƒh‚ğ’Ç‰Á‚µ‚Ü‚·B
+	pDC->TextOut(0, 0, L"‚±‚ñ‚É‚¿‚Íššš");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -79,3 +80,4 @@ CWinDeKikaigoV2Doc* CWinDeKikaigoV2View::GetDocument() // ”ñƒfƒoƒbƒO ƒo[ƒWƒ‡ƒ“‚
 
 /////////////////////////////////////////////////////////////////////////////
 // CWinDeKikaigoV2View ƒNƒ‰ƒX‚ÌƒƒbƒZ[ƒW ƒnƒ“ƒhƒ‰
+

@@ -44,6 +44,9 @@ BOOL CWinDeKikaigoV2Doc::OnNewDocument()
 
 	// TODO: この位置に再初期化処理を追加してください。
 	// (SDI ドキュメントはこのドキュメントを再利用します。)
+	for (int i = 0; i < 0xFFFF; i++) {
+		m_data[i] = i&0xFF;
+	}
 
 	return TRUE;
 }

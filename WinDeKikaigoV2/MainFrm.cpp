@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include "WinDeKikaigoV2.h"
 #include "WinDeKikaigoV2View.h"
+#include "BinViewV2.h"
+#include "AsmViewV2.h"
 
 #include "MainFrm.h"
 
@@ -129,16 +131,16 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	// TODO: この位置に固有の処理を追加するか、または基本クラスを呼び出してください
 	// return CFrameWnd::OnCreateClient(lpcs, pContext);
 	
-		// 親分割ウィンドウ (m_wndSplitter) を作成します
+	// 親分割ウィンドウ (m_wndSplitter) を作成します
 	if (!m_wndSplitter.CreateStatic(this, 2, 1)) // 縦x横
 		return FALSE;
 
 	if (!m_wndSplitter.CreateView(
-			0, 0, RUNTIME_CLASS(CWinDeKikaigoV2View),
-			CSize(100, 1000),
+			0, 0, RUNTIME_CLASS(CBinViewV2),
+			CSize(100, 280),
 			pContext) ||
 		!m_wndSplitter.CreateView(
-			1, 0, RUNTIME_CLASS(CWinDeKikaigoV2View),
+			1, 0, RUNTIME_CLASS(CAsmViewV2),
 			CSize(100, 10),
 			pContext)	
 			)
