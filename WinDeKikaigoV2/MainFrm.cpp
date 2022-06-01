@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "WinDeKikaigoV2.h"
-#include "WinDeKikaigoV2View.h"
+
 #include "BinViewV2.h"
 #include "AsmViewV2.h"
 

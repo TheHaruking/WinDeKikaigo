@@ -6,7 +6,6 @@
 
 #include "MainFrm.h"
 #include "WinDeKikaigoV2Doc.h"
-#include "WinDeKikaigoV2View.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -62,18 +61,16 @@ BOOL CWinDeKikaigoV2App::InitInstance()
 	// TODO: この文字列を、会社名または所属など適切なものに
 	// 変更してください。
 	//SetRegistryKey(_T("Local AppWizard-Generated Applications"));
-
 	LoadStdProfileSettings();  // 標準の INI ファイルのオプションをローﾄﾞします (MRU を含む)
 
 	// アプリケーション用のドキュメント テンプレートを登録します。ドキュメント テンプレート
 	//  はドキュメント、フレーム ウィンドウとビューを結合するために機能します。
-
 	CSingleDocTemplate* pDocTemplate;
 	pDocTemplate = new CSingleDocTemplate(
 		IDR_MAINFRAME,
 		RUNTIME_CLASS(CWinDeKikaigoV2Doc),
 		RUNTIME_CLASS(CMainFrame),       // メイン SDI フレーム ウィンドウ
-		RUNTIME_CLASS(CWinDeKikaigoV2View));
+		RUNTIME_CLASS(CView));
 	AddDocTemplate(pDocTemplate);
 
 	// DDE、file open など標準のシェル コマンドのコマンドラインを解析します。
