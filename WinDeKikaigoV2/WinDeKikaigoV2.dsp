@@ -122,10 +122,6 @@ SOURCE=.\WinDeKikaigoV2.rc
 
 SOURCE=.\WinDeKikaigoV2Doc.cpp
 # End Source File
-# Begin Source File
-
-SOURCE=.\WinDeKikaigoV2View.cpp
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -161,10 +157,6 @@ SOURCE=.\WinDeKikaigoV2.h
 # Begin Source File
 
 SOURCE=.\WinDeKikaigoV2Doc.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\WinDeKikaigoV2View.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
