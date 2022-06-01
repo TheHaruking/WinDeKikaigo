@@ -91,6 +91,18 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\AsmViewDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\AsmViewV2.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\BinViewV2.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\MainFrm.cpp
 # End Source File
 # Begin Source File
@@ -118,6 +130,18 @@ SOURCE=.\WinDeKikaigoV2View.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\AsmViewDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\AsmViewV2.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\BinViewV2.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\MainFrm.h

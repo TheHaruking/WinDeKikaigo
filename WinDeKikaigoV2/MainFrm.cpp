@@ -25,6 +25,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_CREATE()
 	ON_COMMAND(ID_APP_LEFTPANE, OnAppLeftpane)
 	ON_COMMAND(ID_APP_RIGHTPANE, OnAppRightpane)
+	ON_COMMAND(ID_APP_DEBUG, OnAppDebug)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -43,7 +44,6 @@ static UINT indicators[] =
 CMainFrame::CMainFrame()
 {
 	// TODO: この位置にメンバの初期化処理コードを追加してください。
-	
 }
 
 CMainFrame::~CMainFrame()
@@ -52,7 +52,7 @@ CMainFrame::~CMainFrame()
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
+	if (CFrameWnd::OnCreate(lpCreateStruct) == -1) // OnCreateClient はここ
 		return -1;
 
 	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP
@@ -92,6 +92,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("Failed to create status bar\n");
 		return -1;      // 作成に失敗
 	}
+
+	// 起動時のフォーカスを指定
+	SetActiveView((CView*)m_wndSplitter.GetPane(0,0));
 
 	return 0;
 }
@@ -135,22 +138,13 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	if (!m_wndSplitter.CreateStatic(this, 2, 1)) // 縦x横
 		return FALSE;
 
-	if (!m_wndSplitter.CreateView(
-			0, 0, RUNTIME_CLASS(CBinViewV2),
-			CSize(100, 280),
-			pContext) ||
-		!m_wndSplitter.CreateView(
-			1, 0, RUNTIME_CLASS(CAsmViewV2),
-			CSize(100, 10),
-			pContext)	
-			)
+	if (!m_wndSplitter.CreateView(0, 0, RUNTIME_CLASS(CBinViewV2), CSize(100, 280), pContext) ||
+		!m_wndSplitter.CreateView(1, 0, RUNTIME_CLASS(CAsmViewV2), CSize(100, 10), pContext)	
+		)
 	{
 		m_wndSplitter.DestroyWindow();
 		return FALSE;
 	}
-
-	// 起動時フォーカスを設定
-	SetActiveView((CView*)m_wndSplitter.GetPane(0,0));
 
 	// 完了.
 	return TRUE;
@@ -168,4 +162,9 @@ void CMainFrame::OnAppRightpane()
 	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
 	BOOL bVisible = m_wndDialogBar_R.IsWindowVisible();
 	this->ShowControlBar(&m_wndDialogBar_R, bVisible^1, FALSE);
+}
+
+void CMainFrame::OnAppDebug() 
+{
+	MessageBox(L"Hello!");
 }

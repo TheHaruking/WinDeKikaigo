@@ -53,6 +53,7 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnAppLeftpane();
 	afx_msg void OnAppRightpane();
+	afx_msg void OnAppDebug();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
