@@ -6,6 +6,7 @@
 
 #include "BinViewV2.h"
 #include "AsmViewV2.h"
+#include "AsmInputBarDlg.h"
 
 #include "MainFrm.h"
 
@@ -135,11 +136,11 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	// return CFrameWnd::OnCreateClient(lpcs, pContext);
 	
 	// 親分割ウィンドウ (m_wndSplitter) を作成します
-	if (!m_wndSplitter.CreateStatic(this, 2, 1)) // 縦x横
+	if (!m_wndSplitter.CreateStatic(this, 1, 2)) // 縦x横
 		return FALSE;
 
-	if (!m_wndSplitter.CreateView(0, 0, RUNTIME_CLASS(CBinViewV2), CSize(100, 280), pContext) ||
-		!m_wndSplitter.CreateView(1, 0, RUNTIME_CLASS(CAsmViewV2), CSize(100, 10), pContext)	
+	if (!m_wndSplitter.CreateView(0, 0, RUNTIME_CLASS(CBinViewV2), CSize(150, -1), pContext) ||
+		!m_wndSplitter.CreateView(0, 1, RUNTIME_CLASS(CAsmViewV2), CSize(-1, -1), pContext)	
 		)
 	{
 		m_wndSplitter.DestroyWindow();
@@ -166,5 +167,6 @@ void CMainFrame::OnAppRightpane()
 
 void CMainFrame::OnAppDebug() 
 {
-	MessageBox(L"Hello!");
+	CAsmInputBarDlg dlg;
+	dlg.DoModal();
 }

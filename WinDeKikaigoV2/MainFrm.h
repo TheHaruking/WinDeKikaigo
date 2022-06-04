@@ -9,6 +9,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "AsmInputBar.h"
+
 class CMainFrame : public CFrameWnd
 {
 	
@@ -33,6 +35,7 @@ public:
 
 // インプリメンテーション
 public:
+	void OnInputLda();
 	virtual ~CMainFrame();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -40,11 +43,11 @@ public:
 #endif
 
 protected:  // コントロール バー用メンバ
-	CStatusBar  m_wndStatusBar;
-	CToolBar    m_wndToolBar;
+	CStatusBar   m_wndStatusBar;
+	CToolBar     m_wndToolBar;
 	// 追加
-	CDialogBar  m_wndDialogBar_L;
-	CDialogBar  m_wndDialogBar_R;
+	CDialogBar   m_wndDialogBar_L;
+	CAsmInputBar m_wndDialogBar_R;
 	CSplitterWnd m_wndSplitter;
 
 // 生成されたメッセージ マップ関数

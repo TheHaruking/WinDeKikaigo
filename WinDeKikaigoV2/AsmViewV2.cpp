@@ -6,8 +6,6 @@
 #include "WinDeKikaigoV2doc.h"
 #include "AsmViewV2.h"
 
-#include "AsmViewDlg.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -180,8 +178,6 @@ void CAsmViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point) 
 {
 	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
-	CAsmViewDlg dlg;
-	dlg.DoModal();
 
 	CView::OnLButtonDown(nFlags, point);
 }

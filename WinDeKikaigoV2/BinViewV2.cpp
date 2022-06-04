@@ -70,12 +70,18 @@ void CBinViewV2::OnDraw(CDC* pDC)
 	CString buf, bufLine;
 	BYTE* b = pDoc->m_data;
 	DWORD dw;
+	DWORD count = 0;
+	// DIGIT_BYTE:1 ... DIGIT_QWORD:8
+	const DWORD MAXCOUNTTBL[9] = {
+		0, 64, 32, 0, 16, 0, 0, 0, 8
+	};
 
-	for (int i = 0; i < 8; i++) {
-		ofs = i*m_dwMaxColumn;
+	// 64 バイト(DIGIT_BYTEの場合) 分出力する
+	for (int i = 0; count < MAXCOUNTTBL[m_eDigit]; i++) {
+		ofs = i*m_nMaxColumn;
 		
 		bufLine.Format(L"");
-		for (DWORD j = 0; j < m_dwMaxColumn; j++) {
+		for (INT j = 0; j < m_nMaxColumn; j++) {
 			switch (m_eDigit) {
 			case DIGIT_BYTE: dw = b[ofs+j]; break;
 			case DIGIT_WORD: dw = ((WORD*)b)[ofs+j]; break;
@@ -83,6 +89,7 @@ void CBinViewV2::OnDraw(CDC* pDC)
 			}
 			buf.Format(DATA_HEX2FMT[m_eDigit], dw);
 			bufLine += buf;
+			count++;
 		}
 		pDC->TextOut(0, height, bufLine);
 		height += NEXT;
@@ -122,11 +129,11 @@ void CBinViewV2::DigitUp()
 	switch (m_eDigit) {
 	case DIGIT_BYTE:
 		m_eDigit = DIGIT_WORD;
-		m_dwMaxColumn /= 2;
+		m_nMaxColumn /= 2;
 		break;
 	case DIGIT_WORD:
 		m_eDigit = DIGIT_DWORD;
-		m_dwMaxColumn /= 2;
+		m_nMaxColumn /= 2;
 		break;
 	}
 }
@@ -136,11 +143,11 @@ void CBinViewV2::DigitDown()
 	switch (m_eDigit) {
 	case DIGIT_WORD:
 		m_eDigit = DIGIT_BYTE;
-		m_dwMaxColumn *= 2;
+		m_nMaxColumn *= 2;
 		break;
 	case DIGIT_DWORD:
 		m_eDigit = DIGIT_WORD;
-		m_dwMaxColumn *= 2;
+		m_nMaxColumn *= 2;
 		break;
 	}
 }
@@ -151,8 +158,8 @@ void CBinViewV2::CaretPosUpdate()
 	const DWORD GROUPNUM = m_eDigit*2+1; // "XX " で1単位とする
 
 	DWORD sel = m_nSel/m_eDigit;
-	fixPoint.x = (sel%m_dwMaxColumn) * (m_dwFontWidth*GROUPNUM);
-	fixPoint.y = (sel/m_dwMaxColumn) * (m_dwFontHeight+m_dwRowMargin);
+	fixPoint.x = (sel%m_nMaxColumn) * (m_dwFontWidth*GROUPNUM);
+	fixPoint.y = (sel/m_nMaxColumn) * (m_dwFontHeight+m_dwRowMargin);
 
 	DWORD selmod = m_nSel % m_eDigit;
 	fixPoint.x += selmod * m_dwFontWidth*2;
@@ -171,7 +178,7 @@ BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwS
 	m_dwFontHeight = 16;	// フォントの高さ
 //	m_dwFontWidth = 8;		// フォントの幅 (m_font.CreateFont 関数後に取得する)
 	m_dwRowMargin = 1;		// フォントの行余白
-	m_dwMaxColumn = 4;		// 列数
+	m_nMaxColumn = 4;		// 列数
 	m_nSel = 0;			// 選択中の番号
 	m_bIsSecond = FALSE;	// 下位4ビット編集中か？
 	m_eDigit = DIGIT_BYTE; // 編集モード(桁)
@@ -220,13 +227,13 @@ void CBinViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	xmod = (x % GROUPNUM)/2; // 空白クリック時に次項を選択するが許容する。
 	x /= GROUPNUM;
 	row = point.y / (m_dwFontHeight + m_dwRowMargin);
-	m_nSel = row * m_dwMaxColumn + x;
+	m_nSel = row * m_nMaxColumn + x;
 	m_nSel *= m_eDigit;
 	m_nSel += xmod;
 	
 	// 出力
 	CString buf;
-	buf.Format(L"Down! x:%d, y:%d, m_nSel:%d, max:%d\r\n", point.x, point.y, m_nSel, m_dwMaxColumn);
+	buf.Format(L"Down! x:%d, y:%d, m_nSel:%d, max:%d\r\n", point.x, point.y, m_nSel, m_nMaxColumn);
 	OutputDebugString(buf);
 
 	// キャレット設定
@@ -249,15 +256,15 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
 	switch (nChar) {
-	case 'I': m_dwMaxColumn--; break;
-	case 'O': m_dwMaxColumn++; break;
+	case 'I': m_nMaxColumn--; break;
+	case 'O': m_nMaxColumn++; break;
 	case 'U': DigitDown(); break;
 	case 'P': DigitUp(); break;
 
 	case VK_LEFT:  m_nSel--; break;
 	case VK_RIGHT: m_nSel++; break;
-	case VK_UP:    m_nSel -= m_dwMaxColumn*m_eDigit; break;
-	case VK_DOWN:  m_nSel += m_dwMaxColumn*m_eDigit; break;
+	case VK_UP:    m_nSel -= m_nMaxColumn*m_eDigit; break;
+	case VK_DOWN:  m_nSel += m_nMaxColumn*m_eDigit; break;
 
 	case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7':
 	case '8': case '9': case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': 
@@ -282,6 +289,7 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	// 範囲チェック
 	m_nSel = (m_nSel >= 0) ? m_nSel : 0; // 下限値
 //	xxx									 // 上限値 (TODO)
+	m_nMaxColumn = (m_nMaxColumn >= 1) ? m_nMaxColumn : 1;
 
 	// 画面に反映
 	CaretPosUpdate();

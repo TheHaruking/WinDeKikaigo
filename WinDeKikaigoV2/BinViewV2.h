@@ -31,7 +31,7 @@ protected:
 	DWORD m_dwFontWidth;
 	DWORD m_dwFontHeight;
 	DWORD m_dwRowMargin;
-	DWORD m_dwMaxColumn;
+	INT   m_nMaxColumn;
 	INT   m_nSel;
 	BOOL  m_bIsSecond;
 	enum KINDDIGIT {
@@ -78,8 +78,8 @@ protected:
 };
 
 #ifndef _DEBUG  // .cpp ファイルがデバッグ環境の時使用されます。
-inline CWinDeKikaigoDoc* CBinViewV2::GetDocument()
-   { return (CWinDeKikaigoDoc*)m_pDocument; }
+inline CWinDeKikaigoV2Doc* CBinViewV2::GetDocument()
+   { return (CWinDeKikaigoV2Doc*)m_pDocument; }
 #endif
 /////////////////////////////////////////////////////////////////////////////
 
