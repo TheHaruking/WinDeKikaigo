@@ -15,7 +15,7 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // 定数
 const DWORD CAsmViewV2::BIN2OP[256] = {
-//	0       1       2       3       4       5       6       7       8       9       A       B       C       D       E       F
+// 00       1       2       3       4       5       6       7       8       9       A       B       C       D       E       F
 	OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, 
 	OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, 
 	OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, 
@@ -33,12 +33,12 @@ const DWORD CAsmViewV2::BIN2OP[256] = {
 // C0
 	OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, 
 	OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, 
-	OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, 
+	OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_NOP, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, 
 	OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND, OP_UND
 };
 
 const DWORD CAsmViewV2::BIN2ADR[256] = {
-//  0         1         2         3         4         5         6         7         8         9         A         B         C         D         E         F
+// 00         1         2         3         4         5         6         7         8         9         A         B         C         D         E         F
 	ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, 
 	ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, 
 	ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, ADR_NONE, 
@@ -122,24 +122,50 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 {
 	CWinDeKikaigoV2Doc* pDoc = GetDocument();
 	
-	// TODO: この位置に描画用のコードを追加してください
-	DWORD dwOp = BIN2OP[pDoc->m_data[0]];
-	DWORD dwAdr = BIN2ADR[pDoc->m_data[0]];
-	DWORD dwOpr = ADR2OPR[dwAdr];
+	// 逆アセンブル (64 バイト(+α)分) 表示
+	// ※未定義命令以降は DATA 表示に切り替える
+	const BYTE* BIN = pDoc->m_data; // バイナリ
+	DWORD ip = 0; // バイナリ読み取り位置
 
-	CString buf;
-	buf.Format(L"%s", OP2ASM[dwOp]);
-	pDC->TextOut(0, 0, buf);
+	DWORD dwOp, dwAdr, dwOpr; // オペコード, アドレッシング, オペランドのバイト数
+	CString buf; // 表示用
+	INT i = 0;
+	for (; ip < 64; i++) // i は表示縦座標に使用
+	{
+		dwOp = BIN2OP[BIN[ip]];
+		dwAdr = BIN2ADR[BIN[ip]];
+		dwOpr = ADR2OPR[dwAdr];   // 0 or 1 or 2
 
-	// オペランド.
-	DWORD val1 = 0;
-	DWORD val2 = 0;
-	switch (dwOpr) {
-	case 1: val1 = pDoc->m_data[1]; break;
-	case 2: val1 = pDoc->m_data[2]; val2 = pDoc->m_data[1]; break;
+		// UND だった場合中断
+		if (dwOp == OP_UND)
+			break;
+
+		// オペランド.
+		DWORD val1 = 0;
+		DWORD val2 = 0;
+		switch (dwOpr) {
+		case 1: val1 = BIN[ip+1]; break;
+		case 2: val1 = BIN[ip+2]; val2 = BIN[ip+1]; break;
+		}
+
+		// 表示
+		buf.Format(L"%s", OP2ASM[dwOp]);
+		pDC->TextOut(0, i*16, buf);
+		buf.Format(ADR2STR[dwAdr], val1, val2);
+		pDC->TextOut(4*8, i*16, buf);
+
+		// 読み進める
+		ip += 1 + dwOpr;
 	}
-	buf.Format(ADR2STR[dwAdr], val1, val2);
-	pDC->TextOut(4*8, 0, buf);
+
+	// 残りは DATA として表示
+	for (; ip < 64; i++) {
+		buf.Format(L"%02X %02X %02X %02X", BIN[ip+0], BIN[ip+1], BIN[ip+2], BIN[ip+3]);
+		pDC->TextOut(0, i*16, buf);
+		ip += 4;
+	}
+
+	/****************************************/
 }
 
 /////////////////////////////////////////////////////////////////////////////
