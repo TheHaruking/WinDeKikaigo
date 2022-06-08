@@ -6,9 +6,6 @@
 #include "AsmInputBar.h"
 #include "AsmInputBarDlg.h"
 
-#include "WinDeKikaigoV2Doc.h"
-#include "MainFrm.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
