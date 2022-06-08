@@ -7,6 +7,8 @@
 // AsmInputDlg.h : ヘッダー ファイル
 //
 
+#include "WinDeKikaigoV2Doc.h"
+
 /////////////////////////////////////////////////////////////////////////////
 // CAsmInputBar ダイアログ
 
@@ -29,6 +31,10 @@ public:
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
 	//}}AFX_VIRTUAL
+
+public:
+	CWinDeKikaigoV2Doc* m_pDoc; // AsmView から取得
+	LONG m_nCurIp; // 現在選択中の Instruction Pointer (AsmView からコピー)
 
 // インプリメンテーション
 protected:

@@ -35,6 +35,7 @@ void CAsmInputBarDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CAsmInputBarDlg, CDialog)
 	//{{AFX_MSG_MAP(CAsmInputBarDlg)
 	ON_BN_CLICKED(IDC_ASMDLG_1, OnAsmdlg1)
+	ON_WM_KEYDOWN()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -64,4 +65,12 @@ void CAsmInputBarDlg::OnAsmdlg1()
 {
 	m_dwSelect = 1;
 	this->OnOK();
+}
+
+void CAsmInputBarDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
+{
+	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
+
+	
+	CDialog::OnKeyDown(nChar, nRepCnt, nFlags);
 }

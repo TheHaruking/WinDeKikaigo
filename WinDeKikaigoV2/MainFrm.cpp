@@ -97,6 +97,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// 起動時のフォーカスを指定
 	SetActiveView((CView*)m_wndSplitter.GetPane(0,0));
 
+	// AsmView と AsmInputBar を連携させる
+	((CAsmViewV2*)m_wndSplitter.GetPane(0,1))->RegisterAsmInputBar(&m_wndDialogBar_R);
+
 	return 0;
 }
 

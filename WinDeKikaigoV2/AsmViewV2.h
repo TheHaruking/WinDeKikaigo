@@ -7,6 +7,8 @@
 // AsmViewV2.h : ヘッダー ファイル
 //
 
+#include "AsmInputBar.h"
+
 /////////////////////////////////////////////////////////////////////////////
 // CAsmViewV2 ビュー
 
@@ -18,6 +20,7 @@ protected:
 
 // アトリビュート
 public:
+	void RegisterAsmInputBar(CAsmInputBar* wndAsmInputBar);
 	CWinDeKikaigoV2Doc* GetDocument();
 
 // オペレーション
@@ -55,6 +58,13 @@ protected:
 	static const LPTSTR OP2ASM[OP_MAX];
 	static const DWORD ADR2OPR[ADR_MAX];
 	static const LPTSTR ADR2STR[ADR_MAX];
+
+	// メンバ変数
+	LONG m_pos2ip[256]; // クリック座標からipを紐付ける
+	LONG m_nCurSel; // 現在選択中の ASM オブジェクト
+	LONG m_nCurIp;  // 現在選択中の Instruction Pointer
+
+	CAsmInputBar* m_pAsmInputBar; // 
 
 // オーバーライド
 	// ClassWizard は仮想関数のオーバーライドを生成します。

@@ -6,6 +6,9 @@
 #include "AsmInputBar.h"
 #include "AsmInputBarDlg.h"
 
+#include "WinDeKikaigoV2Doc.h"
+#include "MainFrm.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -21,7 +24,6 @@ CAsmInputBar::CAsmInputBar()
 		// メモ - ClassWizard はこの位置にマッピング用のマクロを追加または削除します。
 	//}}AFX_DATA_INIT
 }
-
 
 void CAsmInputBar::DoDataExchange(CDataExchange* pDX)
 {
@@ -53,13 +55,19 @@ LONG CAsmInputBar::OnInitDialog(UINT wParam, LONG lParam)
 	return bRet;
 }
 
-void CAsmInputBar::OnInputLda() 
+void CAsmInputBar::OnInputLda()
 {
 	// TODO: この位置にコントロール通知ハンドラ用のコードを追加してください
 	CAsmInputBarDlg dlg;
-	dlg.DoModal();
-	CString buf;
-	buf.Format(L"dwSelect: %d", dlg.m_dwSelect);
 
-	MessageBox(buf);
+	dlg.DoModal();
+	
+	CString buf;
+	buf.Format(L"m_nCurIp : %d, dwSelect: %d", m_nCurIp, dlg.m_dwSelect);
+	m_pDoc->m_data[m_nCurIp] = 0xEA;
+
+	OutputDebugString(buf);
+
+	m_pDoc->UpdateAllViews(NULL);
+
 }

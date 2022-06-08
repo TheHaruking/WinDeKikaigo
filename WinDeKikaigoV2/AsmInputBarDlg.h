@@ -39,6 +39,7 @@ protected:
 	//{{AFX_MSG(CAsmInputBarDlg)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnAsmdlg1();
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

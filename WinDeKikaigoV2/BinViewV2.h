@@ -31,8 +31,8 @@ protected:
 	DWORD m_dwFontWidth;
 	DWORD m_dwFontHeight;
 	DWORD m_dwRowMargin;
-	INT   m_nMaxColumn;
-	INT   m_nSel;
+	LONG  m_nMaxColumn;
+	LONG  m_nSel;
 	BOOL  m_bIsSecond;
 	enum KINDDIGIT {
 		DIGIT_BYTE = 1,

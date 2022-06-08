@@ -253,6 +253,7 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	CWinDeKikaigoV2Doc* pDoc = GetDocument();
 	BYTE* b = pDoc->m_data;
+	BOOL bNeedReset_IsSecond = TRUE;
 
 	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
 	switch (nChar) {
@@ -282,6 +283,7 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				m_bIsSecond = FALSE;
 				m_nSel++;
 			}
+			bNeedReset_IsSecond = FALSE;
 			break;
 		}
 	}
@@ -290,6 +292,10 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	m_nSel = (m_nSel >= 0) ? m_nSel : 0; // 下限値
 //	xxx									 // 上限値 (TODO)
 	m_nMaxColumn = (m_nMaxColumn >= 1) ? m_nMaxColumn : 1;
+
+	// 移動したら bIsSecond をリセットする
+	if (bNeedReset_IsSecond)
+		m_bIsSecond = FALSE;
 
 	// 画面に反映
 	CaretPosUpdate();

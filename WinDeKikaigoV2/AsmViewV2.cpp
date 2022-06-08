@@ -5,6 +5,7 @@
 #include "WinDeKikaigoV2.h"
 #include "WinDeKikaigoV2doc.h"
 #include "AsmViewV2.h"
+#include "MainFrm.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -101,6 +102,8 @@ IMPLEMENT_DYNCREATE(CAsmViewV2, CView)
 
 CAsmViewV2::CAsmViewV2()
 {
+	::ZeroMemory(m_pos2ip, 256);
+	m_nCurIp = 0;
 }
 
 CAsmViewV2::~CAsmViewV2()
@@ -125,7 +128,7 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 	// 逆アセンブル (64 バイト(+α)分) 表示
 	// ※未定義命令以降は DATA 表示に切り替える
 	const BYTE* BIN = pDoc->m_data; // バイナリ
-	DWORD ip = 0; // バイナリ読み取り位置
+	LONG ip = 0; // バイナリ読み取り位置
 
 	DWORD dwOp, dwAdr, dwOpr; // オペコード, アドレッシング, オペランドのバイト数
 	CString buf; // 表示用
@@ -149,23 +152,29 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 		}
 
 		// 表示
+		if (ip == m_nCurIp) {
+			pDC->SetBkColor(RGB(255,255,0));
+		} else {
+			pDC->SetBkColor(RGB(255,255,255));
+		}
 		buf.Format(L"%s", OP2ASM[dwOp]);
 		pDC->TextOut(0, i*16, buf);
 		buf.Format(ADR2STR[dwAdr], val1, val2);
 		pDC->TextOut(4*8, i*16, buf);
 
+		// 座標からipを特定できるように保存しておく
+		m_pos2ip[i] = ip;
 		// 読み進める
 		ip += 1 + dwOpr;
 	}
 
 	// 残りは DATA として表示
+	pDC->SetBkColor(RGB(255,255,255));
 	for (; ip < 64; i++) {
 		buf.Format(L"%02X %02X %02X %02X", BIN[ip+0], BIN[ip+1], BIN[ip+2], BIN[ip+3]);
 		pDC->TextOut(0, i*16, buf);
 		ip += 4;
 	}
-
-	/****************************************/
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -195,8 +204,21 @@ CWinDeKikaigoV2Doc* CAsmViewV2::GetDocument() // 非デバッグ バージョンはインライ
 
 void CAsmViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
+	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください		
+	switch (nChar) {
+	case VK_LEFT:  break;
+	case VK_RIGHT: break;
+	case VK_UP:    m_nCurSel--; break;
+	case VK_DOWN:  m_nCurSel++; break;
+	}
+
+	m_nCurIp = m_pos2ip[m_nCurSel];
 	
+	// ((CMainFrame*)GetParent())->m_wndDialogBar_R.m_nCurIp = m_nCurIp; // これはできない
+	// ((CMainFrame*)AfxGetMainWnd())->m_wndDialogBar_R.m_nCurIp = m_nCurIp;
+	m_pAsmInputBar->m_nCurIp = m_nCurIp; // 直接 AsmInputBar に書き込む
+
+	this->RedrawWindow();
 	
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
@@ -204,6 +226,21 @@ void CAsmViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point) 
 {
 	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
+	CString buf;
+	buf.Format(L"m_pos2ip: %d\r\n", m_pos2ip[point.y/16]);
+	OutputDebugString(buf);
+
+	m_nCurSel = point.y/16;
+	m_nCurIp = m_pos2ip[m_nCurSel];
+	m_pAsmInputBar->m_nCurIp = m_nCurIp; // 直接 AsmInputBar に書き込む
+	
+	this->RedrawWindow();
 
 	CView::OnLButtonDown(nFlags, point);
+}
+
+void CAsmViewV2::RegisterAsmInputBar(CAsmInputBar* wndAsmInputBar)
+{
+	m_pAsmInputBar = wndAsmInputBar;
+	m_pAsmInputBar->m_pDoc = GetDocument();
 }

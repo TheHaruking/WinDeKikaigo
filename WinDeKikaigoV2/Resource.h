@@ -13,6 +13,7 @@
 #define IDC_PANE_LDA2                   1001
 #define IDC_ASMDLG_1                    1001
 #define IDC_PANE_LDA3                   1002
+#define IDC_ASMDLG_0                    1002
 #define IDC_PANE_LDA4                   1003
 #define IDC_PANE_LDA5                   1004
 #define IDC_PANE_LDA6                   1005
@@ -77,7 +78,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        131
 #define _APS_NEXT_COMMAND_VALUE         32774
-#define _APS_NEXT_CONTROL_VALUE         1002
+#define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -42,7 +42,7 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:  // コントロール バー用メンバ
+public:  // コントロール バー用メンバ
 	CStatusBar   m_wndStatusBar;
 	CToolBar     m_wndToolBar;
 	// 追加
