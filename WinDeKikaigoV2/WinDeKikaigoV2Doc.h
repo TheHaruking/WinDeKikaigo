@@ -9,7 +9,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-
 class CWinDeKikaigoV2Doc : public CDocument
 {
 protected: // シリアライズ機能のみから作成します。

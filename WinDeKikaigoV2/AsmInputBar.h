@@ -7,7 +7,10 @@
 // AsmInputDlg.h : ヘッダー ファイル
 //
 
+// 宣言
 #include "WinDeKikaigoV2Doc.h"
+
+class CAsmViewV2; // 相互参照
 
 /////////////////////////////////////////////////////////////////////////////
 // CAsmInputBar ダイアログ
@@ -33,8 +36,8 @@ public:
 	//}}AFX_VIRTUAL
 
 public:
-	CWinDeKikaigoV2Doc* m_pDoc; // AsmView から取得
-	LONG m_nCurIp; // 現在選択中の Instruction Pointer (AsmView からコピー)
+	CWinDeKikaigoV2Doc* m_pDoc; // AsmView から取得.
+	CAsmViewV2* m_pAsmView;
 
 // インプリメンテーション
 protected:

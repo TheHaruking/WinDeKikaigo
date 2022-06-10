@@ -3,9 +3,12 @@
 
 #include "stdafx.h"
 #include "WinDeKikaigoV2.h"
+
 #include "WinDeKikaigoV2doc.h"
 #include "AsmViewV2.h"
 #include "MainFrm.h"
+
+#include "AsmInputBar.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -110,6 +113,27 @@ CAsmViewV2::~CAsmViewV2()
 {
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// CAsmViewV2 診断
+
+#ifdef _DEBUG
+void CAsmViewV2::AssertValid() const
+{
+	CView::AssertValid();
+}
+
+void CAsmViewV2::Dump(CDumpContext& dc) const
+{
+	CView::Dump(dc);
+}
+
+// 追加！
+CWinDeKikaigoV2Doc* CAsmViewV2::GetDocument() // 非デバッグ バージョンはインラインです。
+{
+	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CWinDeKikaigoV2Doc)));
+	return (CWinDeKikaigoV2Doc*)m_pDocument;
+}
+#endif //_DEBUG
 
 BEGIN_MESSAGE_MAP(CAsmViewV2, CView)
 	//{{AFX_MSG_MAP(CAsmViewV2)
@@ -127,7 +151,7 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 	
 	// 逆アセンブル (64 バイト(+α)分) 表示
 	// ※未定義命令以降は DATA 表示に切り替える
-	const BYTE* BIN = pDoc->m_data; // バイナリ
+	const BYTE* BIN = pDoc->m_data; // バイナリ (読み取り専用)
 	LONG ip = 0; // バイナリ読み取り位置
 
 	DWORD dwOp, dwAdr, dwOpr; // オペコード, アドレッシング, オペランドのバイト数
@@ -164,6 +188,12 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 
 		// 座標からipを特定できるように保存しておく
 		m_pos2ip[i] = ip;
+
+		// ASMOBJ
+		memcpy(m_AsmObj[i].data, &(BIN[ip]), 3);
+		m_AsmObj[i].type = ASMOBJ::TEXT;
+		m_AsmObj[i].nSize = 1 + dwOpr;
+
 		// 読み進める
 		ip += 1 + dwOpr;
 	}
@@ -171,33 +201,22 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 	// 残りは DATA として表示
 	pDC->SetBkColor(RGB(255,255,255));
 	for (; ip < 64; i++) {
-		buf.Format(L"%02X %02X %02X %02X", BIN[ip+0], BIN[ip+1], BIN[ip+2], BIN[ip+3]);
+		buf.Format(L"%02X ", BIN[ip]);
 		pDC->TextOut(0, i*16, buf);
-		ip += 4;
+
+		// ASMOBJ
+		m_AsmObj[i].nSize   = 1;
+		m_AsmObj[i].data[0] = BIN[ip];
+		m_AsmObj[i].type = ASMOBJ::DATA;
+		ip ++;
 	}
-}
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsmViewV2 診断
-
-#ifdef _DEBUG
-void CAsmViewV2::AssertValid() const
-{
-	CView::AssertValid();
+	// ASMOBJ 終端
+	m_AsmObj[i].type = ASMOBJ::END;
+/*
+	pDC->TextOut(0, 0, L"Hello!");
+*/
 }
-
-void CAsmViewV2::Dump(CDumpContext& dc) const
-{
-	CView::Dump(dc);
-}
-
-// 追加！
-CWinDeKikaigoV2Doc* CAsmViewV2::GetDocument() // 非デバッグ バージョンはインラインです。
-{
-	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CWinDeKikaigoV2Doc)));
-	return (CWinDeKikaigoV2Doc*)m_pDocument;
-}
-#endif //_DEBUG
 
 /////////////////////////////////////////////////////////////////////////////
 // CAsmViewV2 メッセージ ハンドラ
@@ -216,7 +235,6 @@ void CAsmViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	
 	// ((CMainFrame*)GetParent())->m_wndDialogBar_R.m_nCurIp = m_nCurIp; // これはできない
 	// ((CMainFrame*)AfxGetMainWnd())->m_wndDialogBar_R.m_nCurIp = m_nCurIp;
-	m_pAsmInputBar->m_nCurIp = m_nCurIp; // 直接 AsmInputBar に書き込む
 
 	this->RedrawWindow();
 	
@@ -232,7 +250,6 @@ void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 
 	m_nCurSel = point.y/16;
 	m_nCurIp = m_pos2ip[m_nCurSel];
-	m_pAsmInputBar->m_nCurIp = m_nCurIp; // 直接 AsmInputBar に書き込む
 	
 	this->RedrawWindow();
 
@@ -243,4 +260,88 @@ void CAsmViewV2::RegisterAsmInputBar(CAsmInputBar* wndAsmInputBar)
 {
 	m_pAsmInputBar = wndAsmInputBar;
 	m_pAsmInputBar->m_pDoc = GetDocument();
+	m_pAsmInputBar->m_pAsmView = this;
+}
+
+void CAsmViewV2::AsmObjToBin()
+{
+	CWinDeKikaigoV2Doc* pDoc = GetDocument();
+
+	BYTE* BIN = pDoc->m_data; // バイナリ
+	LONG ip = 0;
+
+	// ASMOBJ から BIN に変換
+	for (int i=0; i<64; i++) {	
+		if (m_AsmObj[i].type == ASMOBJ::END)
+			break;
+
+		memcpy(&(BIN[ip]), m_AsmObj[i].data, m_AsmObj[i].nSize);
+		ip += m_AsmObj[i].nSize;
+	}
+}
+
+void CAsmViewV2::SetAsmObj(LONG n, BYTE* data, LONG size)
+{
+	m_AsmObj[n].type = ASMOBJ::TEXT;
+	m_AsmObj[n].nSize = size;
+	memcpy(m_AsmObj[n].data, data, size);
+}
+
+LONG CAsmViewV2::GetAsmSel()
+{
+	return m_nCurSel;
+}
+
+void CAsmViewV2::BinToAsmObj()
+{
+	CWinDeKikaigoV2Doc* pDoc = GetDocument();
+	
+	// 逆アセンブル (64 バイト(+α)分) 表示
+	// ※未定義命令以降は DATA 表示に切り替える
+	const BYTE* BIN = pDoc->m_data; // バイナリ (読み取り専用)
+	LONG ip = 0; // バイナリ読み取り位置
+
+	DWORD dwOp, dwAdr, dwOpr; // オペコード, アドレッシング, オペランドのバイト数
+	INT i = 0;
+	for (; ip < 64; i++) // i は表示縦座標に使用
+	{
+		dwOp = BIN2OP[BIN[ip]];
+		dwAdr = BIN2ADR[BIN[ip]];
+		dwOpr = ADR2OPR[dwAdr];   // 0 or 1 or 2
+
+		// UND だった場合中断
+		if (dwOp == OP_UND)
+			break;
+
+		// オペランド.
+		DWORD val1 = 0;
+		DWORD val2 = 0;
+		switch (dwOpr) {
+		case 1: val1 = BIN[ip+1]; break;
+		case 2: val1 = BIN[ip+2]; val2 = BIN[ip+1]; break;
+		}
+
+		// 座標からipを特定できるように保存しておく
+		m_pos2ip[i] = ip;
+
+		// ASMOBJ
+		memcpy(m_AsmObj[i].data, &(BIN[ip]), 3);
+		m_AsmObj[i].type = ASMOBJ::TEXT;
+		m_AsmObj[i].nSize = 1 + dwOpr;
+
+		// 読み進める
+		ip += 1 + dwOpr;
+	}
+
+	// 残りは DATA とする
+	for (; ip < 64; i++) {
+		// ASMOBJ
+		m_AsmObj[i].nSize   = 1;
+		m_AsmObj[i].data[0] = BIN[ip];
+		m_AsmObj[i].type = ASMOBJ::DATA;
+		ip ++;
+	}
+
+	// ASMOBJ 終端
+	m_AsmObj[i].type = ASMOBJ::END;
 }

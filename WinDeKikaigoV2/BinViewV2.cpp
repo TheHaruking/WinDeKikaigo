@@ -238,6 +238,7 @@ void CBinViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 
 	// ƒLƒƒƒŒƒbƒgÝ’è
 	CaretPosUpdate();
+	RedrawWindow();
 
 	CView::OnLButtonDown(nFlags, point);
 }
@@ -300,6 +301,7 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	// ‰æ–Ê‚É”½‰f
 	CaretPosUpdate();
 	RedrawWindow();
+	m_pAsm->BinToAsmObj();
 	pDoc->UpdateAllViews(this);
 
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);

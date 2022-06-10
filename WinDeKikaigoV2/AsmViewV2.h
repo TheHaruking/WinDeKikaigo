@@ -7,7 +7,9 @@
 // AsmViewV2.h : ヘッダー ファイル
 //
 
-#include "AsmInputBar.h"
+#include "WinDeKikaigoV2Doc.h"
+
+class CAsmInputBar; // 相互参照
 
 /////////////////////////////////////////////////////////////////////////////
 // CAsmViewV2 ビュー
@@ -20,8 +22,25 @@ protected:
 
 // アトリビュート
 public:
+	void BinToAsmObj();
+	LONG GetAsmSel();
+	void SetAsmObj(LONG n, BYTE* data, LONG size);
+	void AsmObjToBin();
 	void RegisterAsmInputBar(CAsmInputBar* wndAsmInputBar);
 	CWinDeKikaigoV2Doc* GetDocument();
+
+protected:
+	// ASMOBJ 構造体
+	// 概要 : Asm -> Bin 変換のためのデータ配列
+	typedef struct {
+		typedef enum {
+			TEXT, DATA, END
+		} ASMOBJTYPE;
+		/***********/
+		ASMOBJTYPE type;
+		LONG nSize;
+		BYTE data[4];
+	} ASMOBJ;
 
 // オペレーション
 protected:
@@ -52,7 +71,8 @@ protected:
 		ADR_INDX, ADR_INDY, ADR_IND,
 		ADR_MAX
 	};
-
+	
+	// 変換テーブル
 	static const DWORD BIN2OP[256];
 	static const DWORD BIN2ADR[256];
 	static const LPTSTR OP2ASM[OP_MAX];
@@ -65,6 +85,8 @@ protected:
 	LONG m_nCurIp;  // 現在選択中の Instruction Pointer
 
 	CAsmInputBar* m_pAsmInputBar; // 
+
+	ASMOBJ m_AsmObj[64+1]; // 要終端
 
 // オーバーライド
 	// ClassWizard は仮想関数のオーバーライドを生成します。

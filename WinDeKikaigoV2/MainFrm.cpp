@@ -99,6 +99,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// AsmView ‚Æ AsmInputBar ‚ð˜AŒg‚³‚¹‚é
 	((CAsmViewV2*)m_wndSplitter.GetPane(0,1))->RegisterAsmInputBar(&m_wndDialogBar_R);
+	// AsmView ‚Æ BinView ‚ð˜AŒg‚³‚¹‚é
+	((CBinViewV2*)m_wndSplitter.GetPane(0,0))->m_pAsm = (CAsmViewV2*)m_wndSplitter.GetPane(0,1);
 
 	return 0;
 }

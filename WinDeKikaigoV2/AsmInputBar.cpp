@@ -6,6 +6,8 @@
 #include "AsmInputBar.h"
 #include "AsmInputBarDlg.h"
 
+#include "AsmViewV2.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -60,11 +62,15 @@ void CAsmInputBar::OnInputLda()
 	dlg.DoModal();
 	
 	CString buf;
-	buf.Format(L"m_nCurIp : %d, dwSelect: %d", m_nCurIp, dlg.m_dwSelect);
-	m_pDoc->m_data[m_nCurIp] = 0xEA;
+	buf.Format(L"GetAsmSel() : %d, dwSelect: %d", m_pAsmView->GetAsmSel(), dlg.m_dwSelect);
+
+	// ‘‚«ž‚Ý
+	// m_pDoc->m_data[m_nCurIp] = 0xEA;
+	BYTE data[] = { 0xEA };
+	m_pAsmView->SetAsmObj(m_pAsmView->GetAsmSel(), data, sizeof(data));
+	m_pAsmView->AsmObjToBin();
 
 	OutputDebugString(buf);
 
 	m_pDoc->UpdateAllViews(NULL);
-
 }

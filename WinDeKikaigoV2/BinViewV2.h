@@ -8,6 +8,7 @@
 //
 
 #include "WinDeKikaigoV2Doc.h"
+#include "AsmViewV2.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CBinViewV2 ビュー
@@ -41,6 +42,9 @@ protected:
 		DIGIT_QWORD = 8
 	};
 	KINDDIGIT m_eDigit;
+
+public:
+	CAsmViewV2* m_pAsm; // 仮。TODO: データ構造の見直しを行い削除予定
 
 // 定数
 protected:
