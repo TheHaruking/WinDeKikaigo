@@ -65,10 +65,10 @@ protected:
 	};
 
 	enum {
-		ADR_NONE,
+		ADR_NONE, ADR_A, ADR_REL,
 		ADR_IMM, ADR_ZR, ADR_AD,
 		ADR_ZRX, ADR_ZRY, ADR_ADX, ADR_ADY, 
-		ADR_INDX, ADR_INDY, ADR_IND,
+		ADR_INX, ADR_INY, ADR_IN,
 		ADR_MAX
 	};
 	
