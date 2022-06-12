@@ -44,9 +44,10 @@ protected:
 
 	// 生成されたメッセージ マップ関数
 	//{{AFX_MSG(CAsmInputBar)
-	afx_msg void OnInputLda();
+//	afx_msg void OnInputLda();
 	//}}AFX_MSG
 	afx_msg LONG OnInitDialog(UINT, LONG);
+	afx_msg void OnInputLda(UINT nID);
 	DECLARE_MESSAGE_MAP()
 };
 

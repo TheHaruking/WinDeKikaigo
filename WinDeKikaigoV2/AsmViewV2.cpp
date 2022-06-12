@@ -107,6 +107,7 @@ CAsmViewV2::CAsmViewV2()
 {
 	::ZeroMemory(m_pos2ip, 256);
 	m_nCurIp = 0;
+	m_nCurSel = 0;
 }
 
 CAsmViewV2::~CAsmViewV2()
@@ -313,14 +314,6 @@ void CAsmViewV2::BinToAsmObj()
 		if (dwOp == OP_UND)
 			break;
 
-		// オペランド.
-		DWORD val1 = 0;
-		DWORD val2 = 0;
-		switch (dwOpr) {
-		case 1: val1 = BIN[ip+1]; break;
-		case 2: val1 = BIN[ip+2]; val2 = BIN[ip+1]; break;
-		}
-
 		// 座標からipを特定できるように保存しておく
 		m_pos2ip[i] = ip;
 
@@ -339,6 +332,10 @@ void CAsmViewV2::BinToAsmObj()
 		m_AsmObj[i].nSize   = 1;
 		m_AsmObj[i].data[0] = BIN[ip];
 		m_AsmObj[i].type = ASMOBJ::DATA;
+
+		// 座標からipを特定できるように保存しておく
+		m_pos2ip[i] = ip;
+
 		ip ++;
 	}
 

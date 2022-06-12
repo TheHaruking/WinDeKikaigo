@@ -34,9 +34,10 @@ void CAsmInputBar::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CAsmInputBar, CDialogBar)
 	//{{AFX_MSG_MAP(CAsmInputBar)
-	ON_BN_CLICKED(IDC_INPUT_LDA, OnInputLda)
+//	ON_BN_CLICKED(IDC_INPUT_LDA, OnInputLda)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(WM_INITDIALOG, OnInitDialog)   // 追加！
+	ON_COMMAND_RANGE(IDC_PANE_LDA, IDC_PANE_LDY, OnInputLda)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -54,7 +55,7 @@ LONG CAsmInputBar::OnInitDialog(UINT wParam, LONG lParam)
 	return bRet;
 }
 
-void CAsmInputBar::OnInputLda()
+void CAsmInputBar::OnInputLda(UINT nID)
 {
 	// TODO: この位置にコントロール通知ハンドラ用のコードを追加してください
 	CAsmInputBarDlg dlg;
@@ -66,7 +67,12 @@ void CAsmInputBar::OnInputLda()
 
 	// 書き込み
 	// m_pDoc->m_data[m_nCurIp] = 0xEA;
-	BYTE data[] = { 0xEA };
+	BYTE data[] = { 0xEA, 0xEA, 0xEA };
+	switch (nID) {
+	case IDC_PANE_LDA: data[0] = 0xA9; break;
+	case IDC_PANE_LDX: data[0] = 0xA2; break;
+	case IDC_PANE_LDY: data[0] = 0xA0; break;
+	}
 	m_pAsmView->SetAsmObj(m_pAsmView->GetAsmSel(), data, sizeof(data));
 	m_pAsmView->AsmObjToBin();
 
