@@ -254,33 +254,58 @@ BEGIN
     CONTROL         "",IDC_PANE_DEY,"Static",SS_BLACKFRAME | SS_NOTIFY,125,
                     95,15,15
     GROUPBOX        "3. 無条件ｼﾞｬﾝﾌﾟ",IDC_STATIC,5,125,55,50
-    CONTROL         "",IDC_PANE_JMP,"Static",SS_BLACKFRAME,10,135,15,15
-    CONTROL         "",IDC_PANE_JSR,"Static",SS_BLACKFRAME,25,135,15,15
-    CONTROL         "",IDC_PANE_BRK,"Static",SS_BLACKFRAME,40,135,15,15
-    CONTROL         "",IDC_PANE_RTS,"Static",SS_BLACKFRAME,25,151,15,15
-    CONTROL         "",IDC_PANE_RTI,"Static",SS_BLACKFRAME,40,151,15,15
+    CONTROL         "",IDC_PANE_JMP,"Static",SS_BLACKFRAME | SS_NOTIFY,10,
+                    135,15,15
+    CONTROL         "",IDC_PANE_JSR,"Static",SS_BLACKFRAME | SS_NOTIFY,25,
+                    135,15,15
+    CONTROL         "",IDC_PANE_BRK,"Static",SS_BLACKFRAME | SS_NOTIFY,40,
+                    135,15,15
+    CONTROL         "",IDC_PANE_RTS,"Static",SS_BLACKFRAME | SS_NOTIFY,25,
+                    151,15,15
+    CONTROL         "",IDC_PANE_RTI,"Static",SS_BLACKFRAME | SS_NOTIFY,40,
+                    151,15,15
     GROUPBOX        "4. 比較",IDC_STATIC,65,125,55,50
-    CONTROL         "",IDC_PANE_CMP,"Static",SS_BLACKFRAME,70,135,15,15
-    CONTROL         "",IDC_PANE_CPX,"Static",SS_BLACKFRAME,85,135,15,15
-    CONTROL         "",IDC_PANE_CPY,"Static",SS_BLACKFRAME,100,135,15,15
-    CONTROL         "",IDC_PANE_BIT,"Static",SS_BLACKFRAME,70,151,15,15
+    CONTROL         "",IDC_PANE_CMP,"Static",SS_BLACKFRAME | SS_NOTIFY,70,
+                    135,15,15
+    CONTROL         "",IDC_PANE_CPX,"Static",SS_BLACKFRAME | SS_NOTIFY,85,
+                    135,15,15
+    CONTROL         "",IDC_PANE_CPY,"Static",SS_BLACKFRAME | SS_NOTIFY,100,
+                    135,15,15
+    CONTROL         "",IDC_PANE_BIT,"Static",SS_BLACKFRAME | SS_NOTIFY,70,
+                    151,15,15
     GROUPBOX        "5. 条件ｼﾞｬﾝﾌﾟ・ﾌﾗｸﾞ操作",IDC_STATIC,5,180,140,50
-    CONTROL         "",IDC_PANE_BEQ,"Static",SS_BLACKFRAME,10,190,15,15
-    CONTROL         "",IDC_PANE_BMI,"Static",SS_BLACKFRAME,25,190,15,15
-    CONTROL         "",IDC_PANE_BCS,"Static",SS_BLACKFRAME,40,190,15,15
-    CONTROL         "",IDC_PANE_BVS,"Static",SS_BLACKFRAME,55,190,15,15
-    CONTROL         "",IDC_PANE_BNE,"Static",SS_BLACKFRAME,10,205,15,15
-    CONTROL         "",IDC_PANE_BPL,"Static",SS_BLACKFRAME,25,205,15,15
-    CONTROL         "",IDC_PANE_BCC,"Static",SS_BLACKFRAME,40,205,15,15
-    CONTROL         "",IDC_PANE_BVC,"Static",SS_BLACKFRAME,55,205,15,15
-    CONTROL         "",IDC_PANE_SEI,"Static",SS_BLACKFRAME,75,190,15,15
-    CONTROL         "",IDC_PANE_SED,"Static",SS_BLACKFRAME,90,190,15,15
-    CONTROL         "",IDC_PANE_SEC,"Static",SS_BLACKFRAME,105,190,15,15
-    CONTROL         "",IDC_PANE_CLI,"Static",SS_BLACKFRAME,75,205,15,15
-    CONTROL         "",IDC_PANE_CLD,"Static",SS_BLACKFRAME,90,205,15,15
-    CONTROL         "",IDC_PANE_CLC,"Static",SS_BLACKFRAME,105,205,15,15
-    CONTROL         "",IDC_PANE_CLV,"Static",SS_BLACKFRAME,120,205,15,15
-    CONTROL         "",IDC_PANE_NOP,"Static",SS_BLACKFRAME,125,135,15,15
+    CONTROL         "",IDC_PANE_BEQ,"Static",SS_BLACKFRAME | SS_NOTIFY,10,
+                    190,15,15
+    CONTROL         "",IDC_PANE_BMI,"Static",SS_BLACKFRAME | SS_NOTIFY,25,
+                    190,15,15
+    CONTROL         "",IDC_PANE_BCS,"Static",SS_BLACKFRAME | SS_NOTIFY,40,
+                    190,15,15
+    CONTROL         "",IDC_PANE_BVS,"Static",SS_BLACKFRAME | SS_NOTIFY,55,
+                    190,15,15
+    CONTROL         "",IDC_PANE_BNE,"Static",SS_BLACKFRAME | SS_NOTIFY,10,
+                    205,15,15
+    CONTROL         "",IDC_PANE_BPL,"Static",SS_BLACKFRAME | SS_NOTIFY,25,
+                    205,15,15
+    CONTROL         "",IDC_PANE_BCC,"Static",SS_BLACKFRAME | SS_NOTIFY,40,
+                    205,15,15
+    CONTROL         "",IDC_PANE_BVC,"Static",SS_BLACKFRAME | SS_NOTIFY,55,
+                    205,15,15
+    CONTROL         "",IDC_PANE_SEI,"Static",SS_BLACKFRAME | SS_NOTIFY,75,
+                    190,15,15
+    CONTROL         "",IDC_PANE_SED,"Static",SS_BLACKFRAME | SS_NOTIFY,90,
+                    190,15,15
+    CONTROL         "",IDC_PANE_SEC,"Static",SS_BLACKFRAME | SS_NOTIFY,105,
+                    190,15,15
+    CONTROL         "",IDC_PANE_CLI,"Static",SS_BLACKFRAME | SS_NOTIFY,75,
+                    205,15,15
+    CONTROL         "",IDC_PANE_CLD,"Static",SS_BLACKFRAME | SS_NOTIFY,90,
+                    205,15,15
+    CONTROL         "",IDC_PANE_CLC,"Static",SS_BLACKFRAME | SS_NOTIFY,105,
+                    205,15,15
+    CONTROL         "",IDC_PANE_CLV,"Static",SS_BLACKFRAME | SS_NOTIFY,120,
+                    205,15,15
+    CONTROL         "",IDC_PANE_NOP,"Static",SS_BLACKFRAME | SS_NOTIFY,125,
+                    135,15,15
     LTEXT           "テストです",IDC_TEST_LABEL,46,241,31,8
     LTEXT           "テストです その2",IDC_TEST_LABEL2,39,256,50,8
 END

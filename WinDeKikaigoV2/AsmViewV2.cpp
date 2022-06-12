@@ -101,13 +101,10 @@ const LPTSTR CAsmViewV2::ADR2STR[ADR_MAX] = {
 /////////////////////////////////////////////////////////////////////////////
 // CAsmViewV2
 
-IMPLEMENT_DYNCREATE(CAsmViewV2, CView)
+IMPLEMENT_DYNCREATE(CAsmViewV2, CScrollView)
 
 CAsmViewV2::CAsmViewV2()
 {
-	::ZeroMemory(m_pos2ip, 256);
-	m_nCurIp = 0;
-	m_nCurSel = 0;
 }
 
 CAsmViewV2::~CAsmViewV2()
@@ -120,12 +117,12 @@ CAsmViewV2::~CAsmViewV2()
 #ifdef _DEBUG
 void CAsmViewV2::AssertValid() const
 {
-	CView::AssertValid();
+	CScrollView::AssertValid();
 }
 
 void CAsmViewV2::Dump(CDumpContext& dc) const
 {
-	CView::Dump(dc);
+	CScrollView::Dump(dc);
 }
 
 // 追加！
@@ -136,7 +133,7 @@ CWinDeKikaigoV2Doc* CAsmViewV2::GetDocument() // 非デバッグ バージョンはインライ
 }
 #endif //_DEBUG
 
-BEGIN_MESSAGE_MAP(CAsmViewV2, CView)
+BEGIN_MESSAGE_MAP(CAsmViewV2, CScrollView)
 	//{{AFX_MSG_MAP(CAsmViewV2)
 	ON_WM_KEYDOWN()
 	ON_WM_LBUTTONDOWN()
@@ -148,7 +145,7 @@ END_MESSAGE_MAP()
 
 void CAsmViewV2::OnDraw(CDC* pDC)
 {
-	CWinDeKikaigoV2Doc* pDoc = GetDocument();
+/*	CWinDeKikaigoV2Doc* pDoc = GetDocument();
 	
 	// 逆アセンブル (64 バイト(+α)分) 表示
 	// ※未定義命令以降は DATA 表示に切り替える
@@ -214,9 +211,62 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 
 	// ASMOBJ 終端
 	m_AsmObj[i].type = ASMOBJ::END;
-/*
-	pDC->TextOut(0, 0, L"Hello!");
 */
+	LONG i = 0;
+	CString buf;
+
+	DWORD dwOp, dwAdr, dwOpr; // オペコード, アドレッシング, オペランドのバイト数
+	BYTE* bin;
+	
+	for (i = 0; i < 64; i++) // i は表示縦座標に使用
+	{
+		bin = m_AsmObj[i].data;
+
+		dwOp = BIN2OP[bin[0]];
+		dwAdr = BIN2ADR[bin[0]];
+		dwOpr = m_AsmObj[i].nSize;   // 1 or 2 or 3
+		
+		// UND だった場合中断
+		if (dwOp == OP_UND)
+			break;
+		
+		// オペランド.
+		DWORD val1, val2;
+		switch (dwOpr) {
+		case 2: val1 = bin[1]; break;
+		case 3: val1 = bin[2]; val2 = bin[1]; break;
+		}
+
+		// 表示
+		if (i == m_nCurSel) {
+			pDC->SetBkColor(RGB(255,255,0));
+		} else {
+			pDC->SetBkColor(RGB(255,255,255));
+		}
+		buf.Format(L"%s", OP2ASM[dwOp]);
+		pDC->TextOut(0, i*16, buf);
+		buf.Format(ADR2STR[dwAdr], val1, val2);
+		pDC->TextOut(4*8, i*16, buf);
+	}
+
+	// 残り (DATA) を表示
+	pDC->SetBkColor(RGB(255,255,255));
+	for (; i < 64; i++) {
+		bin = m_AsmObj[i].data;
+
+		// 表示
+		if (i == m_nCurSel) {
+			pDC->SetBkColor(RGB(255,255,0));
+		} else {
+			pDC->SetBkColor(RGB(255,255,255));
+		}
+
+		buf.Format(L"DATA: %02X ", bin[0]);
+		pDC->TextOut(0, i*16, buf);
+	}
+	
+	//
+	SetScrollSizes(MM_TEXT, CSize(1, i*16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -234,12 +284,9 @@ void CAsmViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	m_nCurIp = m_pos2ip[m_nCurSel];
 	
-	// ((CMainFrame*)GetParent())->m_wndDialogBar_R.m_nCurIp = m_nCurIp; // これはできない
-	// ((CMainFrame*)AfxGetMainWnd())->m_wndDialogBar_R.m_nCurIp = m_nCurIp;
-
 	this->RedrawWindow();
 	
-	CView::OnKeyDown(nChar, nRepCnt, nFlags);
+	CScrollView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point) 
@@ -254,7 +301,7 @@ void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	
 	this->RedrawWindow();
 
-	CView::OnLButtonDown(nFlags, point);
+	CScrollView::OnLButtonDown(nFlags, point);
 }
 
 void CAsmViewV2::RegisterAsmInputBar(CAsmInputBar* wndAsmInputBar)
@@ -281,11 +328,17 @@ void CAsmViewV2::AsmObjToBin()
 	}
 }
 
-void CAsmViewV2::SetAsmObj(LONG n, BYTE* data, LONG size)
+void CAsmViewV2::SetAsmObj(LONG n, BYTE* data)
 {
+	DWORD dwOp, dwAdr, dwOpr;
+
+	dwOp = BIN2OP[data[0]];
+	dwAdr = BIN2ADR[data[0]];
+	dwOpr = ADR2OPR[dwAdr];   // 0 or 1 or 2
+
 	m_AsmObj[n].type = ASMOBJ::TEXT;
-	m_AsmObj[n].nSize = size;
-	memcpy(m_AsmObj[n].data, data, size);
+	m_AsmObj[n].nSize = 1 + dwOpr;
+	memcpy(m_AsmObj[n].data, data, m_AsmObj[n].nSize);
 }
 
 LONG CAsmViewV2::GetAsmSel()
@@ -327,7 +380,7 @@ void CAsmViewV2::BinToAsmObj()
 	}
 
 	// 残りは DATA とする
-	for (; ip < 64; i++) {
+	for (; ip < 64; ) {
 		// ASMOBJ
 		m_AsmObj[i].nSize   = 1;
 		m_AsmObj[i].data[0] = BIN[ip];
@@ -336,9 +389,32 @@ void CAsmViewV2::BinToAsmObj()
 		// 座標からipを特定できるように保存しておく
 		m_pos2ip[i] = ip;
 
-		ip ++;
+		i++;
+		ip++;
 	}
 
 	// ASMOBJ 終端
 	m_AsmObj[i].type = ASMOBJ::END;
+}
+
+void CAsmViewV2::OnInitialUpdate() 
+{
+	CScrollView::OnInitialUpdate();
+
+	::ZeroMemory(m_pos2ip, 256);
+	m_nCurIp = 0;
+	m_nCurSel = 0;
+
+	const ASMOBJ ASMINITDATA = {
+		ASMOBJ::DATA, //	ASMOBJTYPE type;
+		4,			  //	LONG nSize;
+		0x00		  //	BYTE data[4];
+	};
+
+	for (int i = 0; i <= 64; i++)
+		m_AsmObj[i] = ASMINITDATA;
+	m_AsmObj[64].type = ASMOBJ::END;
+
+	BinToAsmObj();
+	SetScrollSizes(MM_TEXT, CSize(1,1)); // CScrollView を作成するためのダミー値
 }

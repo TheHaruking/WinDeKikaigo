@@ -14,7 +14,7 @@ class CAsmInputBar; // 相互参照
 /////////////////////////////////////////////////////////////////////////////
 // CAsmViewV2 ビュー
 
-class CAsmViewV2 : public CView
+class CAsmViewV2 : public CScrollView
 {
 protected:
 	CAsmViewV2();           // 動的生成に使用されるプロテクト コンストラクタ
@@ -24,7 +24,7 @@ protected:
 public:
 	void BinToAsmObj();
 	LONG GetAsmSel();
-	void SetAsmObj(LONG n, BYTE* data, LONG size);
+	void SetAsmObj(LONG n, BYTE* data);
 	void AsmObjToBin();
 	void RegisterAsmInputBar(CAsmInputBar* wndAsmInputBar);
 	CWinDeKikaigoV2Doc* GetDocument();
@@ -92,6 +92,8 @@ protected:
 	// ClassWizard は仮想関数のオーバーライドを生成します。
 
 	//{{AFX_VIRTUAL(CAsmViewV2)
+	public:
+	virtual void OnInitialUpdate();
 	protected:
 	virtual void OnDraw(CDC* pDC);      // このビューを描画するためにオーバーライドしました。
 	//}}AFX_VIRTUAL

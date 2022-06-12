@@ -37,7 +37,7 @@ BEGIN_MESSAGE_MAP(CAsmInputBar, CDialogBar)
 //	ON_BN_CLICKED(IDC_INPUT_LDA, OnInputLda)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(WM_INITDIALOG, OnInitDialog)   // ’Ç‰ÁI
-	ON_COMMAND_RANGE(IDC_PANE_LDA, IDC_PANE_LDY, OnInputLda)
+	ON_COMMAND_RANGE(IDC_PANE_LDA, IDC_PANE_NOP, OnInputLda)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -67,13 +67,14 @@ void CAsmInputBar::OnInputLda(UINT nID)
 
 	// ‘‚«ž‚Ý
 	// m_pDoc->m_data[m_nCurIp] = 0xEA;
-	BYTE data[] = { 0xEA, 0xEA, 0xEA };
+	BYTE data[] = { 0xEA, 0x00, 0x00 };
 	switch (nID) {
 	case IDC_PANE_LDA: data[0] = 0xA9; break;
 	case IDC_PANE_LDX: data[0] = 0xA2; break;
 	case IDC_PANE_LDY: data[0] = 0xA0; break;
+	case IDC_PANE_NOP: data[0] = 0xEA; break;
 	}
-	m_pAsmView->SetAsmObj(m_pAsmView->GetAsmSel(), data, sizeof(data));
+	m_pAsmView->SetAsmObj(m_pAsmView->GetAsmSel(), data);
 	m_pAsmView->AsmObjToBin();
 
 	OutputDebugString(buf);
