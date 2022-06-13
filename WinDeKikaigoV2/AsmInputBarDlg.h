@@ -30,7 +30,11 @@ public:
 	//}}AFX_VIRTUAL
 
 public:
+	DWORD GetSelected();
+	void SetAdressingModeDataTable(const LONG* ADRTABLE);
+protected:
 	DWORD m_dwSelect;
+	const LONG* m_ADRTABLE;
 
 // インプリメンテーション
 protected:
@@ -38,9 +42,9 @@ protected:
 	// 生成されたメッセージ マップ関数
 	//{{AFX_MSG(CAsmInputBarDlg)
 	virtual BOOL OnInitDialog();
-	afx_msg void OnAsmdlg1();
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	//}}AFX_MSG
+	afx_msg void OnClickedPanel(UINT nID);
 	DECLARE_MESSAGE_MAP()
 };
 

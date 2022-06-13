@@ -43,7 +43,7 @@ protected:
 	} ASMOBJ;
 
 // オペレーション
-protected:
+public:
 	enum {
 		OP_UND, // 0
 		// 読み書き
@@ -63,6 +63,7 @@ protected:
 		OP_SEI, OP_SED, OP_SEC, OP_NOP,					// 52-55
 		OP_MAX
 	};
+	// resource.h の IDC_PANE_LDA 等もこの順番に準ずる
 
 	enum {
 		ADR_NONE, ADR_A, ADR_REL,
@@ -78,7 +79,9 @@ protected:
 	static const LPTSTR OP2ASM[OP_MAX];
 	static const DWORD ADR2OPR[ADR_MAX];
 	static const LPTSTR ADR2STR[ADR_MAX];
+	static const LONG ASM2ADR[OP_MAX][10];
 
+protected:
 	// メンバ変数
 	LONG m_pos2ip[256]; // クリック座標からipを紐付ける
 	LONG m_nCurSel; // 現在選択中の ASM オブジェクト

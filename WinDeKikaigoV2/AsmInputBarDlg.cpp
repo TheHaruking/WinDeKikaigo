@@ -34,9 +34,9 @@ void CAsmInputBarDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CAsmInputBarDlg, CDialog)
 	//{{AFX_MSG_MAP(CAsmInputBarDlg)
-	ON_BN_CLICKED(IDC_ASMDLG_1, OnAsmdlg1)
 	ON_WM_KEYDOWN()
 	//}}AFX_MSG_MAP
+	ON_COMMAND_RANGE(IDC_ASMDLG_0, IDC_ASMDLG_8, OnClickedPanel)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -61,9 +61,12 @@ BOOL CAsmInputBarDlg::OnInitDialog()
 	              // 例外: OCX プロパティ ページの戻り値は FALSE となります
 }
 
-void CAsmInputBarDlg::OnAsmdlg1() 
+void CAsmInputBarDlg::OnClickedPanel(UINT nID) 
 {
-	m_dwSelect = 1;
+	// #define IDC_ASMDLG_0                    5100
+	UINT id = nID - IDC_ASMDLG_0;
+	m_dwSelect = id;
+
 	this->OnOK();
 }
 
@@ -73,4 +76,14 @@ void CAsmInputBarDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	
 	CDialog::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+void CAsmInputBarDlg::SetAdressingModeDataTable(const LONG* ADRTABLE)
+{
+	m_ADRTABLE = ADRTABLE;
+}
+
+DWORD CAsmInputBarDlg::GetSelected()
+{
+	return m_dwSelect;
 }

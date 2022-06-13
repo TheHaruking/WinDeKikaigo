@@ -57,27 +57,27 @@ LONG CAsmInputBar::OnInitDialog(UINT wParam, LONG lParam)
 
 void CAsmInputBar::OnInputLda(UINT nID)
 {
-	// TODO: この位置にコントロール通知ハンドラ用のコードを追加してください
+	/*
+		#define IDC_PANE_LDA                    5000
+		#define IDC_PANE_LDX                    5001
+		...
+		#define IDC_PANE_NOP                    5055
+		→ nID の順は ASMVIEW の enum OP_LDA らに準ずるようにマニュアルで設定している。
+	*/
+	DWORD id = nID - IDC_PANE_LDA + 1;
+	const LONG* OPADRTABLE = m_pAsmView->ASM2ADR[id];
+
 	CAsmInputBarDlg dlg;
 
+	dlg.SetAdressingModeDataTable(OPADRTABLE);
 	dlg.DoModal();
 	
 	CString buf;
-	buf.Format(L"GetAsmSel() : %d, dwSelect: %d", m_pAsmView->GetAsmSel(), dlg.m_dwSelect);
+	buf.Format(L"GetAsmSel() : %d, GetSelected: %d", m_pAsmView->GetAsmSel(), dlg.GetSelected());
 
-	// 書き込み
-	// m_pDoc->m_data[m_nCurIp] = 0xEA;
-	BYTE data[] = { 0xEA, 0x00, 0x00 };
-	switch (nID) {
-	case IDC_PANE_LDA: data[0] = 0xA9; break;
-	case IDC_PANE_LDX: data[0] = 0xA2; break;
-	case IDC_PANE_LDY: data[0] = 0xA0; break;
-	case IDC_PANE_NOP: data[0] = 0xEA; break;
-	}
+	// 反映
+	BYTE data[3] = { (BYTE)OPADRTABLE[dlg.GetSelected() + 1], 0x00, 0x00 };
 	m_pAsmView->SetAsmObj(m_pAsmView->GetAsmSel(), data);
 	m_pAsmView->AsmObjToBin();
-
-	OutputDebugString(buf);
-
-	m_pDoc->UpdateAllViews(NULL);
+	m_pAsmView->GetDocument()->UpdateAllViews(NULL);
 }

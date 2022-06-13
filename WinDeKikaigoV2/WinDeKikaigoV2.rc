@@ -314,15 +314,22 @@ IDD_ASMINPUTBARDLG DIALOG DISCARDABLE  0, 0, 74, 76
 STYLE DS_MODALFRAME | WS_POPUP
 FONT 9, "‚l‚r ‚oƒSƒVƒbƒN"
 BEGIN
-    CONTROL         "",IDC_ASMDLG_1,"Static",SS_GRAYRECT | SS_NOTIFY,30,5,15,
-                    15
-    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,50,10,15,15
-    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,55,30,15,15
-    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,50,50,15,15
-    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,30,55,15,15
-    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,10,50,15,15
-    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,5,30,15,15
-    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME,10,10,15,15
+    CONTROL         "",IDC_ASMDLG_1,"Static",SS_GRAYFRAME | SS_NOTIFY,30,5,
+                    15,15
+    CONTROL         "",IDC_ASMDLG_2,"Static",SS_BLACKFRAME | SS_NOTIFY,50,10,
+                    15,15
+    CONTROL         "",IDC_ASMDLG_3,"Static",SS_BLACKFRAME | SS_NOTIFY,55,30,
+                    15,15
+    CONTROL         "",IDC_ASMDLG_4,"Static",SS_BLACKFRAME | SS_NOTIFY,50,50,
+                    15,15
+    CONTROL         "",IDC_ASMDLG_5,"Static",SS_BLACKFRAME | SS_NOTIFY,30,55,
+                    15,15
+    CONTROL         "",IDC_ASMDLG_6,"Static",SS_BLACKFRAME | SS_NOTIFY,10,50,
+                    15,15
+    CONTROL         "",IDC_ASMDLG_7,"Static",SS_BLACKFRAME | SS_NOTIFY,5,30,
+                    15,15
+    CONTROL         "",IDC_ASMDLG_8,"Static",SS_BLACKFRAME | SS_NOTIFY,10,10,
+                    15,15
     CONTROL         "",IDC_ASMDLG_0,"Static",SS_BLACKFRAME | SS_NOTIFY,30,30,
                     15,15
 END

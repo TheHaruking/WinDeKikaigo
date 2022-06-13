@@ -36,7 +36,6 @@ public:
 	//}}AFX_VIRTUAL
 
 public:
-	CWinDeKikaigoV2Doc* m_pDoc; // AsmView から取得.
 	CAsmViewV2* m_pAsmView;
 
 // インプリメンテーション
