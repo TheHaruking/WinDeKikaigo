@@ -15,6 +15,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "MyApp"=.\MyApp\MyApp.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "SplitterPractice"=.\SplitterPractice\SplitterPractice.dsp - Package Owner=<4>
 
 Package=<5>
