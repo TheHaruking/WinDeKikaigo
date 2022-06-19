@@ -62,21 +62,28 @@ void CAsmInputBar::OnInputLda(UINT nID)
 		#define IDC_PANE_LDX                    5001
 		...
 		#define IDC_PANE_NOP                    5055
-		→ nID の順は ASMVIEW の enum OP_LDA らに準ずるようにマニュアルで設定している。
+		→ nID の順は ASMVIEW の enum OP_LDA らに準ずるように手作業で設定している。
 	*/
 	DWORD id = nID - IDC_PANE_LDA + 1;
 	const LONG* OPADRTABLE = m_pAsmView->ASM2ADR[id];
+	BYTE data[3] = { 0x00, 0x00, 0x00 };
 
-	CAsmInputBarDlg dlg;
+	// 単一のアドレッシングモードのみのオペコードだった場合
+	if (OPADRTABLE[0] >= 0x00) {
+		data[0] = (BYTE)OPADRTABLE[0];
+	}
+	// 複数のアドレッシングモードを有するオペコードだった場合
+	else /*(OPADRTABLE[0] == -1)*/ {
+		CAsmInputBarDlg dlg;
 
-	dlg.SetAdressingModeDataTable(OPADRTABLE);
-	dlg.DoModal();
-	
-	CString buf;
-	buf.Format(L"GetAsmSel() : %d, GetSelected: %d", m_pAsmView->GetAsmSel(), dlg.GetSelected());
+		dlg.SetAdressingModeDataTable(OPADRTABLE);
+		if (dlg.DoModal() == IDCANCEL)
+			return;
+
+		data[0] = (BYTE)OPADRTABLE[dlg.GetSelected() + 1];
+	}
 
 	// 反映
-	BYTE data[3] = { (BYTE)OPADRTABLE[dlg.GetSelected() + 1], 0x00, 0x00 };
 	m_pAsmView->SetAsmObj(m_pAsmView->GetAsmSel(), data);
 	m_pAsmView->AsmObjToBin();
 	m_pAsmView->GetDocument()->UpdateAllViews(NULL);

@@ -46,6 +46,7 @@ BOOL CAsmInputBarDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
+	// ダイアログの位置調整
 	POINT pos;
 	GetCursorPos(&pos);
 
@@ -54,8 +55,14 @@ BOOL CAsmInputBarDlg::OnInitDialog()
 	DWORD width = rect.right - rect.left;
 	DWORD height = rect.bottom - rect.top;
 	
-//	this->SetWindowPos(this, pos.x, pos.y, pos.x, pos.y, SWP_SHOWWINDOW);
 	this->MoveWindow(pos.x - width/2, pos.y - height/2, width, height);
+
+	// ボタンの無効化処理
+	for (int i = 0; i < 9; i++) {
+		if (m_ADRTABLE[1+i /* HEAD は除く*/] == 0) {
+			GetDlgItem(IDC_ASMDLG_0+i)->ShowWindow(SW_HIDE);
+		}
+	}
 	
 	return TRUE;  // コントロールにフォーカスを設定しないとき、戻り値は TRUE となります
 	              // 例外: OCX プロパティ ページの戻り値は FALSE となります
@@ -73,8 +80,6 @@ void CAsmInputBarDlg::OnClickedPanel(UINT nID)
 void CAsmInputBarDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
 	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
-
-	
 	CDialog::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
