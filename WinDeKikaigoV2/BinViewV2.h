@@ -60,7 +60,6 @@ protected:
 	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 	protected:
 	virtual void OnDraw(CDC* pDC);      // このビューを描画するためにオーバーライドしました。
-	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
 	//}}AFX_VIRTUAL
 
 // インプリメンテーション

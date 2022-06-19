@@ -212,11 +212,6 @@ BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwS
 	return bResult;
 }
 
-void CBinViewV2::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
-{
-//	CWinDeKikaigoV2Doc* pDoc = GetDocument();
-}
-
 void CBinViewV2::OnLButtonDown(UINT nFlags, CPoint point) 
 {
 	// ç¿ïWåvéZ
