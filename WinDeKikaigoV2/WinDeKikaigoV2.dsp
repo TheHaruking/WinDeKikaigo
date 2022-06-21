@@ -107,6 +107,10 @@ SOURCE=.\BinViewV2.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Emu6502.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\MainFrm.cpp
 # End Source File
 # Begin Source File
@@ -145,6 +149,10 @@ SOURCE=.\AsmViewV2.h
 # Begin Source File
 
 SOURCE=.\BinViewV2.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Emu6502.h
 # End Source File
 # Begin Source File
 

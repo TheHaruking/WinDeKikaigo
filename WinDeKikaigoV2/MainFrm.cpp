@@ -7,6 +7,7 @@
 #include "BinViewV2.h"
 #include "AsmViewV2.h"
 #include "AsmInputBarDlg.h"
+#include "Emu6502.h"
 
 #include "MainFrm.h"
 
@@ -172,6 +173,7 @@ void CMainFrame::OnAppRightpane()
 
 void CMainFrame::OnAppDebug() 
 {
-	CAsmInputBarDlg dlg;
-	dlg.DoModal();
+	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
+	CEmu6502 cpu(pDoc->m_data);
+	cpu.Exec();
 }
