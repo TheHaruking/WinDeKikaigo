@@ -176,4 +176,5 @@ void CMainFrame::OnAppDebug()
 	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
 	CEmu6502 cpu(pDoc->m_data);
 	cpu.Exec();
+	pDoc->UpdateAllViews(NULL);
 }

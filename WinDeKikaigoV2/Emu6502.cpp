@@ -33,7 +33,41 @@ CEmu6502::~CEmu6502()
 
 void CEmu6502::Exec()
 {
+	// RET (0x60) が無かったら実行しない : RET の有無を走査。
+	BOOL bNoRET = TRUE;
+	for (int i = 0; i < 64; i++) {
+		if (m_pData[i] == 0x60) {
+			bNoRET = FALSE;
+			break;
+		}
+	}
+
+	// RET (0x60) が無かったら実行しない
+	if (bNoRET) {
+		MessageBox(AfxGetMainWnd()->m_hWnd, L"RET (0x60) が見つかりません。\r\n実行を中断します。", L"", 0);
+		return;
+	}
+
+	// 処理 (後でテーブル化も検討)
+	BYTE op;
 	CString buf;
-	buf.Format(L"m_regPC:%04X, m_pData:%02X", m_regPC, m_pData[m_regPC]);
-	OutputDebugString(buf);
+	for (m_regPC = 0; m_regPC < 64; m_regPC++) {
+		op = m_pData[m_regPC];
+
+		switch (op) {
+		case 0x60: goto end;
+		case 0xA9: m_regA = imm(); break;
+		case 0xAD: m_regA = *ad(); break;
+		case 0xB1: m_regA = *iny(); break;
+		case 0xA1: m_regA = *inx(); break;
+		case 0x8D: *ad() = m_regA; break;
+		case 0xE8: m_regX++; break;
+		}
+
+		// 確認用
+		buf.Format(L"PC:%04X, A:%02X, X:%02X, Y:%02X\r\n", m_regPC, m_regA, m_regX, m_regY);
+		OutputDebugString(buf);
+	}
+end:
+	;
 }

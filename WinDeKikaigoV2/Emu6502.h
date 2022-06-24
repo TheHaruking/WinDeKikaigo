@@ -12,10 +12,27 @@
 class CEmu6502  
 {
 protected:
+	inline BYTE imm()  { m_regPC++; return m_pData[m_regPC]; };
+	inline BYTE* zd()  { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr]); };
+	inline BYTE* zdx() { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr + m_regX]); };
+	inline BYTE* zdy() { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr + m_regY]); };
+	inline BYTE* ad()  { m_regPC++; WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); return &(m_pData[adr]); };
+	inline BYTE* adx() { m_regPC++; WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); return &(m_pData[adr + m_regX]); };
+	inline BYTE* ady() { m_regPC++; WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); return &(m_pData[adr + m_regY]); };
+	inline BYTE* inx() { m_regPC++; WORD adr = m_pData[m_regPC]; WORD adr2 = m_pData[adr + m_regX]; adr2 |= (m_pData[adr + m_regX +1] << 8); return &(m_pData[adr2]); };
+	inline BYTE* iny() { m_regPC++; WORD adr = m_pData[m_regPC]; WORD adr2 = m_pData[adr]; adr2 |= (m_pData[adr+1] << 8); return &(m_pData[adr2 + m_regY]); };
+
+protected:
 	BYTE* m_pData;
 	BYTE m_regA;
 	BYTE m_regX;
 	BYTE m_regY;
+	typedef struct {
+		union {
+			struct { BYTE l, h; };
+			WORD word;
+		};
+	} WORDADR;
 	WORD m_regPC;
 	enum {
 		BIT_N = 0x80, BIT_V = 0x40, BIT_R = 0x20, BIT_B = 0x10,
