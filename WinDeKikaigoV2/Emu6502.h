@@ -13,9 +13,9 @@ class CEmu6502
 {
 protected:
 	inline BYTE imm()  { m_regPC++; return m_pData[m_regPC]; };
-	inline BYTE* zd()  { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr]); };
-	inline BYTE* zdx() { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr + m_regX]); };
-	inline BYTE* zdy() { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr + m_regY]); };
+	inline BYTE* zr()  { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr]); };
+	inline BYTE* zrx() { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr + m_regX]); };
+	inline BYTE* zry() { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr + m_regY]); };
 	inline BYTE* ad()  { m_regPC++; WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); return &(m_pData[adr]); };
 	inline BYTE* adx() { m_regPC++; WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); return &(m_pData[adr + m_regX]); };
 	inline BYTE* ady() { m_regPC++; WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); return &(m_pData[adr + m_regY]); };
