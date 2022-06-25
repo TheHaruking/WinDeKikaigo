@@ -49,19 +49,59 @@ protected:
 	inline BYTE* idx() { m_regPC++; WORD adr = m_pData[m_regPC]; WORD adr2 = m_pData[adr + m_regX]; adr2 |= (m_pData[adr + m_regX +1] << 8); return &(m_pData[adr2]); };
 	inline BYTE* idy() { m_regPC++; WORD adr = m_pData[m_regPC]; WORD adr2 = m_pData[adr]; adr2 |= (m_pData[adr+1] << 8); return &(m_pData[adr2 + m_regY]); };
 
-	/* for test!! */ inline void setN(BYTE byte) { m_regP.bitN = (byte >> 7); }
-	inline void setNZ(BYTE byte)                 { m_regP.bitN = (byte >> 7); m_regP.bitZ = (byte == 0); }
-	inline void setNZC(BYTE byte, BYTE before)   { m_regP.bitN = (byte >> 7); m_regP.bitZ = (byte == 0); m_regP.bitC = (before > byte);}
-	inline void setNZCV(BYTE byte, BYTE before)  { m_regP.bitN = (byte >> 7); m_regP.bitZ = (byte == 0); m_regP.bitC = (before > byte); m_regP.bitV = ((char)before > (char)byte); }
-	inline void setNZCVn(BYTE byte, BYTE before) { m_regP.bitN = (byte >> 7); m_regP.bitZ = (byte == 0); m_regP.bitC = (before > byte); m_regP.bitV = ((char)before < (char)byte); }
+	inline void setNZ(BYTE byte) { m_regP.bitN = (byte >> 7); m_regP.bitZ = (byte == 0); }
 
-	inline void lda(BYTE byte) { m_regA = byte; setNZ(byte); }
+	inline void lda(BYTE byte) { setNZ(m_regA = byte); }
+	inline void ldx(BYTE byte) { setNZ(m_regX = byte); }
+	inline void ldy(BYTE byte) { setNZ(m_regY = byte); }
 	inline void sta(BYTE* byte) { *byte = m_regA; }
-	inline void adc(BYTE byte) { BYTE regA_old = m_regA; setNZCV((m_regA += byte), regA_old); }
-	inline void sbc(BYTE byte) { BYTE regA_old = m_regA; setNZCVn((m_regA -= byte), regA_old); }
+	inline void stx(BYTE* byte) { *byte = m_regX; }
+	inline void sty(BYTE* byte) { *byte = m_regY; }
+
+	inline void tax() { setNZ(m_regX = m_regA); }
+	inline void tay() { setNZ(m_regY = m_regA); }
+	inline void txa() { setNZ(m_regA = m_regX); }
+	inline void tya() { setNZ(m_regA = m_regY); }
+	inline void tsx() { setNZ(m_regX = m_regS); }
+	inline void txs() { setNZ(m_regS = m_regX); }
+
+	inline void pha() { m_pData[0x0100 + m_regS] = m_regA; m_regS++; }
+	inline void pla() { setNZ(m_regA = m_pData[0x0100 + m_regS]); m_regS--; }
+	inline void php() { m_pData[0x0100 + m_regS] = m_regP.byte; m_regS++; }
+	inline void plp() { m_regP.byte = m_pData[0x0100 + m_regS]; m_regS--; }
+
+	inline void and(BYTE byte) { setNZ(m_regA &= byte); }
+	inline void ora(BYTE byte) { setNZ(m_regA |= byte); }
+	inline void eor(BYTE byte) { setNZ(m_regA ^= byte); }
+
+	inline void adc(BYTE byte) { BYTE regA_old = m_regA; setNZ(m_regA += byte +  m_regP.bitC); m_regP.bitV = ((char)regA_old > (char)m_regA); m_regP.bitC = regA_old > m_regA; }
+	inline void sbc(BYTE byte) { BYTE regA_old = m_regA; setNZ(m_regA -= byte - ~m_regP.bitC); m_regP.bitV = ((char)regA_old < (char)m_regA); m_regP.bitC = regA_old > m_regA; }
+
+	inline void asl() { BYTE regA_old = m_regA; setNZ(m_regA <<= 1); m_regP.bitC = (regA_old >> 7); }
+	inline void lsr() { BYTE regA_old = m_regA; setNZ(m_regA >>= 1); m_regP.bitC = (regA_old &  1); }
+	inline void rol() { BYTE regA_old = m_regA; setNZ((m_regA <<= 1) |= (m_regP.bitC     )); m_regP.bitC = (regA_old >> 7); }
+	inline void ror() { BYTE regA_old = m_regA; setNZ((m_regA >>= 1) |= (m_regP.bitC << 7)); m_regP.bitC = (regA_old &  1); }
+	inline void asl(BYTE* byte) { BYTE byte_old = *byte; setNZ(*byte <<= 1); m_regP.bitC = (byte_old >> 7); }
+	inline void lsr(BYTE* byte) { BYTE byte_old = *byte; setNZ(*byte >>= 1); m_regP.bitC = (byte_old &  1); }
+	inline void rol(BYTE* byte) { BYTE byte_old = *byte; setNZ((*byte <<= 1) |= (m_regP.bitC     )); m_regP.bitC = (byte_old >> 7); }
+	inline void ror(BYTE* byte) { BYTE byte_old = *byte; setNZ((*byte >>= 1) |= (m_regP.bitC << 7)); m_regP.bitC = (byte_old &  1); }
+
+	inline void inc(BYTE* byte) { setNZ(++*byte); }
+	inline void inx() { setNZ(++m_regX); }
+	inline void iny() { setNZ(++m_regY); }
+	inline void dec(BYTE* byte) { setNZ(--*byte); }
+	inline void dex() { setNZ(--m_regX); }
+	inline void dey() { setNZ(--m_regY); }
+
 	inline void bit(BYTE byte) { m_regP.bitZ = ((byte & m_regA) == 0); m_regP.bitN = (byte >> 7); m_regP.bitV = (byte >> 6); }
-	inline void inx() { m_regX++; setNZ(m_regX); }
-	inline void cmp() { }
+
+	inline void clc() { m_regP.bitC = 0; }
+	inline void sec() { m_regP.bitC = 1; }
+	inline void cld() { m_regP.bitD = 0; }
+	inline void sed() { m_regP.bitD = 1; }
+	inline void cli() { m_regP.bitI = 0; }
+	inline void sei() { m_regP.bitI = 1; }
+	inline void clv() { m_regP.bitV = 0; }
 
 public:
 	void Exec();
