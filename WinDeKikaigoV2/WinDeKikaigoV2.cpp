@@ -82,8 +82,8 @@ BOOL CWinDeKikaigoV2App::InitInstance()
 		return FALSE;
 
 	// メイン ウィンドウが初期化されたので、表示と更新を行います。
-	// m_pMainWnd->ShowWindow(SW_SHOW);
-	m_pMainWnd->ShowWindow(SW_MAXIMIZE);
+	m_pMainWnd->ShowWindow(SW_SHOW);
+	// m_pMainWnd->ShowWindow(SW_MAXIMIZE);
 	m_pMainWnd->UpdateWindow();
 
 	return TRUE;
