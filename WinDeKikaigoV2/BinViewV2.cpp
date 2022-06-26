@@ -227,9 +227,9 @@ void CBinViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	m_nSel += xmod;
 	
 	// 出力
-	CString buf;
-	buf.Format(L"Down! x:%d, y:%d, m_nSel:%d, max:%d\r\n", point.x, point.y, m_nSel, m_nMaxColumn);
-	OutputDebugString(buf);
+//	CString buf;
+//	buf.Format(L"Down! x:%d, y:%d, m_nSel:%d, max:%d\r\n", point.x, point.y, m_nSel, m_nMaxColumn);
+//	OutputDebugString(buf);
 
 	// キャレット設定
 	CaretPosUpdate();
