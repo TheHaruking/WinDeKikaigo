@@ -40,6 +40,8 @@ protected:
 
 protected:
 	inline BYTE imm()  { m_regPC++; return m_pData[m_regPC]; };
+	inline WORD imm16(){ m_regPC++; WORD adr = *(WORD*)(&(m_pData[m_regPC])); m_regPC++; return adr; };
+	inline WORD id16() { m_regPC++; WORD adr = m_pData[m_regPC]; WORD adr2 = m_pData[adr]; adr2 |= (m_pData[adr + 1] << 8); m_regPC++; return adr2; };
 	inline BYTE* zr()  { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr]); };
 	inline BYTE* zrx() { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr + m_regX]); };
 	inline BYTE* zry() { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr + m_regY]); };
@@ -48,8 +50,11 @@ protected:
 	inline BYTE* ady() { m_regPC++; WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); return &(m_pData[adr + m_regY]); };
 	inline BYTE* idx() { m_regPC++; WORD adr = m_pData[m_regPC]; WORD adr2 = m_pData[adr + m_regX]; adr2 |= (m_pData[adr + m_regX +1] << 8); return &(m_pData[adr2]); };
 	inline BYTE* idy() { m_regPC++; WORD adr = m_pData[m_regPC]; WORD adr2 = m_pData[adr]; adr2 |= (m_pData[adr+1] << 8); return &(m_pData[adr2 + m_regY]); };
+	inline char rel()  { m_regPC++; return (char)(m_pData[m_regPC]); };
 
 	inline void setNZ(BYTE byte) { m_regP.bitN = (byte >> 7); m_regP.bitZ = (byte == 0); }
+	inline WORD* pop16() { WORD p = 0x01FF - m_regS; m_regS -= 2; return (WORD*)(&(m_pData[p])); }
+	inline void push16(WORD word) { m_regS += 2; WORD p = 0x01FF - m_regS; *(WORD*)(&(m_pData[p])) = word; }
 
 	inline void lda(BYTE byte) { setNZ(m_regA = byte); }
 	inline void ldx(BYTE byte) { setNZ(m_regX = byte); }
@@ -98,6 +103,21 @@ protected:
 	inline void cpy(BYTE byte) { setNZ(m_regY - byte); m_regP.bitC = (m_regY >= byte); }
 	inline void bit(BYTE byte) { m_regP.bitN = (byte >> 7); m_regP.bitZ = ((byte & m_regA) == 0); m_regP.bitV = (byte >> 6); }
 
+	inline void jmp(WORD word) { m_regPC = word - 1; }
+	inline void jsr(WORD word) { push16(m_regPC); m_regPC = word - 1; }
+	inline void ret() { m_regPC = *pop16(); }
+//	inline void brk() {}
+//	inline void rti() {}
+
+	inline void bne(char sbyte) { m_regPC += !(m_regP.bitZ) ? sbyte : 0; }
+	inline void beq(char sbyte) { m_regPC +=  (m_regP.bitZ) ? sbyte : 0; }
+	inline void bpl(char sbyte) { m_regPC += !(m_regP.bitN) ? sbyte : 0; }
+	inline void bmi(char sbyte) { m_regPC +=  (m_regP.bitN) ? sbyte : 0; }
+	inline void bcc(char sbyte) { m_regPC += !(m_regP.bitC) ? sbyte : 0; }
+	inline void bcs(char sbyte) { m_regPC +=  (m_regP.bitC) ? sbyte : 0; }
+	inline void bvc(char sbyte) { m_regPC += !(m_regP.bitV) ? sbyte : 0; }
+	inline void bvs(char sbyte) { m_regPC +=  (m_regP.bitV) ? sbyte : 0; }
+
 	inline void clc() { m_regP.bitC = 0; }
 	inline void sec() { m_regP.bitC = 1; }
 	inline void cld() { m_regP.bitD = 0; }
@@ -106,10 +126,17 @@ protected:
 	inline void sei() { m_regP.bitI = 1; }
 	inline void clv() { m_regP.bitV = 0; }
 
+	inline void nop() {}
+
 public:
-	void Exec();
+	CEmu6502();
 	CEmu6502(BYTE* pData);
 	virtual ~CEmu6502();
+
+	void Init(BYTE* pData);
+	void Reset();
+	void Exec();
+	inline WORD GetRegPC() { return m_regPC; };
 };
 
 #endif // !defined(AFX_EMU6502_H__A50E5E02_C522_4A1E_B638_B5FE2CD1822C__INCLUDED_)

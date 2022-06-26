@@ -103,6 +103,10 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// AsmView ‚Æ BinView ‚ð˜AŒg‚³‚¹‚é
 	((CBinViewV2*)m_wndSplitter.GetPane(0,0))->m_pAsm = (CAsmViewV2*)m_wndSplitter.GetPane(0,1);
 
+	// CPU ƒ‚ƒWƒ…[ƒ‹‚Ì‰Šú‰»
+	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
+	m_cpu.Init(pDoc->m_data);
+
 	return 0;
 }
 
@@ -174,7 +178,6 @@ void CMainFrame::OnAppRightpane()
 void CMainFrame::OnAppDebug() 
 {
 	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
-	CEmu6502 cpu(pDoc->m_data);
-	cpu.Exec();
+	m_cpu.Exec();
 	pDoc->UpdateAllViews(NULL);
 }

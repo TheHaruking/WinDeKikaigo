@@ -10,6 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #include "AsmInputBar.h"
+#include "Emu6502.h"
 
 class CMainFrame : public CFrameWnd
 {
@@ -49,6 +50,8 @@ public:  // コントロール バー用メンバ
 	CDialogBar   m_wndDialogBar_L;
 	CAsmInputBar m_wndDialogBar_R;
 	CSplitterWnd m_wndSplitter;
+
+	CEmu6502 m_cpu;
 
 // 生成されたメッセージ マップ関数
 protected:
