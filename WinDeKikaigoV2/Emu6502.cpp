@@ -183,8 +183,23 @@ void CEmu6502::Exec()
 		case 0xD6: dec(zrx());  break;
 		case 0xDE: dec(zry());  break;
 
-		case 0x24: bit(*zr());   break;
-		case 0x2C: bit(*ad());   break;
+		case 0xC9: cmp(imm());  break;
+		case 0xC5: cmp(*zr());  break;
+		case 0xCD: cmp(*ad());  break;
+		case 0xD5: cmp(*zrx()); break;
+		case 0xDD: cmp(*adx()); break;
+		case 0xD9: cmp(*ady()); break;
+		case 0xC1: cmp(*idx()); break;
+		case 0xD1: cmp(*idy()); break;
+
+		case 0xE0: cpx(imm());  break;
+		case 0xE4: cpx(*zr());  break;
+		case 0xEC: cpx(*ad());  break;
+		case 0xC0: cpy(imm());  break;
+		case 0xC4: cpy(*zr());  break;
+		case 0xCC: cpy(*ad());  break;
+		case 0x24: bit(*zr());  break;
+		case 0x2C: bit(*ad());  break;
 
 		case 0x58: cli(); break;
 		case 0x78: sei(); break;

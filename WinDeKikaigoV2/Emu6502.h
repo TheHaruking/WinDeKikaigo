@@ -93,7 +93,10 @@ protected:
 	inline void dex() { setNZ(--m_regX); }
 	inline void dey() { setNZ(--m_regY); }
 
-	inline void bit(BYTE byte) { m_regP.bitZ = ((byte & m_regA) == 0); m_regP.bitN = (byte >> 7); m_regP.bitV = (byte >> 6); }
+	inline void cmp(BYTE byte) { setNZ(m_regA - byte); m_regP.bitC = (m_regA >= byte); }
+	inline void cpx(BYTE byte) { setNZ(m_regX - byte); m_regP.bitC = (m_regX >= byte); }
+	inline void cpy(BYTE byte) { setNZ(m_regY - byte); m_regP.bitC = (m_regY >= byte); }
+	inline void bit(BYTE byte) { m_regP.bitN = (byte >> 7); m_regP.bitZ = ((byte & m_regA) == 0); m_regP.bitV = (byte >> 6); }
 
 	inline void clc() { m_regP.bitC = 0; }
 	inline void sec() { m_regP.bitC = 1; }
