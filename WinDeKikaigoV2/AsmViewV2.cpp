@@ -220,73 +220,6 @@ END_MESSAGE_MAP()
 
 void CAsmViewV2::OnDraw(CDC* pDC)
 {
-/*	CWinDeKikaigoV2Doc* pDoc = GetDocument();
-	
-	// 逆アセンブル (64 バイト(+α)分) 表示
-	// ※未定義命令以降は DATA 表示に切り替える
-	const BYTE* BIN = pDoc->m_data; // バイナリ (読み取り専用)
-	LONG ip = 0; // バイナリ読み取り位置
-
-	DWORD dwOp, dwAdr, dwOpr; // オペコード, アドレッシング, オペランドのバイト数
-	CString buf; // 表示用
-	INT i = 0;
-	for (; ip < 64; i++) // i は表示縦座標に使用
-	{
-		dwOp = BIN2OP[BIN[ip]];
-		dwAdr = BIN2ADR[BIN[ip]];
-		dwOpr = ADR2OPR[dwAdr];   // 0 or 1 or 2
-
-		// UND だった場合中断
-		if (dwOp == OP_UND)
-			break;
-
-		// オペランド.
-		DWORD val1 = 0;
-		DWORD val2 = 0;
-		switch (dwOpr) {
-		case 1: val1 = BIN[ip+1]; break;
-		case 2: val1 = BIN[ip+2]; val2 = BIN[ip+1]; break;
-		}
-
-		// 表示
-		if (ip == m_nCurIp) {
-			pDC->SetBkColor(RGB(255,255,0));
-		} else {
-			pDC->SetBkColor(RGB(255,255,255));
-		}
-		buf.Format(L"%s", OP2ASM[dwOp]);
-		pDC->TextOut(0, i*16, buf);
-		buf.Format(ADR2STR[dwAdr], val1, val2);
-		pDC->TextOut(4*8, i*16, buf);
-
-		// 座標からipを特定できるように保存しておく
-		m_pos2ip[i] = ip;
-
-		// ASMOBJ
-		memcpy(m_AsmObj[i].data, &(BIN[ip]), 3);
-		m_AsmObj[i].type = ASMOBJ::TEXT;
-		m_AsmObj[i].nSize = 1 + dwOpr;
-
-		// 読み進める
-		ip += 1 + dwOpr;
-	}
-
-	// 残りは DATA として表示
-	pDC->SetBkColor(RGB(255,255,255));
-	for (; ip < 64; i++) {
-		buf.Format(L"%02X ", BIN[ip]);
-		pDC->TextOut(0, i*16, buf);
-
-		// ASMOBJ
-		m_AsmObj[i].nSize   = 1;
-		m_AsmObj[i].data[0] = BIN[ip];
-		m_AsmObj[i].type = ASMOBJ::DATA;
-		ip ++;
-	}
-
-	// ASMOBJ 終端
-	m_AsmObj[i].type = ASMOBJ::END;
-*/
 	LONG i = 0;
 	CString buf;
 
@@ -315,7 +248,10 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 		// 表示
 		if (i == m_nCurSel) {
 			pDC->SetBkColor(RGB(255,255,0));
-		} else {
+		} else if (m_num2ip[i] == ((CMainFrame*)AfxGetMainWnd())->m_cpu.GetRegPC()) {
+			pDC->SetBkColor(RGB(0,255,255));
+		}		
+		else {
 			pDC->SetBkColor(RGB(255,255,255));
 		}
 		buf.Format(L"%s", OP2ASM[dwOp]);
@@ -357,7 +293,7 @@ void CAsmViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	case VK_DOWN:  m_nCurSel++; break;
 	}
 
-	m_nCurIp = m_pos2ip[m_nCurSel];
+	m_nCurIp = m_num2ip[m_nCurSel];
 	
 	this->RedrawWindow();
 	
@@ -368,11 +304,11 @@ void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
 	CString buf;
-	buf.Format(L"m_pos2ip: %d\r\n", m_pos2ip[point.y/16]);
+	buf.Format(L"m_num2ip: %d\r\n", m_num2ip[point.y/16]);
 	OutputDebugString(buf);
 
 	m_nCurSel = point.y/16;
-	m_nCurIp = m_pos2ip[m_nCurSel];
+	m_nCurIp = m_num2ip[m_nCurSel];
 	
 	this->RedrawWindow();
 
@@ -443,7 +379,7 @@ void CAsmViewV2::BinToAsmObj()
 			break;
 
 		// 座標からipを特定できるように保存しておく
-		m_pos2ip[i] = ip;
+		m_num2ip[i] = ip;
 
 		// ASMOBJ
 		memcpy(m_AsmObj[i].data, &(BIN[ip]), 3);
@@ -462,7 +398,7 @@ void CAsmViewV2::BinToAsmObj()
 		m_AsmObj[i].type = ASMOBJ::DATA;
 
 		// 座標からipを特定できるように保存しておく
-		m_pos2ip[i] = ip;
+		m_num2ip[i] = ip;
 
 		i++;
 		ip++;
@@ -476,7 +412,7 @@ void CAsmViewV2::OnInitialUpdate()
 {
 	CScrollView::OnInitialUpdate();
 
-	::ZeroMemory(m_pos2ip, 256);
+	::ZeroMemory(m_num2ip, 256);
 	m_nCurIp = 0;
 	m_nCurSel = 0;
 
