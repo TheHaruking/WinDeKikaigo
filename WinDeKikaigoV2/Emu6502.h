@@ -39,18 +39,18 @@ protected:
 	BYTE m_regS;
 
 protected:
-	inline BYTE imm()  { m_regPC++; return m_pData[m_regPC]; };
-	inline WORD imm16(){ m_regPC++; WORD adr = *(WORD*)(&(m_pData[m_regPC])); m_regPC++; return adr; };
-	inline WORD id16() { m_regPC++; WORD adr = m_pData[m_regPC]; WORD adr2 = m_pData[adr]; adr2 |= (m_pData[adr + 1] << 8); m_regPC++; return adr2; };
-	inline BYTE* zr()  { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr]); };
-	inline BYTE* zrx() { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr + m_regX]); };
-	inline BYTE* zry() { m_regPC++; WORD adr = m_pData[m_regPC]; return &(m_pData[adr + m_regY]); };
-	inline BYTE* ad()  { m_regPC++; WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); return &(m_pData[adr]); };
-	inline BYTE* adx() { m_regPC++; WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); return &(m_pData[adr + m_regX]); };
-	inline BYTE* ady() { m_regPC++; WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); return &(m_pData[adr + m_regY]); };
-	inline BYTE* idx() { m_regPC++; WORD adr = m_pData[m_regPC]; WORD adr2 = m_pData[adr + m_regX]; adr2 |= (m_pData[adr + m_regX +1] << 8); return &(m_pData[adr2]); };
-	inline BYTE* idy() { m_regPC++; WORD adr = m_pData[m_regPC]; WORD adr2 = m_pData[adr]; adr2 |= (m_pData[adr+1] << 8); return &(m_pData[adr2 + m_regY]); };
-	inline char rel()  { m_regPC++; return (char)(m_pData[m_regPC]); };
+	inline BYTE imm()  { BYTE ret = m_pData[m_regPC]; m_regPC++; return ret; }
+	inline char rel()  { BYTE ret = (char)(m_pData[m_regPC]); m_regPC++; return ret; }
+	inline WORD imm16(){ WORD adr = *(WORD*)(&(m_pData[m_regPC])); m_regPC+=2; return adr; }
+	inline BYTE* zr()  { WORD adr = m_pData[m_regPC]; m_regPC++; return &(m_pData[adr]); }
+	inline BYTE* zrx() { WORD adr = m_pData[m_regPC]; m_regPC++; return &(m_pData[adr + m_regX]); }
+	inline BYTE* zry() { WORD adr = m_pData[m_regPC]; m_regPC++; return &(m_pData[adr + m_regY]); }
+	inline BYTE* ad()  { WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); m_regPC++; return &(m_pData[adr]); }
+	inline BYTE* adx() { WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); m_regPC++; return &(m_pData[adr + m_regX]); }
+	inline BYTE* ady() { WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); m_regPC++; return &(m_pData[adr + m_regY]); }
+	inline BYTE* idx() { WORD adr = m_pData[m_regPC]; m_regPC++;  WORD adr2 = m_pData[adr + m_regX]; adr2 |= (m_pData[adr + m_regX +1] << 8); return &(m_pData[adr2]); }
+	inline BYTE* idy() { WORD adr = m_pData[m_regPC]; m_regPC++;  WORD adr2 = m_pData[adr]; adr2 |= (m_pData[adr+1] << 8); return &(m_pData[adr2 + m_regY]); }
+	inline WORD id16() { WORD adr = m_pData[m_regPC]; m_regPC+=2; WORD adr2 = m_pData[adr]; adr2 |= (m_pData[adr+1] << 8); return adr2; }
 
 	inline void setNZ(BYTE byte) { m_regP.bitN = (byte >> 7); m_regP.bitZ = (byte == 0); }
 	inline WORD* pop16() { WORD p = 0x01FF - m_regS; m_regS -= 2; return (WORD*)(&(m_pData[p])); }
@@ -103,8 +103,8 @@ protected:
 	inline void cpy(BYTE byte) { setNZ(m_regY - byte); m_regP.bitC = (m_regY >= byte); }
 	inline void bit(BYTE byte) { m_regP.bitN = (byte >> 7); m_regP.bitZ = ((byte & m_regA) == 0); m_regP.bitV = (byte >> 6); }
 
-	inline void jmp(WORD word) { m_regPC = word - 1; }
-	inline void jsr(WORD word) { push16(m_regPC); m_regPC = word - 1; }
+	inline void jmp(WORD word) { m_regPC = word; }
+	inline void jsr(WORD word) { push16(m_regPC); m_regPC = word; }
 	inline void ret() { m_regPC = *pop16(); }
 //	inline void brk() {}
 //	inline void rti() {}

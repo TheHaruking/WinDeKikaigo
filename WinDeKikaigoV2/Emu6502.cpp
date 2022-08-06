@@ -55,10 +55,12 @@ void CEmu6502::Reset()
 
 void CEmu6502::Exec()
 {
+#ifdef _DEBUG
+	WORD regPC_old = m_regPC; // 確認用
+#endif
 	// 処理 (後でテーブル化も検討)
 	BYTE op = m_pData[m_regPC];
-	CString errmsg; // エラー出力用
-	WORD regPC_old = m_regPC; // 確認用
+	m_regPC++;
 
 	switch (op) {
 	case 0xA9: lda(imm());  break;
@@ -228,12 +230,12 @@ void CEmu6502::Exec()
 	case 0xEA: nop(); break;
 
 	default:
+		// エラー出力
+		CString errmsg;
 		errmsg.Format(L"未定義命令 (0x%02X) です。\r\n実行を中断します。", op);
 		MessageBox(AfxGetMainWnd()->m_hWnd, errmsg, L"未定義命令実行エラー", 0);
 		return;
 	}
-
-	m_regPC++;
 
 	// 確認用
 #ifdef _DEBUG
