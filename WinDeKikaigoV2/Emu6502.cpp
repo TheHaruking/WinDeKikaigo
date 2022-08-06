@@ -41,9 +41,11 @@ void CEmu6502::Init(BYTE* pData)
 	m_regP.byte = !BIT_N | !BIT_V | BIT_R | !BIT_B | !BIT_D | BIT_I | !BIT_Z | !BIT_C;
 
 	// 確認用
+#ifdef _DEBUG
 	CString buf;
 	buf.Format(L"                             NV_bdiZC\r\n");
 	OutputDebugString(buf);
+#endif
 }
 
 void CEmu6502::Reset()
@@ -55,7 +57,7 @@ void CEmu6502::Exec()
 {
 	// 処理 (後でテーブル化も検討)
 	BYTE op = m_pData[m_regPC];
-	CString buf; // 確認用
+	CString errmsg; // エラー出力用
 	WORD regPC_old = m_regPC; // 確認用
 
 	switch (op) {
@@ -226,14 +228,17 @@ void CEmu6502::Exec()
 	case 0xEA: nop(); break;
 
 	default:
-		buf.Format(L"未定義命令 (0x%02X) です。\r\n実行を中断します。", op);
-		MessageBox(AfxGetMainWnd()->m_hWnd, buf, L"未定義命令実行エラー", 0);
+		errmsg.Format(L"未定義命令 (0x%02X) です。\r\n実行を中断します。", op);
+		MessageBox(AfxGetMainWnd()->m_hWnd, errmsg, L"未定義命令実行エラー", 0);
 		return;
 	}
 
 	m_regPC++;
 
 	// 確認用
+#ifdef _DEBUG
+	CString buf;
 	buf.Format(L"PC:%04X, op:%02X, A:%02X, X:%02X, Y:%02X, P:%d%d_%d%d%d%d%d [NEXT:%04X]\r\n", regPC_old, op, m_regA, m_regX, m_regY, m_regP.bitN, m_regP.bitV, /*m_regP.bitR, */ m_regP.bitB, m_regP.bitD, m_regP.bitI, m_regP.bitZ, m_regP.bitC, m_regPC);
 	OutputDebugString(buf);
+#endif
 }

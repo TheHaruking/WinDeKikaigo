@@ -226,10 +226,12 @@ void CBinViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	m_nSel *= m_eDigit;
 	m_nSel += xmod;
 	
-	// 出力
+	// 確認用
+#ifdef _DEBUG
 //	CString buf;
 //	buf.Format(L"Down! x:%d, y:%d, m_nSel:%d, max:%d\r\n", point.x, point.y, m_nSel, m_nMaxColumn);
 //	OutputDebugString(buf);
+#endif
 
 	// キャレット設定
 	CaretPosUpdate();

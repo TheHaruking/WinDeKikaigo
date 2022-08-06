@@ -302,10 +302,12 @@ void CAsmViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point) 
 {
-	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
+	// 確認用
+#ifdef _DEBUG
 	CString buf;
 	buf.Format(L"m_num2ip: %d\r\n", m_num2ip[point.y/16]);
 	OutputDebugString(buf);
+#endif
 
 	m_nCurSel = point.y/16;
 	m_nCurIp = m_num2ip[m_nCurSel];
