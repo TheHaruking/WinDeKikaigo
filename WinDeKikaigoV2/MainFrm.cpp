@@ -28,6 +28,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_APP_LEFTPANE, OnAppLeftpane)
 	ON_COMMAND(ID_APP_RIGHTPANE, OnAppRightpane)
 	ON_COMMAND(ID_APP_DEBUG, OnAppDebug)
+	ON_COMMAND(ID_APP_RESET, OnAppReset)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -180,4 +181,11 @@ void CMainFrame::OnAppDebug()
 	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
 	m_cpu.Exec();
 	pDoc->UpdateAllViews(NULL);
+}
+
+void CMainFrame::OnAppReset() 
+{
+	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
+	m_cpu.Reset();
+	pDoc->UpdateAllViews(NULL);	
 }

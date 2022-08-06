@@ -60,6 +60,7 @@ protected:
 	afx_msg void OnAppLeftpane();
 	afx_msg void OnAppRightpane();
 	afx_msg void OnAppDebug();
+	afx_msg void OnAppReset();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
