@@ -6,11 +6,18 @@
 #define IDD_ASMINPUTBARDLG              101
 #define IDD_DIALOGBAR_L                 103
 #define IDD_DIALOGBAR_R                 104
+#define IDD_EMU6502OUTPUTV2_FORM        107
+#define IDR_EMU6502OUTPUTV2_TMPL        108
 #define IDR_MAINFRAME                   128
 #define IDR_WINDEKTYPE                  129
 #define IDD_DIALOG1                     130
 #define IDC_TEST_LABEL                  1021
 #define IDC_TEST_LABEL2                 1022
+#define IDC_EDIT_PC                     1031
+#define IDC_EDIT_REGA                   1032
+#define IDC_EDIT_REGX                   1033
+#define IDC_EDIT_REGY                   1034
+#define IDC_EDIT_REGS                   1035
 #define IDC_PANE_LDA                    5000
 #define IDC_PANE_LDX                    5001
 #define IDC_PANE_LDY                    5002
@@ -86,9 +93,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        134
+#define _APS_NEXT_RESOURCE_VALUE        135
 #define _APS_NEXT_COMMAND_VALUE         32775
-#define _APS_NEXT_CONTROL_VALUE         1030
-#define _APS_NEXT_SYMED_VALUE           101
+#define _APS_NEXT_CONTROL_VALUE         1033
+#define _APS_NEXT_SYMED_VALUE           109
 #endif
 #endif

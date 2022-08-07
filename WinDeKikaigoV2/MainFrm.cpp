@@ -8,6 +8,7 @@
 #include "AsmViewV2.h"
 #include "AsmInputBarDlg.h"
 #include "Emu6502.h"
+#include "Emu6502OutputV2.h"
 
 #include "MainFrm.h"
 
@@ -96,11 +97,22 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;      // 作成に失敗
 	}
 
+	// 下ペイン
+	if (!m_wndCpuOutput.Create(this,
+			IDD_EMU6502OUTPUTV2_FORM, CBRS_BOTTOM, 0))
+	{
+		TRACE0("Failed to create status bar\n");
+		return -1;      // 作成に失敗
+	}
+
 	// 起動時のフォーカスを指定
 	SetActiveView((CView*)m_wndSplitter.GetPane(0,0));
 
-	// AsmView <- AsmInputBar
-	((CAsmViewV2*)m_wndSplitter.GetPane(0,1))->RegisterAsmInputBar(&m_wndDialogBar_R);
+	// AsmInputBar <- AsmView
+	m_wndDialogBar_R.m_pAsmView = (CAsmViewV2*)m_wndSplitter.GetPane(0,1);
+
+	// CEmu6502Output <- CEmu6502
+	m_wndCpuOutput.m_cpu = &m_cpu;
 
 	// CPU モジュールの初期化
 	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
@@ -178,6 +190,7 @@ void CMainFrame::OnAppDebug()
 {
 	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
 	m_cpu.Exec();
+	m_wndCpuOutput.Update();
 	pDoc->UpdateAllViews(NULL);
 }
 

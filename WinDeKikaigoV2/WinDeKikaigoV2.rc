@@ -344,6 +344,23 @@ BEGIN
     PUSHBUTTON      "∑¨›æŸ",IDCANCEL,130,24,50,14
 END
 
+IDD_EMU6502OUTPUTV2_FORM DIALOG DISCARDABLE  0, 0, 392, 126
+STYLE WS_CHILD
+FONT 9, "ÇlÇr ÇoÉSÉVÉbÉN"
+BEGIN
+    LTEXT           "CEmu6502Output",IDC_STATIC,75,5,153,8
+    EDITTEXT        IDC_EDIT_PC,35,20,40,14,ES_AUTOHSCROLL
+    LTEXT           "PC :",IDC_STATIC,20,20,13,8
+    EDITTEXT        IDC_EDIT_REGA,35,60,19,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_REGX,60,60,19,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_REGY,85,60,19,14,ES_AUTOHSCROLL
+    LTEXT           "A",IDC_STATIC,35,45,8,8
+    LTEXT           "X",IDC_STATIC,60,45,8,8
+    LTEXT           "Y",IDC_STATIC,85,45,8,8
+    LTEXT           "Stack",IDC_STATIC,115,45,30,8
+    EDITTEXT        IDC_EDIT_REGS,110,60,19,14,ES_AUTOHSCROLL
+END
+
 
 #ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
@@ -404,17 +421,20 @@ BEGIN
         BOTTOMMARGIN, 48
     END
 
-    IDD_DIALOGBAR_R, DIALOG
-    BEGIN
-        RIGHTMARGIN, 112
-    END
-
     IDD_DIALOG1, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 180
         TOPMARGIN, 7
         BOTTOMMARGIN, 86
+    END
+
+    IDD_EMU6502OUTPUTV2_FORM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 385
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 119
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -529,6 +549,12 @@ STRINGTABLE DISCARDABLE
 BEGIN
     AFX_IDS_SCRESTORE       "≥®›ƒﬁ≥Çí èÌÇÃª≤ΩﬁÇ…ñﬂÇ∑"
     AFX_IDS_SCTASKLIST      "±Ãﬂÿπ∞ºÆ›ÇÃêÿÇËë÷Ç¶"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDR_EMU6502OUTPUTV2_TMPL 
+                            "Emu6502OutputV2\n\nEmu650\nEmu650 Ãß≤Ÿ (*.emu)\n.emu\nEmu6502OutputV2.Document\nEmu650 Document"
 END
 
 #endif    // ì˙ñ{åÍ resources

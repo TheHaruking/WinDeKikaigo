@@ -330,13 +330,6 @@ void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	pDoc->UpdateAllViews(this);
 }
 
-void CAsmViewV2::RegisterAsmInputBar(CAsmInputBar* wndAsmInputBar)
-{
-	// AsmInputBar ‚ÌƒAƒhƒŒƒX‚ð•Û‘¶
-	m_pAsmInputBar = wndAsmInputBar;
-	m_pAsmInputBar->m_pAsmView = this;
-}
-
 void CAsmViewV2::AsmObjToBin()
 {
 	CWinDeKikaigoV2Doc* pDoc = GetDocument();

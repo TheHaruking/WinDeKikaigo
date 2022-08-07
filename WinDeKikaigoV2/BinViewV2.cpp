@@ -48,6 +48,8 @@ BEGIN_MESSAGE_MAP(CBinViewV2, CView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_KEYDOWN()
+	ON_WM_SETFOCUS()
+	ON_WM_KILLFOCUS()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -206,8 +208,8 @@ BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwS
 	ReleaseDC(pDC);
 
 	// ƒLƒƒƒŒƒbƒg
-	CreateSolidCaret(0, 16);
-	ShowCaret();
+//	CreateSolidCaret(0, 16);
+//	ShowCaret();
 
 	return bResult;
 }
@@ -319,4 +321,19 @@ void CBinViewV2::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	CaretPosUpdate();
 
 	CView::OnUpdate(pSender, lHint, pHint);	
+}
+
+void CBinViewV2::OnSetFocus(CWnd* pOldWnd) 
+{
+	CView::OnSetFocus(pOldWnd);
+
+	CreateSolidCaret(0, 16);
+	ShowCaret();
+}
+
+void CBinViewV2::OnKillFocus(CWnd* pNewWnd) 
+{
+	CView::OnKillFocus(pNewWnd);
+	
+//	HideCaret();	
 }

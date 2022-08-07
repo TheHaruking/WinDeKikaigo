@@ -9,8 +9,12 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-class CEmu6502  
+class CEmu6502OutputV2;
+
+class CEmu6502 
 {
+	friend class CEmu6502OutputV2;
+
 protected:
 	BYTE* m_pData;
 	BYTE m_regA;

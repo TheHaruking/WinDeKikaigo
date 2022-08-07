@@ -26,7 +26,7 @@ public:
 	LONG GetAsmSel();
 	void SetAsmObj(LONG n, BYTE* data);
 	void AsmObjToBin();
-	void RegisterAsmInputBar(CAsmInputBar* wndAsmInputBar);
+
 	CWinDeKikaigoV2Doc* GetDocument();
 
 protected:
@@ -87,8 +87,6 @@ protected:
 	LONG m_ip2num[64]; // ipから ASM オブジェクトを紐付ける
 	LONG m_nCurSel; // 現在選択中の ASM オブジェクト
 	LONG m_nCurIp;  // 現在選択中の Instruction Pointer
-
-	CAsmInputBar* m_pAsmInputBar; // 
 
 	ASMOBJ m_AsmObj[64+1]; // 要終端
 

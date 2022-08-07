@@ -11,6 +11,7 @@
 
 #include "AsmInputBar.h"
 #include "Emu6502.h"
+#include "Emu6502OutputV2.h"
 
 class CMainFrame : public CFrameWnd
 {
@@ -52,6 +53,7 @@ public:  // コントロール バー用メンバ
 	CSplitterWnd m_wndSplitter;
 
 	CEmu6502 m_cpu;
+	CEmu6502OutputV2 m_wndCpuOutput;
 
 // 生成されたメッセージ マップ関数
 protected:
