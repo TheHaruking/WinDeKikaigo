@@ -20,10 +20,12 @@ protected:
 	DECLARE_DYNCREATE(CBinViewV2)
 
 // アトリビュート
-public:
+protected:
 	void CaretPosUpdate();
 	void DigitDown();
 	void DigitUp();
+
+public:
 	CWinDeKikaigoV2Doc* GetDocument();
 
 // オペレーション
@@ -43,9 +45,6 @@ protected:
 	};
 	KINDDIGIT m_eDigit;
 
-public:
-	CAsmViewV2* m_pAsm; // 仮。TODO: データ構造の見直しを行い削除予定
-
 // 定数
 protected:
 	static const BYTE DATA_KEY2HEX[];
@@ -60,6 +59,7 @@ protected:
 	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 	protected:
 	virtual void OnDraw(CDC* pDC);      // このビューを描画するためにオーバーライドしました。
+	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
 	//}}AFX_VIRTUAL
 
 // インプリメンテーション

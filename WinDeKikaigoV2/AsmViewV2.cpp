@@ -293,10 +293,18 @@ void CAsmViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	case VK_DOWN:  m_nCurSel++; break;
 	}
 
+	// 範囲チェック
+	m_nCurSel = (m_nCurSel >= 0) ? m_nCurSel : 0; // 下限値
+
 	m_nCurIp = m_num2ip[m_nCurSel];
 	
 	this->RedrawWindow();
-	
+
+	// 同期 (AsmView -> BinView)
+	CWinDeKikaigoV2Doc* pDoc = GetDocument();
+	pDoc->m_nSel = m_nCurIp;
+	pDoc->UpdateAllViews(this);
+
 	CScrollView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
@@ -315,6 +323,11 @@ void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	this->RedrawWindow();
 
 	CScrollView::OnLButtonDown(nFlags, point);
+
+	// 同期 (AsmView -> BinView)
+	CWinDeKikaigoV2Doc* pDoc = GetDocument();
+	pDoc->m_nSel = m_nCurIp;
+	pDoc->UpdateAllViews(this);
 }
 
 void CAsmViewV2::RegisterAsmInputBar(CAsmInputBar* wndAsmInputBar)
@@ -382,6 +395,9 @@ void CAsmViewV2::BinToAsmObj()
 
 		// 座標からipを特定できるように保存しておく
 		m_num2ip[i] = ip;
+		// ipからm_nCurSel(=i)を特定できるように保存しておく
+		for (DWORD j=0; j<=dwOpr; j++)
+			m_ip2num[ip+j] = i;
 
 		// ASMOBJ
 		memcpy(m_AsmObj[i].data, &(BIN[ip]), 3);
@@ -401,6 +417,9 @@ void CAsmViewV2::BinToAsmObj()
 
 		// 座標からipを特定できるように保存しておく
 		m_num2ip[i] = ip;
+		// ipからm_nCurSel(=i)を特定できるように保存しておく
+		for (LONG j=0; j<m_AsmObj[i].nSize; j++)
+			m_ip2num[ip+j] = i;
 
 		i++;
 		ip++;
@@ -430,4 +449,16 @@ void CAsmViewV2::OnInitialUpdate()
 
 	BinToAsmObj();
 	SetScrollSizes(MM_TEXT, CSize(1,1)); // CScrollView を作成するためのダミー値
+}
+
+void CAsmViewV2::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
+{
+	BinToAsmObj();
+
+	// 同期 (BinView -> AsmView)
+	CWinDeKikaigoV2Doc* pDoc = GetDocument();
+	m_nCurIp = pDoc->m_nSel;
+	m_nCurSel = m_ip2num[m_nCurIp];
+
+	CView::OnUpdate(pSender, lHint, pHint);	
 }

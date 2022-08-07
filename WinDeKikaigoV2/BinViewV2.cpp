@@ -163,7 +163,7 @@ void CBinViewV2::CaretPosUpdate()
 
 	DWORD selmod = m_nSel % m_eDigit;
 	fixPoint.x += selmod * m_dwFontWidth*2;
-	SetFocus();
+
 	SetCaretPos(fixPoint);
 }
 
@@ -237,6 +237,11 @@ void CBinViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	CaretPosUpdate();
 	RedrawWindow();
 
+	// “¯Šú (BinView -> AsmView)
+	CWinDeKikaigoV2Doc* pDoc = GetDocument();
+	pDoc->m_nSel = m_nSel;
+	pDoc->UpdateAllViews(this);
+
 	CView::OnLButtonDown(nFlags, point);
 }
 
@@ -298,8 +303,20 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	// ‰æ–Ê‚É”½‰f
 	CaretPosUpdate();
 	RedrawWindow();
-	m_pAsm->BinToAsmObj();
+
+	// “¯Šú (BinView -> AsmView)
+	pDoc->m_nSel = m_nSel;
 	pDoc->UpdateAllViews(this);
 
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+void CBinViewV2::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
+{
+	// “¯Šú (AsmView -> BinView)
+	CWinDeKikaigoV2Doc* pDoc = GetDocument();
+	m_nSel = pDoc->m_nSel;
+	CaretPosUpdate();
+
+	CView::OnUpdate(pSender, lHint, pHint);	
 }

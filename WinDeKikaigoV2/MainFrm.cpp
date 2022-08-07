@@ -99,10 +99,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// 起動時のフォーカスを指定
 	SetActiveView((CView*)m_wndSplitter.GetPane(0,0));
 
-	// AsmView と AsmInputBar を連携させる
+	// AsmView <- AsmInputBar
 	((CAsmViewV2*)m_wndSplitter.GetPane(0,1))->RegisterAsmInputBar(&m_wndDialogBar_R);
-	// AsmView と BinView を連携させる
-	((CBinViewV2*)m_wndSplitter.GetPane(0,0))->m_pAsm = (CAsmViewV2*)m_wndSplitter.GetPane(0,1);
 
 	// CPU モジュールの初期化
 	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());

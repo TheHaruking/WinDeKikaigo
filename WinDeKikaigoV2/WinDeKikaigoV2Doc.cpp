@@ -47,6 +47,7 @@ BOOL CWinDeKikaigoV2Doc::OnNewDocument()
 	for (int i = 0; i < 0xFFFF; i++) {
 		m_data[i] = i&0xFF;
 	}
+	m_nSel = 0;
 
 	return TRUE;
 }

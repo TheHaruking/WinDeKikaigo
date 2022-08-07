@@ -84,6 +84,7 @@ public:
 protected:
 	// メンバ変数
 	LONG m_num2ip[256]; // クリック座標からipを紐付ける
+	LONG m_ip2num[64]; // ipから ASM オブジェクトを紐付ける
 	LONG m_nCurSel; // 現在選択中の ASM オブジェクト
 	LONG m_nCurIp;  // 現在選択中の Instruction Pointer
 
@@ -99,6 +100,7 @@ protected:
 	virtual void OnInitialUpdate();
 	protected:
 	virtual void OnDraw(CDC* pDC);      // このビューを描画するためにオーバーライドしました。
+	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
 	//}}AFX_VIRTUAL
 
 // インプリメンテーション
