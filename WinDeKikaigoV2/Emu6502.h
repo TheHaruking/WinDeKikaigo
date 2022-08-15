@@ -57,8 +57,8 @@ protected:
 	inline WORD id16() { WORD adr = m_pData[m_regPC]; m_regPC+=2; WORD adr2 = m_pData[adr]; adr2 |= (m_pData[adr+1] << 8); return adr2; }
 
 	inline void setNZ(BYTE byte) { m_regP.bitN = (byte >> 7); m_regP.bitZ = (byte == 0); }
-	inline WORD* pop16() { WORD p = 0x01FF - m_regS; m_regS -= 2; return (WORD*)(&(m_pData[p])); }
-	inline void push16(WORD word) { m_regS += 2; WORD p = 0x01FF - m_regS; *(WORD*)(&(m_pData[p])) = word; }
+	inline void push16(WORD word) { WORD p = (0x0100 + m_regS - 1); *(WORD*)(&(m_pData[p])) = word; m_regS -= 2; }
+	inline WORD* pop16() { m_regS += 2; WORD p = (0x0100 + m_regS - 1); return (WORD*)(&(m_pData[p])); }
 
 	inline void lda(BYTE byte) { setNZ(m_regA = byte); }
 	inline void ldx(BYTE byte) { setNZ(m_regX = byte); }
@@ -74,10 +74,10 @@ protected:
 	inline void tsx() { setNZ(m_regX = m_regS); }
 	inline void txs() { setNZ(m_regS = m_regX); }
 
-	inline void pha() { m_pData[0x01FF - m_regS] = m_regA; m_regS++; }
-	inline void pla() { m_regS--; setNZ(m_regA = m_pData[0x01FF - m_regS]); }
-	inline void php() { m_pData[0x01FF - m_regS] = m_regP.byte; m_regS++; }
-	inline void plp() { m_regS--; m_regP.byte = m_pData[0x01FF - m_regS]; }
+	inline void pha() { m_pData[0x0100 + m_regS] = m_regA; m_regS--; }
+	inline void pla() { m_regS++; setNZ(m_regA = m_pData[0x0100 + m_regS]); }
+	inline void php() { m_pData[0x0100 + m_regS] = m_regP.byte; m_regS--; }
+	inline void plp() { m_regS++; m_regP.byte = m_pData[0x0100 + m_regS]; }
 
 	inline void and(BYTE byte) { setNZ(m_regA &= byte); }
 	inline void ora(BYTE byte) { setNZ(m_regA |= byte); }

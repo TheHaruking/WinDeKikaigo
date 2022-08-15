@@ -35,8 +35,8 @@ void CEmu6502::Init(BYTE* pData)
 {
 	m_pData = pData;  // メモリはクラス外の物を参照
 	m_regA = m_regX = m_regY = 0x00;
-	m_regS = 0x00;
-	m_regPC = 0x0000;
+	m_regS = /*0x00*/ 0xFF; // 本来はプログラム側で 0xFF に初期化するものだが便宜的にここで 0xFF にする。
+	m_regPC = /* 0xFFFC*/ 0x0000; // 本来は RESET ベクタ (0xFFFC) だが便宜的に 0x0000 にする。
 	// 電源 ON 時 I フラグはセットされる。(D, C は未定義だがクリアしておく)
 	m_regP.byte = !BIT_N | !BIT_V | BIT_R | !BIT_B | !BIT_D | BIT_I | !BIT_Z | !BIT_C;
 

@@ -78,7 +78,7 @@ void CEmu6502OutputV2::Update()
 	// スタック (積まれた分を表示)
 	{
 		CString bufStack;
-		for (int i = 0; i < m_cpu->m_regS; i++) {
+		for (int i = 0; i < (0xFF - m_cpu->m_regS); i++) {
 			WORD adrStack = 0x01FF - i;
 			buf.Format(L" %04X: 0x%02X\r\n", adrStack, m_cpu->m_pData[adrStack]);
 			bufStack += buf;
