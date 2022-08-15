@@ -18,6 +18,7 @@
 #define IDC_EDIT_REGX                   1033
 #define IDC_EDIT_REGY                   1034
 #define IDC_EDIT_REGS                   1035
+#define IDC_EDIT_STACK                  1036
 #define IDC_PANE_LDA                    5000
 #define IDC_PANE_LDX                    5001
 #define IDC_PANE_LDY                    5002

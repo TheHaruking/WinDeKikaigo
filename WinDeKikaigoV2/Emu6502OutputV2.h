@@ -28,9 +28,10 @@ public:
 public:
 	//{{AFX_DATA(CEmu6502OutputV2)
 	enum { IDD = IDD_EMU6502OUTPUTV2_FORM };
+	CEdit	m_editStack;
 	CEdit	m_editRegY;
 	CEdit	m_editRegX;
-	CEdit	m_editRegStack;
+	CEdit	m_editRegS;
 	CEdit	m_editRegA;
 	CEdit	m_editRegPC;
 	//}}AFX_DATA

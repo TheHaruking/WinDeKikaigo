@@ -31,9 +31,10 @@ void CEmu6502OutputV2::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogBar::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CEmu6502OutputV2)
+	DDX_Control(pDX, IDC_EDIT_STACK, m_editStack);
 	DDX_Control(pDX, IDC_EDIT_REGY, m_editRegY);
 	DDX_Control(pDX, IDC_EDIT_REGX, m_editRegX);
-	DDX_Control(pDX, IDC_EDIT_REGS, m_editRegStack);
+	DDX_Control(pDX, IDC_EDIT_REGS, m_editRegS);
 	DDX_Control(pDX, IDC_EDIT_REGA, m_editRegA);
 	DDX_Control(pDX, IDC_EDIT_PC, m_editRegPC);
 	//}}AFX_DATA_MAP
@@ -72,5 +73,17 @@ void CEmu6502OutputV2::Update()
 	buf.Format(L"0x%02X", m_cpu->m_regA); m_editRegA.SetWindowText(buf);
 	buf.Format(L"0x%02X", m_cpu->m_regX); m_editRegX.SetWindowText(buf);
 	buf.Format(L"0x%02X", m_cpu->m_regY); m_editRegY.SetWindowText(buf);
-	buf.Format(L"0x%02X", m_cpu->m_regS); m_editRegStack.SetWindowText(buf);
+	buf.Format(L"0x%02X", m_cpu->m_regS); m_editRegS.SetWindowText(buf);
+
+	// スタック (積まれた分を表示)
+	{
+		CString bufStack;
+		for (int i = 0; i < m_cpu->m_regS; i++) {
+			WORD adrStack = 0x01FF - i;
+			buf.Format(L" %04X: 0x%02X\r\n", adrStack, m_cpu->m_pData[adrStack]);
+			bufStack += buf;
+		}
+
+		m_editStack.SetWindowText(bufStack);
+	}
 }
