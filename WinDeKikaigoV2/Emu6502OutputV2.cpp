@@ -85,5 +85,6 @@ void CEmu6502OutputV2::Update()
 		}
 
 		m_editStack.SetWindowText(bufStack);
+		m_editStack.LineScroll(m_editStack.GetLineCount());
 	}
 }
