@@ -74,10 +74,10 @@ protected:
 	inline void tsx() { setNZ(m_regX = m_regS); }
 	inline void txs() { setNZ(m_regS = m_regX); }
 
-	inline void pha() { m_pData[0x0100 + m_regS] = m_regA; m_regS++; }
-	inline void pla() { setNZ(m_regA = m_pData[0x0100 + m_regS]); m_regS--; }
-	inline void php() { m_pData[0x0100 + m_regS] = m_regP.byte; m_regS++; }
-	inline void plp() { m_regP.byte = m_pData[0x0100 + m_regS]; m_regS--; }
+	inline void pha() { m_pData[0x01FF - m_regS] = m_regA; m_regS++; }
+	inline void pla() { m_regS--; setNZ(m_regA = m_pData[0x01FF - m_regS]); }
+	inline void php() { m_pData[0x01FF - m_regS] = m_regP.byte; m_regS++; }
+	inline void plp() { m_regS--; m_regP.byte = m_pData[0x01FF - m_regS]; }
 
 	inline void and(BYTE byte) { setNZ(m_regA &= byte); }
 	inline void ora(BYTE byte) { setNZ(m_regA |= byte); }
