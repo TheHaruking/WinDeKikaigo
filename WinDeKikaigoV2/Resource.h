@@ -19,6 +19,14 @@
 #define IDC_EDIT_REGY                   1034
 #define IDC_EDIT_REGS                   1035
 #define IDC_EDIT_STACK                  1036
+#define IDC_CHECK_FLAG_N                1037
+#define IDC_CHECK_FLAG_V                1038
+#define IDC_CHECK_FLAG_R                1039
+#define IDC_CHECK_FLAG_B                1040
+#define IDC_CHECK_FLAG_D                1041
+#define IDC_CHECK_FLAG_I                1042
+#define IDC_CHECK_FLAG_Z                1043
+#define IDC_CHECK_FLAG_C                1044
 #define IDC_PANE_LDA                    5000
 #define IDC_PANE_LDX                    5001
 #define IDC_PANE_LDY                    5002
@@ -88,6 +96,7 @@
 #define ID_APP_LEFTPANE                 32772
 #define ID_APP_DEBUG                    32773
 #define ID_APP_RESET                    32774
+#define ID_APP_VM                       32775
 
 // Next default values for new objects
 // 
@@ -95,8 +104,8 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        135
-#define _APS_NEXT_COMMAND_VALUE         32775
-#define _APS_NEXT_CONTROL_VALUE         1033
+#define _APS_NEXT_COMMAND_VALUE         32776
+#define _APS_NEXT_CONTROL_VALUE         1038
 #define _APS_NEXT_SYMED_VALUE           109
 #endif
 #endif

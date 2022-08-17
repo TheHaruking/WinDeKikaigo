@@ -12,6 +12,7 @@
 #include "AsmInputBar.h"
 #include "Emu6502.h"
 #include "Emu6502OutputV2.h"
+#include "VmWindow.h"
 
 class CMainFrame : public CFrameWnd
 {
@@ -51,6 +52,7 @@ public:  // コントロール バー用メンバ
 	CDialogBar   m_wndDialogBar_L;
 	CAsmInputBar m_wndDialogBar_R;
 	CSplitterWnd m_wndSplitter;
+	CVmWindow    m_wndVmWnd;
 
 	CEmu6502 m_cpu;
 	CEmu6502OutputV2 m_wndCpuOutput;
@@ -63,6 +65,7 @@ protected:
 	afx_msg void OnAppRightpane();
 	afx_msg void OnAppDebug();
 	afx_msg void OnAppReset();
+	afx_msg void OnAppVm();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -30,6 +30,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_APP_RIGHTPANE, OnAppRightpane)
 	ON_COMMAND(ID_APP_DEBUG, OnAppDebug)
 	ON_COMMAND(ID_APP_RESET, OnAppReset)
+	ON_COMMAND(ID_APP_VM, OnAppVm)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -192,11 +193,41 @@ void CMainFrame::OnAppDebug()
 	m_cpu.Exec();
 	m_wndCpuOutput.Update();
 	pDoc->UpdateAllViews(NULL);
+	m_wndVmWnd.Invalidate(FALSE); // 削除はしない.
+	m_wndVmWnd.UpdateWindow();
 }
 
 void CMainFrame::OnAppReset() 
 {
 	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
 	m_cpu.Reset();
+	m_wndCpuOutput.Update();
 	pDoc->UpdateAllViews(NULL);	
+}
+
+void CMainFrame::OnAppVm() 
+{
+	// 未 Create 状態であれば VmWnd を表示させる
+	if (m_wndVmWnd.GetSafeHwnd() == NULL)
+	{
+		DWORD dwStyle = WS_SYSMENU | WS_CAPTION | WS_POPUP | WS_VISIBLE;
+		CRect rect(30, 30, 30+256, 30+192); // 画面サイズは 256 x 192
+
+		// m_VmWnd を作成 (Popup Window は Create"Ex" でないといけない。)
+		AdjustWindowRectEx(&rect, dwStyle, FALSE, 0);
+		m_wndVmWnd.CreateEx(0, 
+			AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW, ::LoadCursor(AfxGetResourceHandle(), NULL)),
+			L"仮想マシン", dwStyle, 
+			rect, this, NULL, NULL );
+
+		m_wndVmWnd.ShowWindow(SW_SHOW);
+
+		// Document クラスをセット
+		CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
+		m_wndVmWnd.SetDocument(pDoc);
+	}
+	else // すでに Create されている場合は Destroy する.
+	{
+		m_wndVmWnd.DestroyWindow();
+	}
 }

@@ -124,6 +124,10 @@ SOURCE=.\StdAfx.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\VmWindow.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\WinDeKikaigoV2.cpp
 # End Source File
 # Begin Source File
@@ -173,6 +177,10 @@ SOURCE=.\Resource.h
 # Begin Source File
 
 SOURCE=.\StdAfx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\VmWindow.h
 # End Source File
 # Begin Source File
 

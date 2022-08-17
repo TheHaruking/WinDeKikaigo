@@ -31,6 +31,14 @@ void CEmu6502OutputV2::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogBar::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CEmu6502OutputV2)
+	DDX_Control(pDX, IDC_CHECK_FLAG_Z, m_chkFlagZ);
+	DDX_Control(pDX, IDC_CHECK_FLAG_V, m_chkFlagV);
+	DDX_Control(pDX, IDC_CHECK_FLAG_R, m_chkFlagR);
+	DDX_Control(pDX, IDC_CHECK_FLAG_N, m_chkFlagN);
+	DDX_Control(pDX, IDC_CHECK_FLAG_I, m_chkFlagI);
+	DDX_Control(pDX, IDC_CHECK_FLAG_D, m_chkFlagD);
+	DDX_Control(pDX, IDC_CHECK_FLAG_C, m_chkFlagC);
+	DDX_Control(pDX, IDC_CHECK_FLAG_B, m_chkFlagB);
 	DDX_Control(pDX, IDC_EDIT_STACK, m_editStack);
 	DDX_Control(pDX, IDC_EDIT_REGY, m_editRegY);
 	DDX_Control(pDX, IDC_EDIT_REGX, m_editRegX);
@@ -68,7 +76,8 @@ void CEmu6502OutputV2::Update()
 {
 	UpdateData(FALSE);
 	CString buf;
-	
+
+	// レジスタ PC, A, X, Y, S
 	buf.Format(L"0x%04X", m_cpu->m_regPC); m_editRegPC.SetWindowText(buf);
 	buf.Format(L"0x%02X", m_cpu->m_regA); m_editRegA.SetWindowText(buf);
 	buf.Format(L"0x%02X", m_cpu->m_regX); m_editRegX.SetWindowText(buf);
@@ -87,4 +96,14 @@ void CEmu6502OutputV2::Update()
 		m_editStack.SetWindowText(bufStack);
 		m_editStack.LineScroll(m_editStack.GetLineCount());
 	}
+
+	// ステータスレジスタ
+	m_chkFlagN.SetCheck(m_cpu->m_regP.bitN);
+	m_chkFlagV.SetCheck(m_cpu->m_regP.bitV);
+	m_chkFlagR.SetCheck(m_cpu->m_regP.bitR);
+	m_chkFlagB.SetCheck(m_cpu->m_regP.bitB);
+	m_chkFlagD.SetCheck(m_cpu->m_regP.bitD);
+	m_chkFlagI.SetCheck(m_cpu->m_regP.bitI);
+	m_chkFlagZ.SetCheck(m_cpu->m_regP.bitZ);
+	m_chkFlagC.SetCheck(m_cpu->m_regP.bitC);
 }

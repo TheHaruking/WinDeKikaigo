@@ -28,6 +28,14 @@ public:
 public:
 	//{{AFX_DATA(CEmu6502OutputV2)
 	enum { IDD = IDD_EMU6502OUTPUTV2_FORM };
+	CButton	m_chkFlagZ;
+	CButton	m_chkFlagV;
+	CButton	m_chkFlagR;
+	CButton	m_chkFlagN;
+	CButton	m_chkFlagI;
+	CButton	m_chkFlagD;
+	CButton	m_chkFlagC;
+	CButton	m_chkFlagB;
 	CEdit	m_editStack;
 	CEdit	m_editRegY;
 	CEdit	m_editRegX;
