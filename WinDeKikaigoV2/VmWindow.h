@@ -24,6 +24,14 @@ public:
 // オペレーション
 private:
 	CWinDeKikaigoV2Doc* m_pDoc;
+	BYTE* m_pBytes;
+	BITMAPINFO* m_pBmi;
+	DWORD m_dwScale;
+
+// 定数
+private:
+	static const LONG WIDTH;
+	static const LONG HEIGHT;
 
 // オーバーライド
 	// ClassWizard は仮想関数のオーバーライドを生成します。
@@ -33,6 +41,7 @@ private:
 
 // インプリメンテーション
 public:
+	BOOL CreateEx(CWnd* pParentWnd);
 	void SetDocument(CWinDeKikaigoV2Doc* pDoc);
 	virtual ~CVmWindow();
 	// 生成されたメッセージ マップ関数

@@ -210,16 +210,7 @@ void CMainFrame::OnAppVm()
 	// 未 Create 状態であれば VmWnd を表示させる
 	if (m_wndVmWnd.GetSafeHwnd() == NULL)
 	{
-		DWORD dwStyle = WS_SYSMENU | WS_CAPTION | WS_POPUP | WS_VISIBLE;
-		CRect rect(30, 30, 30+256, 30+192); // 画面サイズは 256 x 192
-
-		// m_VmWnd を作成 (Popup Window は Create"Ex" でないといけない。)
-		AdjustWindowRectEx(&rect, dwStyle, FALSE, 0);
-		m_wndVmWnd.CreateEx(0, 
-			AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW, ::LoadCursor(AfxGetResourceHandle(), NULL)),
-			L"仮想マシン", dwStyle, 
-			rect, this, NULL, NULL );
-
+		m_wndVmWnd.CreateEx(this);
 		m_wndVmWnd.ShowWindow(SW_SHOW);
 
 		// Document クラスをセット
