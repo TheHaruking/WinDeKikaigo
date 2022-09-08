@@ -399,3 +399,27 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# My Files!
+/OpenGLTest/MainFrm.cpp
+/OpenGLTest/MainFrm.h
+/OpenGLTest/OpenGLTest.cpp
+/OpenGLTest/OpenGLTest.dsp
+/OpenGLTest/OpenGLTest.h
+/OpenGLTest/OpenGLTest.rc
+/OpenGLTest/OpenGLTestDoc.cpp
+/OpenGLTest/OpenGLTestDoc.h
+/OpenGLTest/OpenGLTestView.cpp
+/OpenGLTest/OpenGLTestView.h
+/OpenGLTest/PopupView.cpp
+/OpenGLTest/PopupView.h
+/OpenGLTest/PopupWnd.cpp
+/OpenGLTest/PopupWnd.h
+/OpenGLTest/ReadMe.txt
+/OpenGLTest/StdAfx.cpp
+/OpenGLTest/StdAfx.h
+/OpenGLTest/res/OpenGLTest.ico
+/OpenGLTest/res/OpenGLTest.rc2
+/OpenGLTest/res/OpenGLTestDoc.ico
+/OpenGLTest/res/Toolbar.bmp
+/OpenGLTest/resource.h
