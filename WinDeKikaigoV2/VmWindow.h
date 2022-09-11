@@ -28,6 +28,11 @@ private:
 	BITMAPINFO* m_pBmi;
 	DWORD m_dwScale;
 
+	HBITMAP m_hBitmap;
+	HDC m_hBitmapDC;
+	LONG m_hBitmapWidth;
+	LONG m_hBitmapHeight;
+
 // íËêî
 private:
 	static const LONG WIDTH;
@@ -48,6 +53,8 @@ public:
 protected:
 	//{{AFX_MSG(CVmWindow)
 	afx_msg void OnPaint();
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnDestroy();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

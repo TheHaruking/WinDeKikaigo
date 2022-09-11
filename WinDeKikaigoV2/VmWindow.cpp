@@ -45,10 +45,27 @@ CVmWindow::CVmWindow()
 
 	// 拡大率
 	m_dwScale = 2;
+
+	// Bitmap Object
+	m_hBitmap = (HBITMAP)::LoadImage(NULL, L"画像\\spr_000.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+
+	DWORD dwError = GetLastError();
+	if (m_hBitmap == NULL) {
+		CString buf;
+		buf.Format(L"画像が読み込めませんでした。\nErrorCode : %d", dwError);
+		MessageBox(buf);
+	}
+
+	BITMAP bitmap;
+	::GetObject(m_hBitmap, sizeof(bitmap), (LPVOID)&bitmap);
+	m_hBitmapWidth = bitmap.bmWidth;
+	m_hBitmapHeight = bitmap.bmHeight;
 }
 
 CVmWindow::~CVmWindow()
 {
+	if (m_hBitmap)
+		::DeleteObject(m_hBitmap);
 	if (m_pBmi)
 		free(m_pBmi);
 }
@@ -56,6 +73,8 @@ CVmWindow::~CVmWindow()
 BEGIN_MESSAGE_MAP(CVmWindow, CWnd)
 	//{{AFX_MSG_MAP(CVmWindow)
 	ON_WM_PAINT()
+	ON_WM_CREATE()
+	ON_WM_DESTROY()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -67,10 +86,11 @@ void CVmWindow::OnPaint()
 	CPaintDC dc(this); // 描画用のデバイス コンテキスト
 	
 	// TODO: この位置にメッセージ ハンドラ用のコードを追加してください
-	StretchDIBits(dc.m_hDC, 0, 0, WIDTH*m_dwScale, HEIGHT*m_dwScale,
+	::StretchDIBits(dc.m_hDC, 0, 0, WIDTH*m_dwScale, HEIGHT*m_dwScale,
 		0, 0, WIDTH, HEIGHT,
 		m_pBytes, m_pBmi, DIB_RGB_COLORS, SRCCOPY);
 
+	::TransparentBlt(dc.m_hDC, /*コピー先*/ 120, 80, 32, 32, /*コピー元*/ m_hBitmapDC, 0, 0, m_hBitmapWidth, m_hBitmapHeight, RGB(255, 255, 255));
 	// 描画用メッセージとして CWnd::OnPaint() を呼び出してはいけません
 }
 
@@ -78,8 +98,8 @@ void CVmWindow::SetDocument(CWinDeKikaigoV2Doc* pDoc)
 {
 	m_pDoc = pDoc;
 
-	// 0x4000 : VRAM.
-   	m_pBytes = &(m_pDoc->m_data[0x4000]);
+	// 0x3000 : VRAM.
+   	m_pBytes = &(m_pDoc->m_data[0x3000]);
 }
 
 BOOL CVmWindow::CreateEx(CWnd* pParentWnd)
@@ -93,4 +113,32 @@ BOOL CVmWindow::CreateEx(CWnd* pParentWnd)
 	AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW, ::LoadCursor(AfxGetResourceHandle(), NULL)),
 		L"仮想マシン", dwStyle, 
 		rect, pParentWnd, NULL, NULL );
+}
+
+int CVmWindow::OnCreate(LPCREATESTRUCT lpCreateStruct) 
+{
+	if (CWnd::OnCreate(lpCreateStruct) == -1)
+		return -1;
+	
+	// TODO: この位置に固有の作成用コードを追加してください
+	
+	// スプライト画像
+	if (m_hBitmap != NULL) {
+		CDC* pDC = this->GetDC();
+		m_hBitmapDC = ::CreateCompatibleDC(pDC->m_hDC);
+		::SelectObject(m_hBitmapDC, m_hBitmap);
+		this->ReleaseDC(pDC);
+	}
+
+	return 0;
+}
+
+
+void CVmWindow::OnDestroy() 
+{
+	CWnd::OnDestroy();
+	
+	// TODO: この位置にメッセージ ハンドラ用のコードを追加してください
+	if (m_hBitmapDC)
+		::DeleteDC(m_hBitmapDC);
 }
