@@ -18,6 +18,8 @@ const LONG CVmWindow::HEIGHT = 192;
 
 CVmWindow::CVmWindow()
 {
+	int i;
+
 	// BITMAPINFO + パレット(256色) のメモリを確保.
 	m_pBmi = (BITMAPINFO*)malloc(sizeof(BITMAPINFO) + sizeof(RGBQUAD) * 255); // BITMAPINFO 自体が 1 つのカラーパレットを持っている.
     memset(m_pBmi, 0, sizeof(BITMAPINFO));
@@ -34,7 +36,7 @@ CVmWindow::CVmWindow()
 
 	// パレット部の設定 (仮).
 	RGBQUAD* palette = &(m_pBmi->bmiColors[0]);
-    for (int i = 0; i < 256; i++)
+    for (i = 0; i < 256; i++)
     {
         RGBQUAD rgb = { 0 };
         rgb.rgbRed = i;
@@ -47,25 +49,23 @@ CVmWindow::CVmWindow()
 	m_dwScale = 2;
 
 	// Bitmap Object
-	m_hBitmap = (HBITMAP)::LoadImage(NULL, L"画像\\spr_000.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-
-	DWORD dwError = GetLastError();
-	if (m_hBitmap == NULL) {
-		CString buf;
-		buf.Format(L"画像が読み込めませんでした。\nErrorCode : %d", dwError);
-		MessageBox(buf);
+	memset(m_vbmpList, 0, sizeof(m_vbmpList));
+	for (i = 0; i < 16; i++) {
+		LoadBitmapFileToArrayObj(m_vbmpList, i);
 	}
-
-	BITMAP bitmap;
-	::GetObject(m_hBitmap, sizeof(bitmap), (LPVOID)&bitmap);
-	m_hBitmapWidth = bitmap.bmWidth;
-	m_hBitmapHeight = bitmap.bmHeight;
 }
 
 CVmWindow::~CVmWindow()
 {
-	if (m_hBitmap)
-		::DeleteObject(m_hBitmap);
+	int i;
+
+	// Bitmap オブジェクト破棄
+	for (i = 0; i < 16; i++) {
+		if (m_vbmpList[i].hBitmap)
+			::DeleteObject(m_vbmpList[i].hBitmap);
+	}
+
+	// VRAM 用メモリ破棄
 	if (m_pBmi)
 		free(m_pBmi);
 }
@@ -85,12 +85,21 @@ void CVmWindow::OnPaint()
 {
 	CPaintDC dc(this); // 描画用のデバイス コンテキスト
 	
-	// TODO: この位置にメッセージ ハンドラ用のコードを追加してください
+	// VRAM 描画
 	::StretchDIBits(dc.m_hDC, 0, 0, WIDTH*m_dwScale, HEIGHT*m_dwScale,
 		0, 0, WIDTH, HEIGHT,
 		m_pBytes, m_pBmi, DIB_RGB_COLORS, SRCCOPY);
 
-	::TransparentBlt(dc.m_hDC, /*コピー先*/ 120, 80, 32, 32, /*コピー元*/ m_hBitmapDC, 0, 0, m_hBitmapWidth, m_hBitmapHeight, RGB(255, 255, 255));
+	// FOR TEST !!
+	m_vbmpList[0].x = 70; m_vbmpList[0].y = 50;
+	m_vbmpList[1].x = 10; m_vbmpList[1].y = 60;
+	m_vbmpList[15].x = 150; m_vbmpList[15].y = 70;
+
+	// スプライト画像 描画
+	for (int i = 0; i < 16; i++) {
+		::TransparentBlt(dc.m_hDC, /*コピー先*/ m_vbmpList[i].x, m_vbmpList[i].y, m_vbmpList[i].hBitmapWidth, m_vbmpList[i].hBitmapHeight, /*コピー元*/ m_vbmpList[i].hBitmapDC, 0, 0, m_vbmpList[i].hBitmapWidth, m_vbmpList[i].hBitmapHeight, RGB(255, 255, 255));
+	}
+
 	// 描画用メッセージとして CWnd::OnPaint() を呼び出してはいけません
 }
 
@@ -120,25 +129,69 @@ int CVmWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
 	
-	// TODO: この位置に固有の作成用コードを追加してください
-	
-	// スプライト画像
-	if (m_hBitmap != NULL) {
-		CDC* pDC = this->GetDC();
-		m_hBitmapDC = ::CreateCompatibleDC(pDC->m_hDC);
-		::SelectObject(m_hBitmapDC, m_hBitmap);
-		this->ReleaseDC(pDC);
+	// スプライト画像 DC 初期化
+	CDC* pDC = this->GetDC();
+	VMBITMAP* pvbmp;
+
+	for (int i = 0; i < 16; i++) {
+		pvbmp = &(m_vbmpList[i]);
+		if (pvbmp->hBitmap != NULL) {
+			pvbmp->hBitmapDC = ::CreateCompatibleDC(pDC->m_hDC);
+			::SelectObject(pvbmp->hBitmapDC, pvbmp->hBitmap);
+		}
 	}
+
+	this->ReleaseDC(pDC);
 
 	return 0;
 }
-
 
 void CVmWindow::OnDestroy() 
 {
 	CWnd::OnDestroy();
 	
-	// TODO: この位置にメッセージ ハンドラ用のコードを追加してください
-	if (m_hBitmapDC)
-		::DeleteDC(m_hBitmapDC);
+	// スプライト画像 DC 削除
+	VMBITMAP* pvbmp;
+	for (int i = 0; i < 16; i++) {
+		pvbmp = &(m_vbmpList[i]);
+		if (pvbmp->hBitmapDC)
+			::DeleteDC(pvbmp->hBitmapDC);
+	}
+}
+
+void CVmWindow::LoadBitmapFileToArrayObj(VMBITMAP* pvbmpArray, LONG n)
+{
+	VMBITMAP* pvbmp = &(pvbmpArray[n]);
+
+	// ファイルから画像読み込み
+	CString buf;
+	buf.Format(L"画像\\spr_%03d.bmp", n);
+	pvbmp->hBitmap = (HBITMAP)::LoadImage(NULL, buf, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+
+	// エラー判定
+	DWORD dwError = GetLastError();
+
+	// dwError のみで判定しないこと (例: 32bit BMP を LoadImage した場合 ... dwError:0, m_hBitmap:NULL に。)
+	if (dwError != 0 || pvbmp->hBitmap == NULL) {
+		switch (dwError) {
+		case 0: // dwError:0, m_hBitmap:NULL のケース
+			buf.Format(L"画像が読み込めませんでした。\n画像 : %d 番\n理由 : 対応していないフォーマット (32bit ビットマップ等) です。", n);
+			break;
+		case 2: // ファイルがないケース
+			// 何もせずリターン。
+			return;
+		default: // その他のエラー
+			buf.Format(L"画像が読み込めませんでした。^n画像 : %d 番", n);
+			break;
+		}
+
+		MessageBox(buf);
+		return;
+	}
+
+	// 幅/高さ だけ保存する
+	BITMAP bitmap;
+	::GetObject(pvbmp->hBitmap, sizeof(bitmap), (LPVOID)&bitmap);
+	pvbmp->hBitmapWidth = bitmap.bmWidth;
+	pvbmp->hBitmapHeight = bitmap.bmHeight;
 }

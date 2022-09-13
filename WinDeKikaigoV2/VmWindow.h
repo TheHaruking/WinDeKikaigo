@@ -23,20 +23,26 @@ public:
 
 // オペレーション
 private:
+	static const LONG WIDTH;
+	static const LONG HEIGHT;
+
 	CWinDeKikaigoV2Doc* m_pDoc;
 	BYTE* m_pBytes;
 	BITMAPINFO* m_pBmi;
 	DWORD m_dwScale;
 
-	HBITMAP m_hBitmap;
-	HDC m_hBitmapDC;
-	LONG m_hBitmapWidth;
-	LONG m_hBitmapHeight;
+	struct VMBITMAP {
+		HBITMAP hBitmap;
+		HDC hBitmapDC;
+		LONG hBitmapWidth;
+		LONG hBitmapHeight;
+		LONG x;
+		LONG y;
+	} m_vbmpList[16];
 
-// 定数
 private:
-	static const LONG WIDTH;
-	static const LONG HEIGHT;
+
+	void LoadBitmapFileToArrayObj(VMBITMAP* vmBitmap, LONG n);
 
 // オーバーライド
 	// ClassWizard は仮想関数のオーバーライドを生成します。
