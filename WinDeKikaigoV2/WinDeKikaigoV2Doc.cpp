@@ -44,9 +44,17 @@ BOOL CWinDeKikaigoV2Doc::OnNewDocument()
 
 	// TODO: この位置に再初期化処理を追加してください。
 	// (SDI ドキュメントはこのドキュメントを再利用します。)
-	for (int i = 0; i < 0xFFFF; i++) {
+	int i;
+	// Free エリア、VRAM は (確認しやすさの都合で) 0-255 の連番にしておく.
+	for (i = 0; i < 0xDFFF; i++) {
 		m_data[i] = i&0xFF;
 	}
+
+	// SpriteMem, 入力 IO 等は 0 にしておく.
+	for (i = 0xE000; i < 0xFFFF; i++) {
+		m_data[i] = 0x00;
+	}
+
 	m_nSel = 0;
 
 	return TRUE;

@@ -40,6 +40,13 @@ private:
 		LONG y;
 	} m_vbmpList[16];
 
+	struct SPRITEMEM {
+		BYTE id;
+		BYTE reserved;
+		BYTE x;
+		BYTE y;
+	} *m_pSprList;
+
 private:
 
 	void LoadBitmapFileToArrayObj(VMBITMAP* vmBitmap, LONG n);

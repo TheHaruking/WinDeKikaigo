@@ -90,14 +90,15 @@ void CVmWindow::OnPaint()
 		0, 0, WIDTH, HEIGHT,
 		m_pBytes, m_pBmi, DIB_RGB_COLORS, SRCCOPY);
 
-	// FOR TEST !!
-	m_vbmpList[0].x = 70; m_vbmpList[0].y = 50;
-	m_vbmpList[1].x = 10; m_vbmpList[1].y = 60;
-	m_vbmpList[15].x = 150; m_vbmpList[15].y = 70;
-
 	// スプライト画像 描画
 	for (int i = 0; i < 16; i++) {
-		::TransparentBlt(dc.m_hDC, /*コピー先*/ m_vbmpList[i].x, m_vbmpList[i].y, m_vbmpList[i].hBitmapWidth, m_vbmpList[i].hBitmapHeight, /*コピー元*/ m_vbmpList[i].hBitmapDC, 0, 0, m_vbmpList[i].hBitmapWidth, m_vbmpList[i].hBitmapHeight, RGB(255, 255, 255));
+		::TransparentBlt(dc.m_hDC,
+			/*コピー先 座標  */ m_pSprList[i].x, m_pSprList[i].y,
+			/*コピー先 サイズ*/ m_vbmpList[i].hBitmapWidth, m_vbmpList[i].hBitmapHeight,
+			/*コピー元 BMPDC */ m_vbmpList[m_pSprList[i].id].hBitmapDC,
+			/*コピー元 原点  */ 0, 0,
+			/*コピー元 サイズ*/ m_vbmpList[i].hBitmapWidth, m_vbmpList[i].hBitmapHeight,
+			/*コピー元 透過色*/ RGB(255, 255, 255));
 	}
 
 	// 描画用メッセージとして CWnd::OnPaint() を呼び出してはいけません
@@ -107,8 +108,9 @@ void CVmWindow::SetDocument(CWinDeKikaigoV2Doc* pDoc)
 {
 	m_pDoc = pDoc;
 
-	// 0x3000 : VRAM.
-   	m_pBytes = &(m_pDoc->m_data[0x3000]);
+	// 0x2000 : VRAM.
+   	m_pBytes	= &(m_pDoc->m_data[0x2000]);
+	m_pSprList	= (SPRITEMEM*)&(m_pDoc->m_data[0xE000]);
 }
 
 BOOL CVmWindow::CreateEx(CWnd* pParentWnd)
