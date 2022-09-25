@@ -193,8 +193,12 @@ void CMainFrame::OnAppDebug()
 	m_cpu.Exec();
 	m_wndCpuOutput.Update();
 	pDoc->UpdateAllViews(NULL);
-	m_wndVmWnd.Invalidate(FALSE); // 削除はしない.
-	m_wndVmWnd.UpdateWindow();
+	
+	// 仮想マシンウィンドウが開いている場合.
+	if (m_wndVmWnd.m_hWnd != NULL) {
+		m_wndVmWnd.Invalidate(FALSE); // 削除はしない.
+		m_wndVmWnd.UpdateWindow();
+	}
 }
 
 void CMainFrame::OnAppReset() 
