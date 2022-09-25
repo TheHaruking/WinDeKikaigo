@@ -83,8 +83,8 @@ protected:
 	inline void ora(BYTE byte) { setNZ(m_regA |= byte); }
 	inline void eor(BYTE byte) { setNZ(m_regA ^= byte); }
 
-	inline void adc(BYTE byte) { BYTE regA_old = m_regA; setNZ(m_regA += byte +  m_regP.bitC); m_regP.bitV = ((char)regA_old > (char)m_regA); m_regP.bitC = regA_old > m_regA; }
-	inline void sbc(BYTE byte) { BYTE regA_old = m_regA; setNZ(m_regA -= byte - ~m_regP.bitC); m_regP.bitV = ((char)regA_old < (char)m_regA); m_regP.bitC = regA_old > m_regA; }
+	inline void adc(BYTE byte) { SHORT val = m_regA; BYTE regA_old = m_regA; setNZ((BYTE)(val += byte +  m_regP.bitC)); m_regA = (BYTE)val; m_regP.bitV = (byte&0x80) ? ((char)m_regA > (char)regA_old) : ((char)m_regA < (char)regA_old); m_regP.bitC =  (val>>8); }
+	inline void sbc(BYTE byte) { SHORT val = m_regA; BYTE regA_old = m_regA; setNZ((BYTE)(val -= byte + !m_regP.bitC)); m_regA = (BYTE)val; m_regP.bitV = (byte&0x80) ? ((char)m_regA < (char)regA_old) : ((char)m_regA > (char)regA_old); m_regP.bitC = !(val>>8); }
 
 	inline void asl() { BYTE regA_old = m_regA; setNZ(m_regA <<= 1); m_regP.bitC = (regA_old >> 7); }
 	inline void lsr() { BYTE regA_old = m_regA; setNZ(m_regA >>= 1); m_regP.bitC = (regA_old &  1); }
