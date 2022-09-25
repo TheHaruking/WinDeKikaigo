@@ -84,17 +84,18 @@ END_MESSAGE_MAP()
 void CVmWindow::OnPaint() 
 {
 	CPaintDC dc(this); // 描画用のデバイス コンテキスト
+	const DWORD S = m_dwScale; // 拡大率
 	
 	// VRAM 描画
-	::StretchDIBits(dc.m_hDC, 0, 0, WIDTH*m_dwScale, HEIGHT*m_dwScale,
+	::StretchDIBits(dc.m_hDC, 0, 0, WIDTH*S, HEIGHT*S,
 		0, 0, WIDTH, HEIGHT,
 		m_pBytes, m_pBmi, DIB_RGB_COLORS, SRCCOPY);
 
 	// スプライト画像 描画
 	for (int i = 0; i < 16; i++) {
 		::TransparentBlt(dc.m_hDC,
-			/*コピー先 座標  */ m_pSprList[i].x, m_pSprList[i].y,
-			/*コピー先 サイズ*/ m_vbmpList[i].hBitmapWidth, m_vbmpList[i].hBitmapHeight,
+			/*コピー先 座標  */ m_pSprList[i].x*S, m_pSprList[i].y*S,
+			/*コピー先 サイズ*/ m_vbmpList[i].hBitmapWidth*S, m_vbmpList[i].hBitmapHeight*S,
 			/*コピー元 BMPDC */ m_vbmpList[m_pSprList[i].id].hBitmapDC,
 			/*コピー元 原点  */ 0, 0,
 			/*コピー元 サイズ*/ m_vbmpList[i].hBitmapWidth, m_vbmpList[i].hBitmapHeight,
