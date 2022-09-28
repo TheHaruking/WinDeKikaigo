@@ -75,6 +75,62 @@ IDR_WINDEKTYPE          ICON    DISCARDABLE     "res\\WinDeKikaigoV2Doc.ico"
 //
 
 IDR_MAINFRAME           BITMAP  MOVEABLE PURE   "res\\Toolbar.bmp"
+IDB_OP_LDA              BITMAP  DISCARDABLE     "res\\lda.bmp"
+IDB_OP_LDX              BITMAP  DISCARDABLE     "res\\ldx.bmp"
+IDB_OP_LDY              BITMAP  DISCARDABLE     "res\\ldy.bmp"
+IDB_OP_STA              BITMAP  DISCARDABLE     "res\\sta.bmp"
+IDB_OP_STX              BITMAP  DISCARDABLE     "res\\stx.bmp"
+IDB_OP_STY              BITMAP  DISCARDABLE     "res\\sty.bmp"
+IDB_OP_TAX              BITMAP  DISCARDABLE     "res\\tax.bmp"
+IDB_OP_TXA              BITMAP  DISCARDABLE     "res\\txa.bmp"
+IDB_OP_TAY              BITMAP  DISCARDABLE     "res\\tay.bmp"
+IDB_OP_TYA              BITMAP  DISCARDABLE     "res\\tya.bmp"
+IDB_OP_TSX              BITMAP  DISCARDABLE     "res\\tsx.bmp"
+IDB_OP_TXS              BITMAP  DISCARDABLE     "res\\txs.bmp"
+IDB_OP_PHA              BITMAP  DISCARDABLE     "res\\pha.bmp"
+IDB_OP_NOP              BITMAP  DISCARDABLE     "res\\nop.bmp"
+IDB_OP_CLV              BITMAP  DISCARDABLE     "res\\clv.bmp"
+IDB_OP_CLC              BITMAP  DISCARDABLE     "res\\clc.bmp"
+IDB_OP_SEC              BITMAP  DISCARDABLE     "res\\sec.bmp"
+IDB_OP_CLD              BITMAP  DISCARDABLE     "res\\cld.bmp"
+IDB_OP_SED              BITMAP  DISCARDABLE     "res\\sed.bmp"
+IDB_OP_CLI              BITMAP  DISCARDABLE     "res\\cli.bmp"
+IDB_OP_SEI              BITMAP  DISCARDABLE     "res\\sei.bmp"
+IDB_OP_BVC              BITMAP  DISCARDABLE     "res\\bvc.bmp"
+IDB_OP_BVS              BITMAP  DISCARDABLE     "res\\bvs.bmp"
+IDB_OP_BCC              BITMAP  DISCARDABLE     "res\\bcc.bmp"
+IDB_OP_BCS              BITMAP  DISCARDABLE     "res\\bcs.bmp"
+IDB_OP_BPL              BITMAP  DISCARDABLE     "res\\bpl.bmp"
+IDB_OP_BMI              BITMAP  DISCARDABLE     "res\\bmi.bmp"
+IDB_OP_BNE              BITMAP  DISCARDABLE     "res\\bne.bmp"
+IDB_OP_BEQ              BITMAP  DISCARDABLE     "res\\beq.bmp"
+IDB_OP_BIT              BITMAP  DISCARDABLE     "res\\bit.bmp"
+IDB_OP_CPY              BITMAP  DISCARDABLE     "res\\cpy.bmp"
+IDB_OP_CPX              BITMAP  DISCARDABLE     "res\\cpx.bmp"
+IDB_OP_CMP              BITMAP  DISCARDABLE     "res\\cmp.bmp"
+IDB_OP_RTI              BITMAP  DISCARDABLE     "res\\rti.bmp"
+IDB_OP_BRK              BITMAP  DISCARDABLE     "res\\brk.bmp"
+IDB_OP_RTS              BITMAP  DISCARDABLE     "res\\rts.bmp"
+IDB_OP_JSR              BITMAP  DISCARDABLE     "res\\jsr.bmp"
+IDB_OP_JMP              BITMAP  DISCARDABLE     "res\\jmp.bmp"
+IDB_OP_DEY              BITMAP  DISCARDABLE     "res\\dey.bmp"
+IDB_OP_DEC              BITMAP  DISCARDABLE     "res\\dec.bmp"
+IDB_OP_DEX              BITMAP  DISCARDABLE     "res\\dex.bmp"
+IDB_OP_INY              BITMAP  DISCARDABLE     "res\\iny.bmp"
+IDB_OP_INX              BITMAP  DISCARDABLE     "res\\inx.bmp"
+IDB_OP_INC              BITMAP  DISCARDABLE     "res\\inc.bmp"
+IDB_OP_ROL              BITMAP  DISCARDABLE     "res\\rol.bmp"
+IDB_OP_ROR              BITMAP  DISCARDABLE     "res\\ror.bmp"
+IDB_OP_LSR              BITMAP  DISCARDABLE     "res\\lsr.bmp"
+IDB_OP_ASL              BITMAP  DISCARDABLE     "res\\asl.bmp"
+IDB_OP_SBC              BITMAP  DISCARDABLE     "res\\sbc.bmp"
+IDB_OP_ADC              BITMAP  DISCARDABLE     "res\\adc.bmp"
+IDB_OP_EOR              BITMAP  DISCARDABLE     "res\\eor.bmp"
+IDB_OP_ORA              BITMAP  DISCARDABLE     "res\\ora.bmp"
+IDB_OP_AND              BITMAP  DISCARDABLE     "res\\and.bmp"
+IDB_OP_PLP              BITMAP  DISCARDABLE     "res\\plp.bmp"
+IDB_OP_PHP              BITMAP  DISCARDABLE     "res\\php.bmp"
+IDB_OP_PLA              BITMAP  DISCARDABLE     "res\\pla.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -190,126 +246,124 @@ IDD_DIALOGBAR_R DIALOG DISCARDABLE  0, 0, 152, 291
 STYLE WS_CHILD
 FONT 9, "ÇlÇr ÇoÉSÉVÉbÉN"
 BEGIN
-    LTEXT           "DIALOGBAR_RIGHT",IDC_STATIC,55,5,60,9
+    LTEXT           "DIALOGBAR_RIGHT",IDC_STATIC,45,5,60,9,NOT WS_VISIBLE
     GROUPBOX        "1. ì«Ç›èëÇ´",IDC_STATIC,5,15,140,50
-    CONTROL         "",IDC_PANE_LDA,"Static",SS_BLACKFRAME | SS_NOTIFY,10,25,
-                    15,15
-    CONTROL         "",IDC_PANE_LDX,"Static",SS_BLACKFRAME | SS_NOTIFY,25,25,
-                    15,15
-    CONTROL         "",IDC_PANE_LDY,"Static",SS_BLACKFRAME | SS_NOTIFY,40,25,
-                    15,15
-    CONTROL         "",IDC_PANE_STA,"Static",SS_BLACKFRAME | SS_NOTIFY,10,40,
-                    15,15
-    CONTROL         "",IDC_PANE_STX,"Static",SS_BLACKFRAME | SS_NOTIFY,25,40,
-                    15,15
-    CONTROL         "",IDC_PANE_STY,"Static",SS_BLACKFRAME | SS_NOTIFY,40,40,
-                    15,15
-    CONTROL         "",IDC_PANE_TAX,"Static",SS_BLACKFRAME | SS_NOTIFY,60,25,
-                    15,15
-    CONTROL         "",IDC_PANE_TAY,"Static",SS_BLACKFRAME | SS_NOTIFY,75,25,
-                    15,15
-    CONTROL         "",IDC_PANE_TSX,"Static",SS_BLACKFRAME | SS_NOTIFY,90,25,
-                    15,15
-    CONTROL         "",IDC_PANE_TXA,"Static",SS_BLACKFRAME | SS_NOTIFY,60,40,
-                    15,15
-    CONTROL         "",IDC_PANE_TYA,"Static",SS_BLACKFRAME | SS_NOTIFY,75,40,
-                    15,15
-    CONTROL         "",IDC_PANE_TXS,"Static",SS_BLACKFRAME | SS_NOTIFY,90,40,
-                    15,15
-    CONTROL         "",IDC_PANE_PHA,"Static",SS_BLACKFRAME | SS_NOTIFY,110,
-                    25,15,15
-    CONTROL         "",IDC_PANE_PHP,"Static",SS_BLACKFRAME | SS_NOTIFY,125,
-                    25,15,15
-    CONTROL         "",IDC_PANE_PLA,"Static",SS_BLACKFRAME | SS_NOTIFY,110,
-                    40,15,15
-    CONTROL         "",IDC_PANE_PLP,"Static",SS_BLACKFRAME | SS_NOTIFY,125,
-                    40,15,15
+    CONTROL         135,IDC_PANE_LDA,"Static",SS_BITMAP | SS_NOTIFY,10,25,20,
+                    20
+    CONTROL         136,IDC_PANE_LDX,"Static",SS_BITMAP | SS_NOTIFY,25,25,15,
+                    15
+    CONTROL         137,IDC_PANE_LDY,"Static",SS_BITMAP | SS_NOTIFY,40,25,15,
+                    15
+    CONTROL         138,IDC_PANE_STA,"Static",SS_BITMAP | SS_NOTIFY,10,40,15,
+                    15
+    CONTROL         139,IDC_PANE_STX,"Static",SS_BITMAP | SS_NOTIFY,25,40,15,
+                    15
+    CONTROL         140,IDC_PANE_STY,"Static",SS_BITMAP | SS_NOTIFY,40,40,15,
+                    15
+    CONTROL         141,IDC_PANE_TAX,"Static",SS_BITMAP | SS_NOTIFY,60,25,20,
+                    20
+    CONTROL         143,IDC_PANE_TAY,"Static",SS_BITMAP | SS_NOTIFY,75,25,20,
+                    20
+    CONTROL         145,IDC_PANE_TSX,"Static",SS_BITMAP | SS_NOTIFY,90,25,20,
+                    20
+    CONTROL         142,IDC_PANE_TXA,"Static",SS_BITMAP | SS_NOTIFY,60,40,20,
+                    20
+    CONTROL         144,IDC_PANE_TYA,"Static",SS_BITMAP | SS_NOTIFY,75,40,20,
+                    20
+    CONTROL         146,IDC_PANE_TXS,"Static",SS_BITMAP | SS_NOTIFY,90,40,20,
+                    20
+    CONTROL         147,IDC_PANE_PHA,"Static",SS_BITMAP | SS_NOTIFY,110,25,
+                    20,20
+    CONTROL         194,IDC_PANE_PHP,"Static",SS_BITMAP | SS_NOTIFY,125,25,
+                    20,20
+    CONTROL         195,IDC_PANE_PLA,"Static",SS_BITMAP | SS_NOTIFY,110,40,
+                    20,20
+    CONTROL         193,IDC_PANE_PLP,"Static",SS_BITMAP | SS_NOTIFY,125,40,
+                    20,20
     GROUPBOX        "2. åvéZ",IDC_STATIC,5,70,140,50
-    CONTROL         "",IDC_PANE_AND,"Static",SS_BLACKFRAME | SS_NOTIFY,10,80,
-                    15,15
-    CONTROL         "",IDC_PANE_ORA,"Static",SS_BLACKFRAME | SS_NOTIFY,25,80,
-                    15,15
-    CONTROL         "",IDC_PANE_EOR,"Static",SS_BLACKFRAME | SS_NOTIFY,40,80,
-                    15,15
-    CONTROL         "",IDC_PANE_ADC,"Static",SS_BLACKFRAME | SS_NOTIFY,10,95,
-                    15,15
-    CONTROL         "",IDC_PANE_SBC,"Static",SS_BLACKFRAME | SS_NOTIFY,25,95,
-                    15,15
-    CONTROL         "",IDC_PANE_ASL,"Static",SS_BLACKFRAME | SS_NOTIFY,60,80,
-                    15,15
-    CONTROL         "",IDC_PANE_LSR,"Static",SS_BLACKFRAME | SS_NOTIFY,75,80,
-                    15,15
-    CONTROL         "",IDC_PANE_ROL,"Static",SS_BLACKFRAME | SS_NOTIFY,60,95,
-                    15,15
-    CONTROL         "",IDC_PANE_ROR,"Static",SS_BLACKFRAME | SS_NOTIFY,75,95,
-                    15,15
-    CONTROL         "",IDC_PANE_INC,"Static",SS_BLACKFRAME | SS_NOTIFY,95,80,
-                    15,15
-    CONTROL         "",IDC_PANE_INX,"Static",SS_BLACKFRAME | SS_NOTIFY,110,
-                    80,15,15
-    CONTROL         "",IDC_PANE_INY,"Static",SS_BLACKFRAME | SS_NOTIFY,125,
-                    80,15,15
-    CONTROL         "",IDC_PANE_DEC,"Static",SS_BLACKFRAME | SS_NOTIFY,95,95,
-                    15,15
-    CONTROL         "",IDC_PANE_DEX,"Static",SS_BLACKFRAME | SS_NOTIFY,110,
-                    95,15,15
-    CONTROL         "",IDC_PANE_DEY,"Static",SS_BLACKFRAME | SS_NOTIFY,125,
-                    95,15,15
+    CONTROL         192,IDC_PANE_AND,"Static",SS_BITMAP | SS_NOTIFY,10,80,20,
+                    20
+    CONTROL         191,IDC_PANE_ORA,"Static",SS_BITMAP | SS_NOTIFY,25,80,20,
+                    20
+    CONTROL         190,IDC_PANE_EOR,"Static",SS_BITMAP | SS_NOTIFY,25,95,20,
+                    20
+    CONTROL         189,IDC_PANE_ADC,"Static",SS_BITMAP | SS_NOTIFY,40,80,20,
+                    20
+    CONTROL         188,IDC_PANE_SBC,"Static",SS_BITMAP | SS_NOTIFY,40,95,20,
+                    20
+    CONTROL         187,IDC_PANE_ASL,"Static",SS_BITMAP | SS_NOTIFY,60,80,20,
+                    20
+    CONTROL         186,IDC_PANE_LSR,"Static",SS_BITMAP | SS_NOTIFY,75,80,20,
+                    20
+    CONTROL         184,IDC_PANE_ROL,"Static",SS_BITMAP | SS_NOTIFY,60,95,20,
+                    20
+    CONTROL         185,IDC_PANE_ROR,"Static",SS_BITMAP | SS_NOTIFY,75,95,20,
+                    20
+    CONTROL         183,IDC_PANE_INC,"Static",SS_BITMAP | SS_NOTIFY,95,80,20,
+                    20
+    CONTROL         182,IDC_PANE_INX,"Static",SS_BITMAP | SS_NOTIFY,110,80,
+                    20,20
+    CONTROL         181,IDC_PANE_INY,"Static",SS_BITMAP | SS_NOTIFY,125,80,
+                    20,20
+    CONTROL         179,IDC_PANE_DEC,"Static",SS_BITMAP | SS_NOTIFY,95,95,20,
+                    20
+    CONTROL         180,IDC_PANE_DEX,"Static",SS_BITMAP | SS_NOTIFY,110,95,
+                    20,20
+    CONTROL         178,IDC_PANE_DEY,"Static",SS_BITMAP | SS_NOTIFY,125,95,
+                    20,20
     GROUPBOX        "3. ñ≥èåèºﬁ¨›Ãﬂ",IDC_STATIC,5,125,55,50
-    CONTROL         "",IDC_PANE_JMP,"Static",SS_BLACKFRAME | SS_NOTIFY,10,
-                    135,15,15
-    CONTROL         "",IDC_PANE_JSR,"Static",SS_BLACKFRAME | SS_NOTIFY,25,
-                    135,15,15
-    CONTROL         "",IDC_PANE_BRK,"Static",SS_BLACKFRAME | SS_NOTIFY,40,
-                    135,15,15
-    CONTROL         "",IDC_PANE_RTS,"Static",SS_BLACKFRAME | SS_NOTIFY,25,
-                    151,15,15
-    CONTROL         "",IDC_PANE_RTI,"Static",SS_BLACKFRAME | SS_NOTIFY,40,
-                    151,15,15
+    CONTROL         177,IDC_PANE_JMP,"Static",SS_BITMAP | SS_NOTIFY,10,135,
+                    20,20
+    CONTROL         176,IDC_PANE_JSR,"Static",SS_BITMAP | SS_NOTIFY,25,135,
+                    20,20
+    CONTROL         174,IDC_PANE_BRK,"Static",SS_BITMAP | SS_NOTIFY,40,135,
+                    20,20
+    CONTROL         175,IDC_PANE_RTS,"Static",SS_BITMAP | SS_NOTIFY,25,151,
+                    20,20
+    CONTROL         173,IDC_PANE_RTI,"Static",SS_BITMAP | SS_NOTIFY,40,151,
+                    20,20
     GROUPBOX        "4. î‰är",IDC_STATIC,65,125,55,50
-    CONTROL         "",IDC_PANE_CMP,"Static",SS_BLACKFRAME | SS_NOTIFY,70,
-                    135,15,15
-    CONTROL         "",IDC_PANE_CPX,"Static",SS_BLACKFRAME | SS_NOTIFY,85,
-                    135,15,15
-    CONTROL         "",IDC_PANE_CPY,"Static",SS_BLACKFRAME | SS_NOTIFY,100,
-                    135,15,15
-    CONTROL         "",IDC_PANE_BIT,"Static",SS_BLACKFRAME | SS_NOTIFY,70,
-                    151,15,15
+    CONTROL         172,IDC_PANE_CMP,"Static",SS_BITMAP | SS_NOTIFY,70,135,
+                    20,20
+    CONTROL         171,IDC_PANE_CPX,"Static",SS_BITMAP | SS_NOTIFY,85,135,
+                    20,20
+    CONTROL         170,IDC_PANE_CPY,"Static",SS_BITMAP | SS_NOTIFY,100,135,
+                    20,20
+    CONTROL         169,IDC_PANE_BIT,"Static",SS_BITMAP | SS_NOTIFY,70,151,
+                    20,20
     GROUPBOX        "5. èåèºﬁ¨›ÃﬂÅEÃ◊∏ﬁëÄçÏ",IDC_STATIC,5,180,140,50
-    CONTROL         "",IDC_PANE_BEQ,"Static",SS_BLACKFRAME | SS_NOTIFY,10,
-                    190,15,15
-    CONTROL         "",IDC_PANE_BMI,"Static",SS_BLACKFRAME | SS_NOTIFY,25,
-                    190,15,15
-    CONTROL         "",IDC_PANE_BCS,"Static",SS_BLACKFRAME | SS_NOTIFY,40,
-                    190,15,15
-    CONTROL         "",IDC_PANE_BVS,"Static",SS_BLACKFRAME | SS_NOTIFY,55,
-                    190,15,15
-    CONTROL         "",IDC_PANE_BNE,"Static",SS_BLACKFRAME | SS_NOTIFY,10,
-                    205,15,15
-    CONTROL         "",IDC_PANE_BPL,"Static",SS_BLACKFRAME | SS_NOTIFY,25,
-                    205,15,15
-    CONTROL         "",IDC_PANE_BCC,"Static",SS_BLACKFRAME | SS_NOTIFY,40,
-                    205,15,15
-    CONTROL         "",IDC_PANE_BVC,"Static",SS_BLACKFRAME | SS_NOTIFY,55,
-                    205,15,15
-    CONTROL         "",IDC_PANE_SEI,"Static",SS_BLACKFRAME | SS_NOTIFY,75,
-                    190,15,15
-    CONTROL         "",IDC_PANE_SED,"Static",SS_BLACKFRAME | SS_NOTIFY,90,
-                    190,15,15
-    CONTROL         "",IDC_PANE_SEC,"Static",SS_BLACKFRAME | SS_NOTIFY,105,
-                    190,15,15
-    CONTROL         "",IDC_PANE_CLI,"Static",SS_BLACKFRAME | SS_NOTIFY,75,
-                    205,15,15
-    CONTROL         "",IDC_PANE_CLD,"Static",SS_BLACKFRAME | SS_NOTIFY,90,
-                    205,15,15
-    CONTROL         "",IDC_PANE_CLC,"Static",SS_BLACKFRAME | SS_NOTIFY,105,
-                    205,15,15
-    CONTROL         "",IDC_PANE_CLV,"Static",SS_BLACKFRAME | SS_NOTIFY,120,
-                    205,15,15
-    CONTROL         "",IDC_PANE_NOP,"Static",SS_BLACKFRAME | SS_NOTIFY,125,
-                    135,15,15
-    LTEXT           "ÉeÉXÉgÇ≈Ç∑",IDC_TEST_LABEL,46,241,31,8
-    LTEXT           "ÉeÉXÉgÇ≈Ç∑ ÇªÇÃ2",IDC_TEST_LABEL2,39,256,50,8
+    CONTROL         168,IDC_PANE_BEQ,"Static",SS_BITMAP | SS_NOTIFY,10,190,
+                    20,20
+    CONTROL         166,IDC_PANE_BMI,"Static",SS_BITMAP | SS_NOTIFY,25,190,
+                    20,20
+    CONTROL         164,IDC_PANE_BCS,"Static",SS_BITMAP | SS_NOTIFY,40,190,
+                    20,20
+    CONTROL         162,IDC_PANE_BVS,"Static",SS_BITMAP | SS_NOTIFY,55,190,
+                    20,20
+    CONTROL         167,IDC_PANE_BNE,"Static",SS_BITMAP | SS_NOTIFY,10,205,
+                    20,20
+    CONTROL         165,IDC_PANE_BPL,"Static",SS_BITMAP | SS_NOTIFY,25,205,
+                    20,20
+    CONTROL         163,IDC_PANE_BCC,"Static",SS_BITMAP | SS_NOTIFY,40,205,
+                    20,20
+    CONTROL         161,IDC_PANE_BVC,"Static",SS_BITMAP | SS_NOTIFY,55,205,
+                    20,20
+    CONTROL         160,IDC_PANE_SEI,"Static",SS_BITMAP | SS_NOTIFY,75,190,
+                    20,20
+    CONTROL         158,IDC_PANE_SED,"Static",SS_BITMAP | SS_NOTIFY,90,190,
+                    20,20
+    CONTROL         156,IDC_PANE_SEC,"Static",SS_BITMAP | SS_NOTIFY,105,190,
+                    20,20
+    CONTROL         159,IDC_PANE_CLI,"Static",SS_BITMAP | SS_NOTIFY,75,205,
+                    20,20
+    CONTROL         157,IDC_PANE_CLD,"Static",SS_BITMAP | SS_NOTIFY,90,205,
+                    20,20
+    CONTROL         155,IDC_PANE_CLC,"Static",SS_BITMAP | SS_NOTIFY,105,205,
+                    20,20
+    CONTROL         154,IDC_PANE_CLV,"Static",SS_BITMAP | SS_NOTIFY,120,205,
+                    20,20
+    CONTROL         153,IDC_PANE_NOP,"Static",SS_BITMAP | SS_NOTIFY,125,135,
+                    20,20
 END
 
 IDD_ASMINPUTBARDLG DIALOG DISCARDABLE  0, 0, 74, 76
