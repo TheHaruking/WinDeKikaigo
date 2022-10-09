@@ -90,6 +90,10 @@ protected:
 
 	ASMOBJ m_AsmObj[64+1]; // 要終端
 
+	CBitmap m_bmp[56];
+	CDC m_bmpdc[56];
+	CFont m_font;
+
 // オーバーライド
 	// ClassWizard は仮想関数のオーバーライドを生成します。
 

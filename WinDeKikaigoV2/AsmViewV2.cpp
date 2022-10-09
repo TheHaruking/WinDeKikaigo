@@ -91,10 +91,10 @@ const DWORD CAsmViewV2::ADR2OPR[ADR_MAX] = {
 };
 
 const LPTSTR CAsmViewV2::ADR2STR[ADR_MAX] = {
-	L"", L"", L"%02X",									// ADR_NONE, ADR_A, ADR_REL
-	L"#%02X", L"%02X", L"%02X%02X",			// ADR_IMM, ADR_ZR, ADR_AD,
-	L"%02X, x", L"%02X, y", L"%02X%02X, x", L"%02X%02X, y", // ADR_ZRX, ADR_ZRY, ADR_ADX, ADR_ADY, 
-	L"(%02X, x)", L"(%02X), y", L"(%02X%02X)"	// ADR_INDX, ADR_INDY, ADR_IND,
+	L"", L"", L"$%02X",									// ADR_NONE, ADR_A, ADR_REL
+	L"#$%02X", L"$%02X", L"$%02X%02X",			// ADR_IMM, ADR_ZR, ADR_AD,
+	L"$%02X,x", L"$%02X,y", L"$%02X%02X,x", L"$%02X%02X,y", // ADR_ZRX, ADR_ZRY, ADR_ADX, ADR_ADY, 
+	L"($%02X,x)", L"($%02X),y", L"($%02X%02X)"	// ADR_INDX, ADR_INDY, ADR_IND,
 };
 
 const LONG CAsmViewV2::ASM2ADR[OP_MAX][10] = {
@@ -225,6 +225,11 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 
 	DWORD dwOp, dwAdr, dwOpr; // オペコード, アドレッシング, オペランドのバイト数
 	BYTE* bin;
+	const DWORD HEIGHT = 21+2;
+
+	// フォント変更
+	CFont* pFontOld;
+	pFontOld = pDC->SelectObject(&m_font);
 	
 	for (i = 0; i < 64; i++) // i は表示縦座標に使用
 	{
@@ -245,7 +250,7 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 		case 3: val1 = bin[2]; val2 = bin[1]; break;
 		}
 
-		// 表示
+		// 表示:テキスト部
 		if (i == m_nCurSel) {
 			pDC->SetBkColor(RGB(255,255,0));
 		} else if (m_num2ip[i] == ((CMainFrame*)AfxGetMainWnd())->m_cpu.GetRegPC()) {
@@ -255,9 +260,12 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 			pDC->SetBkColor(RGB(255,255,255));
 		}
 		buf.Format(L"%s", OP2ASM[dwOp]);
-		pDC->TextOut(0, i*16, buf);
+		pDC->TextOut(28, i*HEIGHT, buf);
 		buf.Format(ADR2STR[dwAdr], val1, val2);
-		pDC->TextOut(4*8, i*16, buf);
+		pDC->TextOut(28+11*4, i*HEIGHT, buf);
+
+		// 表示:アイコン部
+		pDC->BitBlt(1, 1+i*HEIGHT, 24, 21, &(m_bmpdc[0]), 1, 1, SRCCOPY); // 周囲1px は省く.
 	}
 
 	// 残り (DATA) を表示
@@ -272,10 +280,13 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 			pDC->SetBkColor(RGB(255,255,255));
 		}
 
-		buf.Format(L"DATA: %02X ", bin[0]);
-		pDC->TextOut(0, i*16, buf);
+		buf.Format(L"DATA: $%02X ", bin[0]);
+		pDC->TextOut(0, i*HEIGHT, buf);
 	}
-	
+
+	// 後処理
+	pDC->SelectObject(&m_font);
+
 	//
 	SetScrollSizes(MM_TEXT, CSize(1, i*16));
 }
@@ -316,8 +327,10 @@ void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	buf.Format(L"m_num2ip: %d\r\n", m_num2ip[point.y/16]);
 	OutputDebugString(buf);
 #endif
+	const DWORD HEIGHT = 21+2;
+	LONG y = CScrollView::GetScrollPosition().y + point.y;
 
-	m_nCurSel = point.y/16;
+	m_nCurSel = y/HEIGHT;
 	m_nCurIp = m_num2ip[m_nCurSel];
 	
 	this->RedrawWindow();
@@ -442,6 +455,25 @@ void CAsmViewV2::OnInitialUpdate()
 
 	BinToAsmObj();
 	SetScrollSizes(MM_TEXT, CSize(1,1)); // CScrollView を作成するためのダミー値
+
+	// アイコン関連
+	CClientDC dc(this);
+	m_bmp[0].LoadBitmap(IDB_OP_LDA);
+	m_bmpdc[0].CreateCompatibleDC(&dc);
+	m_bmpdc[0].SelectObject(&m_bmp[0]);
+
+	// フォント
+	m_font.CreateFont(
+		22, 0,					// 高さ、幅
+		0, 0, FW_DONTCARE,		// 角度、角度、太さ
+		FALSE, FALSE, FALSE,	// 斜体、下線、取消線
+		ANSI_CHARSET,			// 文字セット
+		OUT_DEFAULT_PRECIS,		// 出力精度
+		CLIP_DEFAULT_PRECIS,	// クリッピング精度
+		DEFAULT_QUALITY,		// 出力品質
+		DEFAULT_PITCH,			// ピッチ
+		_T("Courier New")		// タイプフェイス名
+		);
 }
 
 void CAsmViewV2::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
