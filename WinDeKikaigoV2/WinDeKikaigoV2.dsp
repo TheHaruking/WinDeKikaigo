@@ -197,7 +197,231 @@ SOURCE=.\WinDeKikaigoV2Doc.h
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # Begin Source File
 
+SOURCE=.\res\adc.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\and.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\asl.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\bcc.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\bcs.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\beq.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\bit.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\bmi.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\bne.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\bpl.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\brk.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\bvc.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\bvs.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\clc.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\cld.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\cli.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\clv.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\cmp.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\cpx.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\cpy.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\dec.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\dex.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\dey.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\eor.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\inc.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\inx.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\iny.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\jmp.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\jsr.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\lda.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\ldx.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\ldy.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\lsr.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\nop.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\ora.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\pha.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\php.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\pla.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\plp.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\rol.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\ror.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\rti.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\rts.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\sbc.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\sec.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\sed.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\sei.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\sta.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\stx.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\sty.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\tax.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\tay.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\Toolbar.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\tsx.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\txa.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\txs.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\tya.bmp
 # End Source File
 # Begin Source File
 
