@@ -265,7 +265,7 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 		pDC->TextOut(28+11*4, i*HEIGHT, buf);
 
 		// 表示:アイコン部
-		pDC->BitBlt(1, 1+i*HEIGHT, 24, 21, &(m_bmpdc[0]), 1, 1, SRCCOPY); // 周囲1px は省く.
+		pDC->BitBlt(1, 1+i*HEIGHT, 24, 21, &(m_bmpdc[dwOp]), 1, 1, SRCCOPY); // 周囲1px は省く.
 	}
 
 	// 残り (DATA) を表示
@@ -321,14 +321,15 @@ void CAsmViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point) 
 {
+	const DWORD HEIGHT = 21+2;
+	LONG y = CScrollView::GetScrollPosition().y + point.y;
+
 	// 確認用
 #ifdef _DEBUG
 	CString buf;
-	buf.Format(L"m_num2ip: %d\r\n", m_num2ip[point.y/16]);
+	buf.Format(L"m_num2ip: %d\r\n", m_num2ip[y/HEIGHT]);
 	OutputDebugString(buf);
 #endif
-	const DWORD HEIGHT = 21+2;
-	LONG y = CScrollView::GetScrollPosition().y + point.y;
 
 	m_nCurSel = y/HEIGHT;
 	m_nCurIp = m_num2ip[m_nCurSel];
@@ -439,6 +440,8 @@ void CAsmViewV2::OnInitialUpdate()
 {
 	CScrollView::OnInitialUpdate();
 
+	int i;
+
 	::ZeroMemory(m_num2ip, 256);
 	m_nCurIp = 0;
 	m_nCurSel = 0;
@@ -449,7 +452,7 @@ void CAsmViewV2::OnInitialUpdate()
 		0x00		  //	BYTE data[4];
 	};
 
-	for (int i = 0; i <= 64; i++)
+	for (i = 0; i <= 64; i++)
 		m_AsmObj[i] = ASMINITDATA;
 	m_AsmObj[64].type = ASMOBJ::END;
 
@@ -458,9 +461,12 @@ void CAsmViewV2::OnInitialUpdate()
 
 	// アイコン関連
 	CClientDC dc(this);
-	m_bmp[0].LoadBitmap(IDB_OP_LDA);
-	m_bmpdc[0].CreateCompatibleDC(&dc);
-	m_bmpdc[0].SelectObject(&m_bmp[0]);
+
+	for (i = 0; i < OP_MAX; i++) {
+		m_bmp[i].LoadBitmap(IDB_OP_UND+i);
+		m_bmpdc[i].CreateCompatibleDC(&dc);
+		m_bmpdc[i].SelectObject(&m_bmp[i]);
+	}
 
 	// フォント
 	m_font.CreateFont(

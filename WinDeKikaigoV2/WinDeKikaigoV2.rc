@@ -248,121 +248,121 @@ FONT 9, "ÇlÇr ÇoÉSÉVÉbÉN"
 BEGIN
     LTEXT           "DIALOGBAR_RIGHT",IDC_STATIC,45,5,60,9,NOT WS_VISIBLE
     GROUPBOX        "1. ì«Ç›èëÇ´",IDC_STATIC,5,15,140,50
-    CONTROL         135,IDC_PANE_LDA,"Static",SS_BITMAP | SS_NOTIFY,10,25,20,
-                    20
-    CONTROL         136,IDC_PANE_LDX,"Static",SS_BITMAP | SS_NOTIFY,25,25,15,
-                    15
-    CONTROL         137,IDC_PANE_LDY,"Static",SS_BITMAP | SS_NOTIFY,40,25,15,
-                    15
-    CONTROL         138,IDC_PANE_STA,"Static",SS_BITMAP | SS_NOTIFY,10,40,15,
-                    15
-    CONTROL         139,IDC_PANE_STX,"Static",SS_BITMAP | SS_NOTIFY,25,40,15,
-                    15
-    CONTROL         140,IDC_PANE_STY,"Static",SS_BITMAP | SS_NOTIFY,40,40,15,
-                    15
-    CONTROL         141,IDC_PANE_TAX,"Static",SS_BITMAP | SS_NOTIFY,60,25,20,
-                    20
-    CONTROL         143,IDC_PANE_TAY,"Static",SS_BITMAP | SS_NOTIFY,75,25,20,
-                    20
-    CONTROL         145,IDC_PANE_TSX,"Static",SS_BITMAP | SS_NOTIFY,90,25,20,
-                    20
-    CONTROL         142,IDC_PANE_TXA,"Static",SS_BITMAP | SS_NOTIFY,60,40,20,
-                    20
-    CONTROL         144,IDC_PANE_TYA,"Static",SS_BITMAP | SS_NOTIFY,75,40,20,
-                    20
-    CONTROL         146,IDC_PANE_TXS,"Static",SS_BITMAP | SS_NOTIFY,90,40,20,
-                    20
-    CONTROL         147,IDC_PANE_PHA,"Static",SS_BITMAP | SS_NOTIFY,110,25,
+    CONTROL         5201,IDC_PANE_LDA,"Static",SS_BITMAP | SS_NOTIFY,10,25,
                     20,20
-    CONTROL         194,IDC_PANE_PHP,"Static",SS_BITMAP | SS_NOTIFY,125,25,
+    CONTROL         5202,IDC_PANE_LDX,"Static",SS_BITMAP | SS_NOTIFY,25,25,
+                    15,15
+    CONTROL         5203,IDC_PANE_LDY,"Static",SS_BITMAP | SS_NOTIFY,40,25,
+                    15,15
+    CONTROL         5204,IDC_PANE_STA,"Static",SS_BITMAP | SS_NOTIFY,10,40,
+                    15,15
+    CONTROL         5205,IDC_PANE_STX,"Static",SS_BITMAP | SS_NOTIFY,25,40,
+                    15,15
+    CONTROL         5206,IDC_PANE_STY,"Static",SS_BITMAP | SS_NOTIFY,40,40,
+                    15,15
+    CONTROL         5210,IDC_PANE_TAX,"Static",SS_BITMAP | SS_NOTIFY,60,25,
                     20,20
-    CONTROL         195,IDC_PANE_PLA,"Static",SS_BITMAP | SS_NOTIFY,110,40,
+    CONTROL         5211,IDC_PANE_TAY,"Static",SS_BITMAP | SS_NOTIFY,75,25,
                     20,20
-    CONTROL         193,IDC_PANE_PLP,"Static",SS_BITMAP | SS_NOTIFY,125,40,
+    CONTROL         5212,IDC_PANE_TSX,"Static",SS_BITMAP | SS_NOTIFY,90,25,
+                    20,20
+    CONTROL         5207,IDC_PANE_TXA,"Static",SS_BITMAP | SS_NOTIFY,60,40,
+                    20,20
+    CONTROL         5208,IDC_PANE_TYA,"Static",SS_BITMAP | SS_NOTIFY,75,40,
+                    20,20
+    CONTROL         5209,IDC_PANE_TXS,"Static",SS_BITMAP | SS_NOTIFY,90,40,
+                    20,20
+    CONTROL         5213,IDC_PANE_PHA,"Static",SS_BITMAP | SS_NOTIFY,110,25,
+                    20,20
+    CONTROL         5214,IDC_PANE_PHP,"Static",SS_BITMAP | SS_NOTIFY,125,25,
+                    20,20
+    CONTROL         5215,IDC_PANE_PLA,"Static",SS_BITMAP | SS_NOTIFY,110,40,
+                    20,20
+    CONTROL         5216,IDC_PANE_PLP,"Static",SS_BITMAP | SS_NOTIFY,125,40,
                     20,20
     GROUPBOX        "2. åvéZ",IDC_STATIC,5,70,140,50
-    CONTROL         192,IDC_PANE_AND,"Static",SS_BITMAP | SS_NOTIFY,10,80,20,
-                    20
-    CONTROL         191,IDC_PANE_ORA,"Static",SS_BITMAP | SS_NOTIFY,25,80,20,
-                    20
-    CONTROL         190,IDC_PANE_EOR,"Static",SS_BITMAP | SS_NOTIFY,25,95,20,
-                    20
-    CONTROL         189,IDC_PANE_ADC,"Static",SS_BITMAP | SS_NOTIFY,40,80,20,
-                    20
-    CONTROL         188,IDC_PANE_SBC,"Static",SS_BITMAP | SS_NOTIFY,40,95,20,
-                    20
-    CONTROL         187,IDC_PANE_ASL,"Static",SS_BITMAP | SS_NOTIFY,60,80,20,
-                    20
-    CONTROL         186,IDC_PANE_LSR,"Static",SS_BITMAP | SS_NOTIFY,75,80,20,
-                    20
-    CONTROL         184,IDC_PANE_ROL,"Static",SS_BITMAP | SS_NOTIFY,60,95,20,
-                    20
-    CONTROL         185,IDC_PANE_ROR,"Static",SS_BITMAP | SS_NOTIFY,75,95,20,
-                    20
-    CONTROL         183,IDC_PANE_INC,"Static",SS_BITMAP | SS_NOTIFY,95,80,20,
-                    20
-    CONTROL         182,IDC_PANE_INX,"Static",SS_BITMAP | SS_NOTIFY,110,80,
+    CONTROL         5217,IDC_PANE_AND,"Static",SS_BITMAP | SS_NOTIFY,10,80,
                     20,20
-    CONTROL         181,IDC_PANE_INY,"Static",SS_BITMAP | SS_NOTIFY,125,80,
+    CONTROL         5218,IDC_PANE_ORA,"Static",SS_BITMAP | SS_NOTIFY,25,80,
                     20,20
-    CONTROL         179,IDC_PANE_DEC,"Static",SS_BITMAP | SS_NOTIFY,95,95,20,
-                    20
-    CONTROL         180,IDC_PANE_DEX,"Static",SS_BITMAP | SS_NOTIFY,110,95,
+    CONTROL         5219,IDC_PANE_EOR,"Static",SS_BITMAP | SS_NOTIFY,25,95,
                     20,20
-    CONTROL         178,IDC_PANE_DEY,"Static",SS_BITMAP | SS_NOTIFY,125,95,
+    CONTROL         5220,IDC_PANE_ADC,"Static",SS_BITMAP | SS_NOTIFY,40,80,
+                    20,20
+    CONTROL         5221,IDC_PANE_SBC,"Static",SS_BITMAP | SS_NOTIFY,40,95,
+                    20,20
+    CONTROL         5222,IDC_PANE_ASL,"Static",SS_BITMAP | SS_NOTIFY,60,80,
+                    20,20
+    CONTROL         5223,IDC_PANE_LSR,"Static",SS_BITMAP | SS_NOTIFY,75,80,
+                    20,20
+    CONTROL         5224,IDC_PANE_ROL,"Static",SS_BITMAP | SS_NOTIFY,60,95,
+                    20,20
+    CONTROL         5225,IDC_PANE_ROR,"Static",SS_BITMAP | SS_NOTIFY,75,95,
+                    20,20
+    CONTROL         5226,IDC_PANE_INC,"Static",SS_BITMAP | SS_NOTIFY,95,80,
+                    20,20
+    CONTROL         5227,IDC_PANE_INX,"Static",SS_BITMAP | SS_NOTIFY,110,80,
+                    20,20
+    CONTROL         5228,IDC_PANE_INY,"Static",SS_BITMAP | SS_NOTIFY,125,80,
+                    20,20
+    CONTROL         5229,IDC_PANE_DEC,"Static",SS_BITMAP | SS_NOTIFY,95,95,
+                    20,20
+    CONTROL         5230,IDC_PANE_DEX,"Static",SS_BITMAP | SS_NOTIFY,110,95,
+                    20,20
+    CONTROL         5231,IDC_PANE_DEY,"Static",SS_BITMAP | SS_NOTIFY,125,95,
                     20,20
     GROUPBOX        "3. ñ≥èåèºﬁ¨›Ãﬂ",IDC_STATIC,5,125,55,50
-    CONTROL         177,IDC_PANE_JMP,"Static",SS_BITMAP | SS_NOTIFY,10,135,
+    CONTROL         5236,IDC_PANE_JMP,"Static",SS_BITMAP | SS_NOTIFY,10,135,
                     20,20
-    CONTROL         176,IDC_PANE_JSR,"Static",SS_BITMAP | SS_NOTIFY,25,135,
+    CONTROL         5237,IDC_PANE_JSR,"Static",SS_BITMAP | SS_NOTIFY,25,135,
                     20,20
-    CONTROL         174,IDC_PANE_BRK,"Static",SS_BITMAP | SS_NOTIFY,40,135,
+    CONTROL         5239,IDC_PANE_BRK,"Static",SS_BITMAP | SS_NOTIFY,40,135,
                     20,20
-    CONTROL         175,IDC_PANE_RTS,"Static",SS_BITMAP | SS_NOTIFY,25,151,
+    CONTROL         5238,IDC_PANE_RTS,"Static",SS_BITMAP | SS_NOTIFY,25,151,
                     20,20
-    CONTROL         173,IDC_PANE_RTI,"Static",SS_BITMAP | SS_NOTIFY,40,151,
+    CONTROL         5240,IDC_PANE_RTI,"Static",SS_BITMAP | SS_NOTIFY,40,151,
                     20,20
     GROUPBOX        "4. î‰är",IDC_STATIC,65,125,55,50
-    CONTROL         172,IDC_PANE_CMP,"Static",SS_BITMAP | SS_NOTIFY,70,135,
+    CONTROL         5232,IDC_PANE_CMP,"Static",SS_BITMAP | SS_NOTIFY,70,135,
                     20,20
-    CONTROL         171,IDC_PANE_CPX,"Static",SS_BITMAP | SS_NOTIFY,85,135,
+    CONTROL         5233,IDC_PANE_CPX,"Static",SS_BITMAP | SS_NOTIFY,85,135,
                     20,20
-    CONTROL         170,IDC_PANE_CPY,"Static",SS_BITMAP | SS_NOTIFY,100,135,
+    CONTROL         5234,IDC_PANE_CPY,"Static",SS_BITMAP | SS_NOTIFY,100,135,
                     20,20
-    CONTROL         169,IDC_PANE_BIT,"Static",SS_BITMAP | SS_NOTIFY,70,151,
+    CONTROL         5235,IDC_PANE_BIT,"Static",SS_BITMAP | SS_NOTIFY,70,151,
                     20,20
     GROUPBOX        "5. èåèºﬁ¨›ÃﬂÅEÃ◊∏ﬁëÄçÏ",IDC_STATIC,5,180,140,50
-    CONTROL         168,IDC_PANE_BEQ,"Static",SS_BITMAP | SS_NOTIFY,10,190,
+    CONTROL         5241,IDC_PANE_BEQ,"Static",SS_BITMAP | SS_NOTIFY,10,190,
                     20,20
-    CONTROL         166,IDC_PANE_BMI,"Static",SS_BITMAP | SS_NOTIFY,25,190,
+    CONTROL         5243,IDC_PANE_BMI,"Static",SS_BITMAP | SS_NOTIFY,25,190,
                     20,20
-    CONTROL         164,IDC_PANE_BCS,"Static",SS_BITMAP | SS_NOTIFY,40,190,
+    CONTROL         5245,IDC_PANE_BCS,"Static",SS_BITMAP | SS_NOTIFY,40,190,
                     20,20
-    CONTROL         162,IDC_PANE_BVS,"Static",SS_BITMAP | SS_NOTIFY,55,190,
+    CONTROL         5247,IDC_PANE_BVS,"Static",SS_BITMAP | SS_NOTIFY,55,190,
                     20,20
-    CONTROL         167,IDC_PANE_BNE,"Static",SS_BITMAP | SS_NOTIFY,10,205,
+    CONTROL         5242,IDC_PANE_BNE,"Static",SS_BITMAP | SS_NOTIFY,10,205,
                     20,20
-    CONTROL         165,IDC_PANE_BPL,"Static",SS_BITMAP | SS_NOTIFY,25,205,
+    CONTROL         5244,IDC_PANE_BPL,"Static",SS_BITMAP | SS_NOTIFY,25,205,
                     20,20
-    CONTROL         163,IDC_PANE_BCC,"Static",SS_BITMAP | SS_NOTIFY,40,205,
+    CONTROL         5246,IDC_PANE_BCC,"Static",SS_BITMAP | SS_NOTIFY,40,205,
                     20,20
-    CONTROL         161,IDC_PANE_BVC,"Static",SS_BITMAP | SS_NOTIFY,55,205,
+    CONTROL         5248,IDC_PANE_BVC,"Static",SS_BITMAP | SS_NOTIFY,55,205,
                     20,20
-    CONTROL         160,IDC_PANE_SEI,"Static",SS_BITMAP | SS_NOTIFY,75,190,
+    CONTROL         5253,IDC_PANE_SEI,"Static",SS_BITMAP | SS_NOTIFY,75,190,
                     20,20
-    CONTROL         158,IDC_PANE_SED,"Static",SS_BITMAP | SS_NOTIFY,90,190,
+    CONTROL         5254,IDC_PANE_SED,"Static",SS_BITMAP | SS_NOTIFY,90,190,
                     20,20
-    CONTROL         156,IDC_PANE_SEC,"Static",SS_BITMAP | SS_NOTIFY,105,190,
+    CONTROL         5255,IDC_PANE_SEC,"Static",SS_BITMAP | SS_NOTIFY,105,190,
                     20,20
-    CONTROL         159,IDC_PANE_CLI,"Static",SS_BITMAP | SS_NOTIFY,75,205,
+    CONTROL         5249,IDC_PANE_CLI,"Static",SS_BITMAP | SS_NOTIFY,75,205,
                     20,20
-    CONTROL         157,IDC_PANE_CLD,"Static",SS_BITMAP | SS_NOTIFY,90,205,
+    CONTROL         5250,IDC_PANE_CLD,"Static",SS_BITMAP | SS_NOTIFY,90,205,
                     20,20
-    CONTROL         155,IDC_PANE_CLC,"Static",SS_BITMAP | SS_NOTIFY,105,205,
+    CONTROL         5251,IDC_PANE_CLC,"Static",SS_BITMAP | SS_NOTIFY,105,205,
                     20,20
-    CONTROL         154,IDC_PANE_CLV,"Static",SS_BITMAP | SS_NOTIFY,120,205,
+    CONTROL         5252,IDC_PANE_CLV,"Static",SS_BITMAP | SS_NOTIFY,120,205,
                     20,20
-    CONTROL         153,IDC_PANE_NOP,"Static",SS_BITMAP | SS_NOTIFY,125,135,
+    CONTROL         5256,IDC_PANE_NOP,"Static",SS_BITMAP | SS_NOTIFY,125,135,
                     20,20
 END
 

@@ -90,8 +90,8 @@ protected:
 
 	ASMOBJ m_AsmObj[64+1]; // 要終端
 
-	CBitmap m_bmp[56];
-	CDC m_bmpdc[56];
+	CBitmap m_bmp[OP_MAX];
+	CDC m_bmpdc[OP_MAX];
 	CFont m_font;
 
 // オーバーライド
