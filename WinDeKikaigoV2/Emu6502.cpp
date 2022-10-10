@@ -92,6 +92,14 @@ void CEmu6502::Exec()
 	case 0x81: sta(idx());  break;
 	case 0x91: sta(idy());  break;
 
+	case 0x86: stx(zr());   break;
+	case 0x8E: stx(ad());   break;
+	case 0x96: stx(zry());  break;
+
+	case 0x84: sty(zr());   break;
+	case 0x8C: sty(ad());   break;
+	case 0x94: sty(zrx());  break;
+
 	case 0x8A: txa(); break;
 	case 0x98: tya(); break;
 	case 0xAA: tax(); break;
