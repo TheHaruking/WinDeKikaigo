@@ -94,6 +94,9 @@ protected:
 	CDC m_bmpdc[OP_MAX];
 	CFont m_font;
 
+	CBitmap m_bmpCur;
+	CDC m_bmpdcCur;
+
 // オーバーライド
 	// ClassWizard は仮想関数のオーバーライドを生成します。
 

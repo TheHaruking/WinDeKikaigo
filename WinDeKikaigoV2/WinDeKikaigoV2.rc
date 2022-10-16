@@ -131,6 +131,7 @@ IDB_OP_AND              BITMAP  DISCARDABLE     "res\\and.bmp"
 IDB_OP_PLP              BITMAP  DISCARDABLE     "res\\plp.bmp"
 IDB_OP_PHP              BITMAP  DISCARDABLE     "res\\php.bmp"
 IDB_OP_PLA              BITMAP  DISCARDABLE     "res\\pla.bmp"
+IDB_CURSOR              BITMAP  DISCARDABLE     "res\\Å®.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -199,7 +200,7 @@ END
 
 IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
 BEGIN
-    "@",            ID_APP_DEBUG,           ASCII,  NOINVERT
+    " ",            ID_APP_DEBUG,           ASCII,  NOINVERT
     "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
     "J",            ID_APP_LEFTPANE,        VIRTKEY, CONTROL, NOINVERT
     "K",            ID_APP_RIGHTPANE,       VIRTKEY, CONTROL, NOINVERT

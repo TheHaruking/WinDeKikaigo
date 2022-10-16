@@ -226,12 +226,20 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 	DWORD dwOp, dwAdr, dwOpr; // オペコード, アドレッシング, オペランドのバイト数
 	BYTE* bin;
 	const DWORD HEIGHT = 21+2;
+	DWORD xofs;
+	LONG  count = 0;
 
 	// フォント変更
 	CFont* pFontOld;
 	pFontOld = pDC->SelectObject(&m_font);
 	
-	for (i = 0; i < 64; i++) // i は表示縦座標に使用
+	// 背景用ペン/ブラシ
+	CBrush brush(RGB(239, 239, 239));
+	CBrush* pBrushOld = pDC->SelectObject(&brush);
+	CPen pen(PS_NULL, 0, RGB(0, 0, 0));
+	CPen* pPenOld = pDC->SelectObject(&pen);
+
+	for (i = 0; (i < 64) && (m_AsmObj[i].type != ASMOBJ::END); i++) // i は表示縦座標に使用
 	{
 		bin = m_AsmObj[i].data;
 
@@ -250,30 +258,47 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 		case 3: val1 = bin[2]; val2 = bin[1]; break;
 		}
 
-		// 表示:テキスト部
-		if (i == m_nCurSel) {
-			pDC->SetBkColor(RGB(255,255,0));
-		} else if (m_num2ip[i] == ((CMainFrame*)AfxGetMainWnd())->m_cpu.GetRegPC()) {
-			pDC->SetBkColor(RGB(0,255,255));
-		}		
-		else {
-			pDC->SetBkColor(RGB(255,255,255));
+		// 表示:実行中カーソル
+		xofs = 0;
+		pDC->Rectangle(0, i*HEIGHT, 16+2, i*HEIGHT+HEIGHT+1); // 背景の塗りつぶし
+
+		if (m_num2ip[i] == ((CMainFrame*)AfxGetMainWnd())->m_cpu.GetRegPC()) {
+			::TransparentBlt(pDC->m_hDC, /*コピー先 座標  */ xofs, 1+i*HEIGHT, /*サイズ*/ 16, 16+4, /*コピー元 BMPDC */ m_bmpdcCur.m_hDC, /*原点  */ 0, 0, /*サイズ*/ 16, 16, /*透過色*/ RGB(255, 255, 255));
 		}
-		buf.Format(L"%s", OP2ASM[dwOp]);
-		pDC->TextOut(28, i*HEIGHT, buf);
-		buf.Format(ADR2STR[dwAdr], val1, val2);
-		pDC->TextOut(28+11*4, i*HEIGHT, buf);
+		xofs += 16+2;
+
 
 		// 表示:アイコン部
-		pDC->BitBlt(1, 1+i*HEIGHT, 24, 21, &(m_bmpdc[dwOp]), 1, 1, SRCCOPY); // 周囲1px は省く.
+		pDC->BitBlt(xofs, 1+i*HEIGHT, 24, 21, &(m_bmpdc[dwOp]), 1, 1, SRCCOPY); // 周囲1px は省く.
+		xofs += 24+4; // アイコン部 + 余白.
+
+		// 表示:"LDA " 部
+		if (i == m_nCurSel) {
+			pDC->SetBkColor(RGB(255,255,0));
+		} else {
+			pDC->SetBkColor(RGB(255,255,255));
+		}
+
+		buf.Format(L"%s", OP2ASM[dwOp]);
+		pDC->TextOut(xofs, i*HEIGHT, buf);
+		xofs += 11*4;
+		
+		// 表示:"#$00" 部
+		pDC->SetBkColor(RGB(239,239,239));
+		buf.Format(ADR2STR[dwAdr], val1, val2);
+		pDC->TextOut(xofs, i*HEIGHT, buf);
+
+		count++;
 	}
 
 	// 残り (DATA) を表示
 	pDC->SetBkColor(RGB(255,255,255));
-	for (; i < 64; i++) {
+	for (; (i < 64) && (m_AsmObj[i].type != ASMOBJ::END); i++) {
 		bin = m_AsmObj[i].data;
 
 		// 表示
+		pDC->Rectangle(0, i*HEIGHT, 16+2, i*HEIGHT+HEIGHT+1); // 背景の塗りつぶし
+
 		if (i == m_nCurSel) {
 			pDC->SetBkColor(RGB(255,255,0));
 		} else {
@@ -281,14 +306,16 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 		}
 
 		buf.Format(L"DATA: $%02X ", bin[0]);
-		pDC->TextOut(0, i*HEIGHT, buf);
+		pDC->TextOut(19, i*HEIGHT, buf);
+
+		count++;
 	}
 
 	// 後処理
 	pDC->SelectObject(&m_font);
 
-	//
-	SetScrollSizes(MM_TEXT, CSize(1, i*16));
+	// スクロール範囲の決定
+	SetScrollSizes(MM_TEXT, CSize(1, HEIGHT*count));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -306,6 +333,9 @@ void CAsmViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	// 範囲チェック
 	m_nCurSel = (m_nCurSel >= 0) ? m_nCurSel : 0; // 下限値
+	m_nCurSel = (m_nCurSel <= 63) ? m_nCurSel : 63; // 上限値
+	if (m_AsmObj[m_nCurSel].type == ASMOBJ::END)  // 上限値
+		m_nCurSel--;
 
 	m_nCurIp = m_num2ip[m_nCurSel];
 	
@@ -467,6 +497,10 @@ void CAsmViewV2::OnInitialUpdate()
 		m_bmpdc[i].CreateCompatibleDC(&dc);
 		m_bmpdc[i].SelectObject(&m_bmp[i]);
 	}
+
+	m_bmpCur.LoadBitmap(IDB_CURSOR);
+	m_bmpdcCur.CreateCompatibleDC(&dc);
+	m_bmpdcCur.SelectObject(&m_bmpCur);
 
 	// フォント
 	m_font.CreateFont(

@@ -435,6 +435,10 @@ SOURCE=.\res\WinDeKikaigoV2.rc2
 
 SOURCE=.\res\WinDeKikaigoV2Doc.ico
 # End Source File
+# Begin Source File
+
+SOURCE=".\res\Å®.bmp"
+# End Source File
 # End Group
 # Begin Source File
 
