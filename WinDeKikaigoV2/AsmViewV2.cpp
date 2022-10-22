@@ -293,16 +293,16 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 			pDC->SetBkColor(RGB(255,255,255));
 		}
 
-		buf.Format(L"%s", OP2ASM[dwOp]);
+		buf.Format(L"%s ", OP2ASM[dwOp]);
 		pDC->TextOut(xofs, i*HEIGHT, buf);
-		xofs += 11*4;
+		xofs += 12*4;
 		
 		// •\Ž¦:"#$00" •”
 		buf.Format(ADR2STR[dwAdr]);
 		pDC->TextOut(xofs, i*HEIGHT, buf);
 		pDC->SetBkColor(RGB(239,239,239));
 		buf.Format(ADR2VAL[dwAdr], val1, val2);
-		pDC->TextOut(xofs+ADR2VALPOS[dwAdr]*11, i*HEIGHT, buf);
+		pDC->TextOut(xofs+ADR2VALPOS[dwAdr]*12, i*HEIGHT, buf);
 
 		count++;
 	}
