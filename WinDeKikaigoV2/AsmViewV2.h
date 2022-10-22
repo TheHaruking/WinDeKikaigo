@@ -79,6 +79,8 @@ public:
 	static const LPTSTR OP2ASM[OP_MAX];
 	static const DWORD ADR2OPR[ADR_MAX];
 	static const LPTSTR ADR2STR[ADR_MAX];
+	static const LONG ADR2VALPOS[ADR_MAX];
+	static const LPTSTR ADR2VAL[ADR_MAX];
 	static const LONG ASM2ADR[OP_MAX][10];
 
 protected:

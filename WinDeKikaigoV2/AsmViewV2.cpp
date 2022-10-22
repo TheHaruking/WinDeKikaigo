@@ -91,10 +91,24 @@ const DWORD CAsmViewV2::ADR2OPR[ADR_MAX] = {
 };
 
 const LPTSTR CAsmViewV2::ADR2STR[ADR_MAX] = {
-	L"", L"", L"$%02X",									// ADR_NONE, ADR_A, ADR_REL
-	L"#$%02X", L"$%02X", L"$%02X%02X",			// ADR_IMM, ADR_ZR, ADR_AD,
-	L"$%02X,x", L"$%02X,y", L"$%02X%02X,x", L"$%02X%02X,y", // ADR_ZRX, ADR_ZRY, ADR_ADX, ADR_ADY, 
-	L"($%02X,x)", L"($%02X),y", L"($%02X%02X)"	// ADR_INDX, ADR_INDY, ADR_IND,
+	L"", L"", L"$  ",						// ADR_NONE, ADR_A, ADR_REL,
+	L"#$  ", L"$  ", L"$    ",				// ADR_IMM, ADR_ZR, ADR_AD,
+	L"$  ,x", L"$  ,y", L"$    ,x", L"$    ,y", // ADR_ZRX, ADR_ZRY, ADR_ADX, ADR_ADY, 
+	L"($  ,x)", L"($  ),y", L"($    )"		// ADR_INDX, ADR_INDY, ADR_IND,
+};
+
+const LONG CAsmViewV2::ADR2VALPOS[ADR_MAX] = {
+	0, 0, 1,	// ADR_NONE, ADR_A, ADR_REL,
+	2, 1, 1,	// ADR_IMM, ADR_ZR, ADR_AD,
+	1, 1, 1, 1, // ADR_ZRX, ADR_ZRY, ADR_ADX, ADR_ADY, 
+	2, 2, 2		// ADR_INDX, ADR_INDY, ADR_IND,
+};
+
+const LPTSTR CAsmViewV2::ADR2VAL[ADR_MAX] = {
+	L"", L"", L"%02X",						// ADR_NONE, ADR_A, ADR_REL
+	L"%02X", L"%02X", L"%02X%02X",			// ADR_IMM, ADR_ZR, ADR_AD,
+	L"%02X", L"%02X", L"%02X%02X", L"%02X%02X", // ADR_ZRX, ADR_ZRY, ADR_ADX, ADR_ADY, 
+	L"%02X", L"%02X", L"%02X%02X"			// ADR_INDX, ADR_INDY, ADR_IND,
 };
 
 const LONG CAsmViewV2::ASM2ADR[OP_MAX][10] = {
@@ -284,9 +298,11 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 		xofs += 11*4;
 		
 		// •\Ž¦:"#$00" •”
-		pDC->SetBkColor(RGB(239,239,239));
-		buf.Format(ADR2STR[dwAdr], val1, val2);
+		buf.Format(ADR2STR[dwAdr]);
 		pDC->TextOut(xofs, i*HEIGHT, buf);
+		pDC->SetBkColor(RGB(239,239,239));
+		buf.Format(ADR2VAL[dwAdr], val1, val2);
+		pDC->TextOut(xofs+ADR2VALPOS[dwAdr]*11, i*HEIGHT, buf);
 
 		count++;
 	}
