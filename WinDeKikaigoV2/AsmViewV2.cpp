@@ -301,8 +301,13 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 		buf.Format(ADR2STR[dwAdr]);
 		pDC->TextOut(xofs, i*HEIGHT, buf);
 		pDC->SetBkColor(RGB(239,239,239));
+
 		buf.Format(ADR2VAL[dwAdr], val1, val2);
 		pDC->TextOut(xofs+ADR2VALPOS[dwAdr]*12, i*HEIGHT, buf);
+
+		// クリック座標から AddrInputDlg のための横幅(開始,終端)を取得できるようにしておく.
+		m_num2width[i][0] = xofs + ADR2VALPOS[dwAdr]*12;						// 開始.
+		m_num2width[i][1] = xofs + ADR2VALPOS[dwAdr]*12 + ADR2OPR[dwAdr]*24;	// 終端.
 
 		count++;
 	}
@@ -381,6 +386,10 @@ void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	m_nCurIp = m_num2ip[m_nCurSel];
 	
 	this->RedrawWindow();
+
+	// アドレス入力.
+	if ((point.x >= m_num2width[m_nCurSel][0]) && (point.x <= m_num2width[m_nCurSel][1])) // 仮.
+		m_AddrInputDlg.DoModal();
 
 	CScrollView::OnLButtonDown(nFlags, point);
 

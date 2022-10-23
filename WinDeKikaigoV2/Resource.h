@@ -12,6 +12,7 @@
 #define IDR_WINDEKTYPE                  129
 #define IDD_DIALOG1                     130
 #define IDB_CURSOR                      197
+#define IDD_ADDRINPUTDLG                198
 #define IDC_TEST_LABEL                  1021
 #define IDC_TEST_LABEL2                 1022
 #define IDC_EDIT_PC                     1031
@@ -22,6 +23,7 @@
 #define IDC_EDIT_STACK                  1036
 #define IDC_CHECK_FLAG_N                1037
 #define IDC_CHECK_FLAG_V                1038
+#define IDC_EDIT1                       1038
 #define IDC_CHECK_FLAG_R                1039
 #define IDC_CHECK_FLAG_B                1040
 #define IDC_CHECK_FLAG_D                1041
@@ -161,9 +163,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        198
+#define _APS_NEXT_RESOURCE_VALUE        199
 #define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1038
+#define _APS_NEXT_CONTROL_VALUE         1039
 #define _APS_NEXT_SYMED_VALUE           109
 #endif
 #endif

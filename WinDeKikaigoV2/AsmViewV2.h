@@ -8,6 +8,7 @@
 //
 
 #include "WinDeKikaigoV2Doc.h"
+#include "AddrInputDlg.h"
 
 class CAsmInputBar; // 相互参照
 
@@ -85,8 +86,10 @@ public:
 
 protected:
 	// メンバ変数
-	LONG m_num2ip[256]; // クリック座標からipを紐付ける
-	LONG m_ip2num[64]; // ipから ASM オブジェクトを紐付ける
+	LONG m_num2ip[256];			// クリック座標からipを紐付ける
+	LONG m_num2width[64][2];	// クリック座標から AddrInputDlg のための横幅(開始,終端)を取得.
+	LONG m_ip2num[64];			// ip から ASM オブジェクトを紐付ける
+
 	LONG m_nCurSel; // 現在選択中の ASM オブジェクト
 	LONG m_nCurIp;  // 現在選択中の Instruction Pointer
 
@@ -98,6 +101,8 @@ protected:
 
 	CBitmap m_bmpCur;
 	CDC m_bmpdcCur;
+
+	CAddrInputDlg m_AddrInputDlg;
 
 // オーバーライド
 	// ClassWizard は仮想関数のオーバーライドを生成します。
