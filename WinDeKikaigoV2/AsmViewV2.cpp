@@ -385,12 +385,21 @@ void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	m_nCurSel = y/HEIGHT;
 	m_nCurIp = m_num2ip[m_nCurSel];
 	
+	// オペランド部入力判定.
+	if ((point.x >= m_num2width[m_nCurSel][0]) && (point.x <= m_num2width[m_nCurSel][1]))
+	{
+		// Enter が押されたとき値を反映する.
+		if (m_AddrInputDlg.DoModal() == IDOK)
+		{
+			DWORD addr = m_AddrInputDlg.GetAddr();
+			m_AsmObj[m_nCurSel].data[1] = addr & 0xFF;
+			m_AsmObj[m_nCurSel].data[2] = (addr & 0xFF00) >> 8;
+
+			AsmObjToBin();
+		}
+	}
+
 	this->RedrawWindow();
-
-	// アドレス入力.
-	if ((point.x >= m_num2width[m_nCurSel][0]) && (point.x <= m_num2width[m_nCurSel][1])) // 仮.
-		m_AddrInputDlg.DoModal();
-
 	CScrollView::OnLButtonDown(nFlags, point);
 
 	// 同期 (AsmView -> BinView)

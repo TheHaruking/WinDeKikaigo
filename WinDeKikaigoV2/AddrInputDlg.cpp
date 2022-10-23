@@ -45,9 +45,33 @@ BOOL CAddrInputDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// TODO: この位置に初期化の補足処理を追加してください
+	// ダイアログの位置調整
+	POINT pos;
+	GetCursorPos(&pos);
 
-	return FALSE;
-//	return TRUE;  // コントロールにフォーカスを設定しないとき、戻り値は TRUE となります
+	RECT rect;
+	this->GetWindowRect(&rect);
+	DWORD width = rect.right - rect.left;
+	DWORD height = rect.bottom - rect.top;
+	
+	this->MoveWindow(pos.x, pos.y - height/2, width, height);
+
+	
+//	return FALSE;
+	return TRUE;  // コントロールにフォーカスを設定しないとき、戻り値は TRUE となります
 	              // 例外: OCX プロパティ ページの戻り値は FALSE となります
+}
+
+void CAddrInputDlg::OnOK()
+{
+	CString buf;
+	m_edit1.GetWindowText(buf);
+	m_dwAddr = wcstol(buf, NULL, 16);
+	CDialog::OnOK();
+}
+
+
+DWORD CAddrInputDlg::GetAddr()
+{
+	return m_dwAddr;
 }

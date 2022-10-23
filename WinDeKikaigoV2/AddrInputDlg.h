@@ -14,6 +14,7 @@ class CAddrInputDlg : public CDialog
 {
 // コンストラクション
 public:
+	DWORD GetAddr();
 	CAddrInputDlg(CWnd* pParent = NULL);   // 標準のコンストラクタ
 
 // ダイアログ データ
@@ -22,6 +23,8 @@ public:
 	CEdit	m_edit1;
 	//}}AFX_DATA
 
+private:
+	DWORD m_dwAddr;
 
 // オーバーライド
 	// ClassWizard は仮想関数のオーバーライドを生成します。
@@ -29,6 +32,7 @@ public:
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
 	//}}AFX_VIRTUAL
+	virtual void OnOK();
 
 // インプリメンテーション
 protected:
