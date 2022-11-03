@@ -66,6 +66,9 @@ protected:
 	afx_msg void OnAppDebug();
 	afx_msg void OnAppReset();
 	afx_msg void OnAppVm();
+	afx_msg void OnUpdateAppLeftpane(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateAppRightpane(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateAppVm(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

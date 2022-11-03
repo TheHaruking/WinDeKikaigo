@@ -31,6 +31,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_APP_DEBUG, OnAppDebug)
 	ON_COMMAND(ID_APP_RESET, OnAppReset)
 	ON_COMMAND(ID_APP_VM, OnAppVm)
+	ON_UPDATE_COMMAND_UI(ID_APP_LEFTPANE, OnUpdateAppLeftpane)
+	ON_UPDATE_COMMAND_UI(ID_APP_RIGHTPANE, OnUpdateAppRightpane)
+	ON_UPDATE_COMMAND_UI(ID_APP_VM, OnUpdateAppVm)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -89,6 +92,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("Failed to create status bar\n");
 		return -1;      // 作成に失敗
 	}
+
+	// 非表示にしておく.
+	this->ShowControlBar(&m_wndDialogBar_L, FALSE, FALSE);
 
 	// 右ペイン
 	if (!m_wndDialogBar_R.Create(this,
@@ -225,4 +231,31 @@ void CMainFrame::OnAppVm()
 	{
 		m_wndVmWnd.DestroyWindow();
 	}
+}
+
+void CMainFrame::OnUpdateAppLeftpane(CCmdUI* pCmdUI) 
+{
+	// TODO: この位置に command update UI ハンドラ用のコードを追加してください
+	BOOL bVisible = m_wndDialogBar_L.IsWindowVisible();
+	pCmdUI->SetCheck(bVisible);
+}
+
+void CMainFrame::OnUpdateAppRightpane(CCmdUI* pCmdUI) 
+{
+	// TODO: この位置に command update UI ハンドラ用のコードを追加してください
+	BOOL bVisible = m_wndDialogBar_R.IsWindowVisible();
+	pCmdUI->SetCheck(bVisible);	
+}
+
+void CMainFrame::OnUpdateAppVm(CCmdUI* pCmdUI) 
+{
+	// 未 Create (Destroy 後) であれば FALSE.
+	if (m_wndVmWnd.GetSafeHwnd() == NULL) {
+		pCmdUI->SetCheck(FALSE);
+		return;
+	}
+
+	// TODO: この位置に command update UI ハンドラ用のコードを追加してください
+	BOOL bVisible = m_wndVmWnd.IsWindowVisible();
+	pCmdUI->SetCheck(bVisible);		
 }
