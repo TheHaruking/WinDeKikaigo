@@ -523,31 +523,35 @@ void CAsmViewV2::OnInitialUpdate()
 	BinToAsmObj();
 	SetScrollSizes(MM_TEXT, CSize(1,1)); // CScrollView を作成するためのダミー値
 
-	// アイコン関連
-	CClientDC dc(this);
+	// アイコン関連 (初回のみ)
+	if (m_bmpdc[0] == NULL) {
+		CClientDC dc(this);
 
-	for (i = 0; i < OP_MAX; i++) {
-		m_bmp[i].LoadBitmap(IDB_OP_UND+i);
-		m_bmpdc[i].CreateCompatibleDC(&dc);
-		m_bmpdc[i].SelectObject(&m_bmp[i]);
+		for (i = 0; i < OP_MAX; i++) {
+			m_bmp[i].LoadBitmap(IDB_OP_UND+i);
+			m_bmpdc[i].CreateCompatibleDC(&dc);
+			m_bmpdc[i].SelectObject(&m_bmp[i]);
+		}
+
+		m_bmpCur.LoadBitmap(IDB_CURSOR);
+		m_bmpdcCur.CreateCompatibleDC(&dc);
+		m_bmpdcCur.SelectObject(&m_bmpCur);
 	}
 
-	m_bmpCur.LoadBitmap(IDB_CURSOR);
-	m_bmpdcCur.CreateCompatibleDC(&dc);
-	m_bmpdcCur.SelectObject(&m_bmpCur);
-
-	// フォント
-	m_font.CreateFont(
-		22, 0,					// 高さ、幅
-		0, 0, FW_DONTCARE,		// 角度、角度、太さ
-		FALSE, FALSE, FALSE,	// 斜体、下線、取消線
-		ANSI_CHARSET,			// 文字セット
-		OUT_DEFAULT_PRECIS,		// 出力精度
-		CLIP_DEFAULT_PRECIS,	// クリッピング精度
-		DEFAULT_QUALITY,		// 出力品質
-		DEFAULT_PITCH,			// ピッチ
-		_T("Courier New")		// タイプフェイス名
-		);
+	// フォント (初回のみ)
+	if ((HFONT)m_font == NULL) {
+		m_font.CreateFont(
+			22, 0,					// 高さ、幅
+			0, 0, FW_DONTCARE,		// 角度、角度、太さ
+			FALSE, FALSE, FALSE,	// 斜体、下線、取消線
+			ANSI_CHARSET,			// 文字セット
+			OUT_DEFAULT_PRECIS,		// 出力精度
+			CLIP_DEFAULT_PRECIS,	// クリッピング精度
+			DEFAULT_QUALITY,		// 出力品質
+			DEFAULT_PITCH,			// ピッチ
+			_T("Courier New")		// タイプフェイス名
+			);
+	}
 }
 
 void CAsmViewV2::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 

@@ -46,12 +46,12 @@ BOOL CWinDeKikaigoV2Doc::OnNewDocument()
 	// (SDI ドキュメントはこのドキュメントを再利用します。)
 	int i;
 	// Free エリア、VRAM は (確認しやすさの都合で) 0-255 の連番にしておく.
-	for (i = 0; i < 0xDFFF; i++) {
+	for (i = 0; i <= 0xDFFF; i++) {
 		m_data[i] = i&0xFF;
 	}
 
 	// SpriteMem, 入力 IO 等は 0 にしておく.
-	for (i = 0xE000; i < 0xFFFF; i++) {
+	for (i = 0xE000; i <= 0xFFFF; i++) {
 		m_data[i] = 0x00;
 	}
 
@@ -70,10 +70,16 @@ void CWinDeKikaigoV2Doc::Serialize(CArchive& ar)
 	if (ar.IsStoring())
 	{
 		// TODO: この位置に保存用のコードを追加してください。
+		ar.Write(m_data, sizeof(m_data));
+		SetModifiedFlag(FALSE); // ドキュメントが変更されたかどうかを示すフラグ. (FALSE : 変更なし)
 	}
 	else
 	{
 		// TODO: この位置に読み込み用のコードを追加してください。
+		memset(m_data, 0x00, sizeof(m_data));
+		ar.Read(m_data, sizeof(m_data));
+		UpdateAllViews(NULL);
+		SetModifiedFlag(FALSE);
 	}
 }
 
