@@ -82,7 +82,16 @@ BOOL CWinDeKikaigoV2App::InitInstance()
 		return FALSE;
 
 	// メイン ウィンドウが初期化されたので、表示と更新を行います。
-	m_pMainWnd->MoveWindow(100, 100, 700, 600);
+	{
+		// センタリング.
+		const SIZE sz = { 700, 600 }; // ひとまず固定値にしておく.
+		const SIZE max = {
+			GetSystemMetrics(SM_CXSCREEN),
+			GetSystemMetrics(SM_CYSCREEN)
+			};
+		
+		m_pMainWnd->MoveWindow((max.cx-sz.cx)/2, (max.cy-sz.cy)/2, sz.cx, sz.cy);
+	}
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	// m_pMainWnd->ShowWindow(SW_MAXIMIZE);
 	m_pMainWnd->UpdateWindow();
