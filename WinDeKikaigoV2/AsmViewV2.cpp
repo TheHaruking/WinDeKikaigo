@@ -253,7 +253,16 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 	CPen pen(PS_NULL, 0, RGB(0, 0, 0));
 	CPen* pPenOld = pDC->SelectObject(&pen);
 
-	for (i = 0; (i < 64) && (m_AsmObj[i].type != ASMOBJ::END); i++) // i は表示縦座標に使用
+	// 同ページフラグ (ループの前に確認しておく)
+	BOOL bCurPage = FALSE;
+	{
+		CWinDeKikaigoV2Doc* pDoc = GetDocument();
+		DWORD dwPC = ((CMainFrame*)AfxGetMainWnd())->m_cpu.GetRegPC();
+		DWORD dwPCPage = dwPC / PAGESIZE;
+		bCurPage = (dwPCPage == pDoc->GetPage());
+	}
+
+	for (i = 0; (i < PAGESIZE) && (m_AsmObj[i].type != ASMOBJ::END); i++) // i は表示縦座標に使用
 	{
 		bin = m_AsmObj[i].data;
 
@@ -276,8 +285,10 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 		xofs = 0;
 		pDC->Rectangle(0, i*HEIGHT, 16+2, i*HEIGHT+HEIGHT+1); // 背景の塗りつぶし
 
-		if (m_num2ip[i] == ((CMainFrame*)AfxGetMainWnd())->m_cpu.GetRegPC()) {
-			::TransparentBlt(pDC->m_hDC, /*コピー先 座標  */ xofs, 1+i*HEIGHT, /*サイズ*/ 16, 16+4, /*コピー元 BMPDC */ m_bmpdcCur.m_hDC, /*原点  */ 0, 0, /*サイズ*/ 16, 16, /*透過色*/ RGB(255, 255, 255));
+		if (bCurPage) {
+			if (m_num2ip[i] == ((CMainFrame*)AfxGetMainWnd())->m_cpu.GetRegPC()) {
+				::TransparentBlt(pDC->m_hDC, /*コピー先 座標  */ xofs, 1+i*HEIGHT, /*サイズ*/ 16, 16+4, /*コピー元 BMPDC */ m_bmpdcCur.m_hDC, /*原点  */ 0, 0, /*サイズ*/ 16, 16, /*透過色*/ RGB(255, 255, 255));
+			}
 		}
 		xofs += 16+2;
 
@@ -314,7 +325,7 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 
 	// 残り (DATA) を表示
 	pDC->SetBkColor(RGB(255,255,255));
-	for (; (i < 64) && (m_AsmObj[i].type != ASMOBJ::END); i++) {
+	for (; (i < PAGESIZE) && (m_AsmObj[i].type != ASMOBJ::END); i++) {
 		bin = m_AsmObj[i].data;
 
 		// 表示
@@ -353,8 +364,11 @@ void CAsmViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 
 	// 範囲チェック
-	m_nCurSel = (m_nCurSel >= 0) ? m_nCurSel : 0; // 下限値
-	m_nCurSel = (m_nCurSel <= 63) ? m_nCurSel : 63; // 上限値
+	{
+		const LONG max = PAGESIZE-1;
+		m_nCurSel = (m_nCurSel >= 0)   ? m_nCurSel : 0;		// 下限値
+		m_nCurSel = (m_nCurSel <= max) ? m_nCurSel : max;	// 上限値
+	}
 	if (m_AsmObj[m_nCurSel].type == ASMOBJ::END)  // 上限値
 		m_nCurSel--;
 
@@ -392,8 +406,8 @@ void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 		if (m_AddrInputDlg.DoModal() == IDOK)
 		{
 			DWORD addr = m_AddrInputDlg.GetAddr();
-			m_AsmObj[m_nCurSel].data[1] = addr & 0xFF;
-			m_AsmObj[m_nCurSel].data[2] = (addr & 0xFF00) >> 8;
+			m_AsmObj[m_nCurSel].data[1] = (BYTE)(addr & 0xFF);
+			m_AsmObj[m_nCurSel].data[2] = (BYTE)((addr & 0xFF00) >> 8);
 
 			AsmObjToBin();
 		}
@@ -416,7 +430,7 @@ void CAsmViewV2::AsmObjToBin()
 	LONG ip = 0;
 
 	// ASMOBJ から BIN に変換
-	for (int i=0; i<64; i++) {	
+	for (int i=0; i<PAGESIZE; i++) {	
 		if (m_AsmObj[i].type == ASMOBJ::END)
 			break;
 
@@ -447,14 +461,14 @@ void CAsmViewV2::BinToAsmObj()
 {
 	CWinDeKikaigoV2Doc* pDoc = GetDocument();
 	
-	// 逆アセンブル (64 バイト(+α)分) 表示
+	// 逆アセンブル (PAGESIZE バイト(+α)分) 表示
 	// ※未定義命令以降は DATA 表示に切り替える
 	const BYTE* BIN = pDoc->GetPageTopAddr(); // バイナリ (読み取り専用)
 	LONG ip = 0; // バイナリ読み取り位置
 
 	DWORD dwOp, dwAdr, dwOpr; // オペコード, アドレッシング, オペランドのバイト数
 	INT i = 0;
-	for (; ip < 64; i++) // i は表示縦座標に使用
+	for (; ip < PAGESIZE; i++) // i は表示縦座標に使用
 	{
 		dwOp = BIN2OP[BIN[ip]];
 		dwAdr = BIN2ADR[BIN[ip]];
@@ -480,7 +494,7 @@ void CAsmViewV2::BinToAsmObj()
 	}
 
 	// 残りは DATA とする
-	for (; ip < 64; ) {
+	for (; ip < PAGESIZE; ) {
 		// ASMOBJ
 		m_AsmObj[i].nSize   = 1;
 		m_AsmObj[i].data[0] = BIN[ip];
@@ -516,9 +530,9 @@ void CAsmViewV2::OnInitialUpdate()
 		0x00		  //	BYTE data[4];
 	};
 
-	for (i = 0; i <= 64; i++)
+	for (i = 0; i <= PAGESIZE; i++)
 		m_AsmObj[i] = ASMINITDATA;
-	m_AsmObj[64].type = ASMOBJ::END;
+	m_AsmObj[PAGESIZE].type = ASMOBJ::END;
 
 	BinToAsmObj();
 	SetScrollSizes(MM_TEXT, CSize(1,1)); // CScrollView を作成するためのダミー値

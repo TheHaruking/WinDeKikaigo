@@ -76,10 +76,10 @@ void CBinViewV2::OnDraw(CDC* pDC)
 
 	// DIGIT_BYTE:1 ... DIGIT_QWORD:8
 	const DWORD MAXCOUNTTBL[9] = {
-		0, 64, 32, 0, 16, 0, 0, 0, 8
+		0, PAGESIZE/1, PAGESIZE/2, 0, PAGESIZE/4, 0, 0, 0, PAGESIZE/8
 	};
 
-	// 64 バイト(DIGIT_BYTEの場合) 分出力する
+	// PAGESIZE バイト(DIGIT_BYTEの場合) 分出力する
 	for (int i = 0; count < MAXCOUNTTBL[m_eDigit]; i++) {
 		ofs = i*m_nMaxColumn;
 		
@@ -295,9 +295,12 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 
 	// 範囲チェック
-	m_nSel = (m_nSel >= 0)  ? m_nSel : 0;  // 下限値
-	m_nSel = (m_nSel <= 63) ? m_nSel : 63; // 上限値
-	m_nMaxColumn = (m_nMaxColumn >= 1) ? m_nMaxColumn : 1;
+	{
+		const LONG max = PAGESIZE - 1;
+		m_nSel = (m_nSel >= 0)   ? m_nSel : 0;		// 下限値
+		m_nSel = (m_nSel <= max) ? m_nSel : max;	// 上限値
+		m_nMaxColumn = (m_nMaxColumn >= 1) ? m_nMaxColumn : 1;
+	}
 
 	// 移動したら bIsSecond をリセットする
 	if (bNeedReset_IsSecond)

@@ -44,6 +44,7 @@ public:
 
 // インプリメンテーション
 public:
+	LONG GetPage();
 	BYTE* GetDataAddr(LONG);
 	BYTE* GetPageTopAddr();
 	void SetPage(LONG);

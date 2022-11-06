@@ -152,6 +152,8 @@ BEGIN
     SEPARATOR
     BUTTON      ID_APP_DEBUG
     BUTTON      ID_APP_RESET
+    SEPARATOR
+    BUTTON      ID_APP_TEST
 END
 
 
@@ -654,6 +656,11 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDR_EMU6502OUTPUTV2_TMPL 
                             "Emu6502OutputV2\n\nEmu650\nEmu650 ﾌｧｲﾙ (*.emu)\n.emu\nEmu6502OutputV2.Document\nEmu650 Document"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_APP_TEST             "機能テスト用のボタンです\nテスト"
 END
 
 #endif    // 日本語 resources

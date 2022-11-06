@@ -122,3 +122,8 @@ BYTE* CWinDeKikaigoV2Doc::GetDataAddr(LONG n)
 {
 	return &(m_data[n]);
 }
+
+LONG CWinDeKikaigoV2Doc::GetPage()
+{
+	return m_nPage;
+}

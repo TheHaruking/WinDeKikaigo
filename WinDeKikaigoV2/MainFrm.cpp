@@ -34,6 +34,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_APP_LEFTPANE, OnUpdateAppLeftpane)
 	ON_UPDATE_COMMAND_UI(ID_APP_RIGHTPANE, OnUpdateAppRightpane)
 	ON_UPDATE_COMMAND_UI(ID_APP_VM, OnUpdateAppVm)
+	ON_COMMAND(ID_APP_TEST, OnAppTest)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -258,4 +259,17 @@ void CMainFrame::OnUpdateAppVm(CCmdUI* pCmdUI)
 	// TODO: この位置に command update UI ハンドラ用のコードを追加してください
 	BOOL bVisible = m_wndVmWnd.IsWindowVisible();
 	pCmdUI->SetCheck(bVisible);		
+}
+
+// 機能確認用関数.
+void CMainFrame::OnAppTest() 
+{
+	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
+	
+	// 数値を入力できる CAddrInputDlg を流用してページを指定してしまうことにする.
+	CAddrInputDlg dlg;
+
+	dlg.DoModal();
+	pDoc->SetPage(dlg.GetAddr());
+	pDoc->UpdateAllViews(NULL);
 }

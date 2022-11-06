@@ -86,14 +86,14 @@ public:
 
 protected:
 	// メンバ変数
-	LONG m_num2ip[256];			// クリック座標からipを紐付ける
-	LONG m_num2width[64][2];	// クリック座標から AddrInputDlg のための横幅(開始,終端)を取得.
-	LONG m_ip2num[64];			// ip から ASM オブジェクトを紐付ける
+	LONG m_num2ip[PAGESIZE];		// クリック座標からipを紐付ける
+	LONG m_num2width[PAGESIZE][2];	// クリック座標から AddrInputDlg のための横幅(開始,終端)を取得.
+	LONG m_ip2num[PAGESIZE];		// ip から ASM オブジェクトを紐付ける
 
 	LONG m_nCurSel; // 現在選択中の ASM オブジェクト
 	LONG m_nCurIp;  // 現在選択中の Instruction Pointer
 
-	ASMOBJ m_AsmObj[64+1]; // 要終端
+	ASMOBJ m_AsmObj[PAGESIZE+1]; // 要終端
 
 	CBitmap m_bmp[OP_MAX];
 	CDC m_bmpdc[OP_MAX];
