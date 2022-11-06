@@ -110,8 +110,8 @@ void CVmWindow::SetDocument(CWinDeKikaigoV2Doc* pDoc)
 	m_pDoc = pDoc;
 
 	// 0x2000 : VRAM.
-   	m_pBytes	= &(m_pDoc->m_data[0x2000]);
-	m_pSprList	= (SPRITEMEM*)&(m_pDoc->m_data[0xE000]);
+   	m_pBytes	= m_pDoc->GetDataAddr(0x2000);
+	m_pSprList	= (SPRITEMEM*)m_pDoc->GetDataAddr(0xE000);
 }
 
 BOOL CVmWindow::CreateEx(CWnd* pParentWnd)

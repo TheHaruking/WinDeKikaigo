@@ -56,6 +56,7 @@ BOOL CWinDeKikaigoV2Doc::OnNewDocument()
 	}
 
 	m_nSel = 0;
+	SetPage(0);
 
 	return TRUE;
 }
@@ -100,3 +101,24 @@ void CWinDeKikaigoV2Doc::Dump(CDumpContext& dc) const
 
 /////////////////////////////////////////////////////////////////////////////
 // CWinDeKikaigoV2Doc ƒRƒ}ƒ“ƒh
+
+void CWinDeKikaigoV2Doc::SetPage(LONG nPage)
+{
+	ASSERT(nPage < PAGENUM);
+	ASSERT(nPage >=  0);
+
+	m_nPage = nPage;
+	m_pPageTop = &(m_data[nPage * PAGESIZE]);
+}
+
+
+BYTE* CWinDeKikaigoV2Doc::GetPageTopAddr()
+{
+	return m_pPageTop;
+}
+
+
+BYTE* CWinDeKikaigoV2Doc::GetDataAddr(LONG n)
+{
+	return &(m_data[n]);
+}

@@ -70,9 +70,10 @@ void CBinViewV2::OnDraw(CDC* pDC)
 	DWORD height = 0;
 
 	CString buf, bufLine;
-	BYTE* b = pDoc->m_data;
+	BYTE* data = pDoc->GetPageTopAddr();
 	DWORD dw;
 	DWORD count = 0;
+
 	// DIGIT_BYTE:1 ... DIGIT_QWORD:8
 	const DWORD MAXCOUNTTBL[9] = {
 		0, 64, 32, 0, 16, 0, 0, 0, 8
@@ -85,9 +86,9 @@ void CBinViewV2::OnDraw(CDC* pDC)
 		bufLine.Format(L"");
 		for (INT j = 0; j < m_nMaxColumn; j++) {
 			switch (m_eDigit) {
-			case DIGIT_BYTE: dw = b[ofs+j]; break;
-			case DIGIT_WORD: dw = ((WORD*)b)[ofs+j]; break;
-			case DIGIT_DWORD: dw = ((DWORD*)b)[ofs+j]; break;
+			case DIGIT_BYTE:  dw = ((BYTE*) data)[ofs+j]; break;
+			case DIGIT_WORD:  dw = ((WORD*) data)[ofs+j]; break;
+			case DIGIT_DWORD: dw = ((DWORD*)data)[ofs+j]; break;
 			}
 			buf.Format(DATA_HEX2FMT[m_eDigit], dw);
 			bufLine += buf;
@@ -257,7 +258,7 @@ void CBinViewV2::OnLButtonUp(UINT nFlags, CPoint point)
 void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
 	CWinDeKikaigoV2Doc* pDoc = GetDocument();
-	BYTE* b = pDoc->m_data;
+	BYTE* b = pDoc->GetPageTopAddr();
 	BOOL bNeedReset_IsSecond = TRUE;
 
 	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください

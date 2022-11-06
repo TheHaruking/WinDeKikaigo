@@ -123,7 +123,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// CPU ƒ‚ƒWƒ…[ƒ‹‚Ì‰Šú‰»
 	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
-	m_cpu.Init(pDoc->m_data);
+	m_cpu.Init(pDoc->GetDataAddr(0x0000));
 
 	return 0;
 }

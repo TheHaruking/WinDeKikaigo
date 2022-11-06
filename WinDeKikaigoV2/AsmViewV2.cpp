@@ -412,7 +412,7 @@ void CAsmViewV2::AsmObjToBin()
 {
 	CWinDeKikaigoV2Doc* pDoc = GetDocument();
 
-	BYTE* BIN = pDoc->m_data; // バイナリ
+	BYTE* BIN = pDoc->GetPageTopAddr(); // バイナリ
 	LONG ip = 0;
 
 	// ASMOBJ から BIN に変換
@@ -449,7 +449,7 @@ void CAsmViewV2::BinToAsmObj()
 	
 	// 逆アセンブル (64 バイト(+α)分) 表示
 	// ※未定義命令以降は DATA 表示に切り替える
-	const BYTE* BIN = pDoc->m_data; // バイナリ (読み取り専用)
+	const BYTE* BIN = pDoc->GetPageTopAddr(); // バイナリ (読み取り専用)
 	LONG ip = 0; // バイナリ読み取り位置
 
 	DWORD dwOp, dwAdr, dwOpr; // オペコード, アドレッシング, オペランドのバイト数
