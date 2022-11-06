@@ -94,6 +94,7 @@ protected:
 	LONG m_nCurIp;  // 現在選択中の Instruction Pointer
 
 	ASMOBJ m_AsmObj[PAGESIZE+1]; // 要終端
+	BYTE   m_AsmObjToBinBuf[PAGESIZE+4]; // JMP (3バイト) 命令で 2 バイトはみ出る. 余裕を持たせた buf を用意.
 
 	CBitmap m_bmp[OP_MAX];
 	CDC m_bmpdc[OP_MAX];

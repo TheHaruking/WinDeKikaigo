@@ -257,11 +257,12 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 	BOOL bCurPage = FALSE;
 	{
 		CWinDeKikaigoV2Doc* pDoc = GetDocument();
-		DWORD dwPC = ((CMainFrame*)AfxGetMainWnd())->m_cpu.GetRegPC();
-		DWORD dwPCPage = dwPC / PAGESIZE;
-		bCurPage = (dwPCPage == pDoc->GetPage());
+		WORD regPC = ((CMainFrame*)AfxGetMainWnd())->m_cpu.GetRegPC();
+		LONG nPCPage = regPC / PAGESIZE;
+		bCurPage = (nPCPage == pDoc->GetPage());
 	}
 
+	// ページサイズ分の描画を行う.
 	for (i = 0; (i < PAGESIZE) && (m_AsmObj[i].type != ASMOBJ::END); i++) // i は表示縦座標に使用
 	{
 		bin = m_AsmObj[i].data;
@@ -426,7 +427,6 @@ void CAsmViewV2::AsmObjToBin()
 {
 	CWinDeKikaigoV2Doc* pDoc = GetDocument();
 
-	BYTE* BIN = pDoc->GetPageTopAddr(); // バイナリ
 	LONG ip = 0;
 
 	// ASMOBJ から BIN に変換
@@ -434,9 +434,13 @@ void CAsmViewV2::AsmObjToBin()
 		if (m_AsmObj[i].type == ASMOBJ::END)
 			break;
 
-		memcpy(&(BIN[ip]), m_AsmObj[i].data, m_AsmObj[i].nSize);
+		memcpy(&(m_AsmObjToBinBuf[ip]), m_AsmObj[i].data, m_AsmObj[i].nSize);
 		ip += m_AsmObj[i].nSize;
 	}
+
+	// Buf から PAGESIZE 分書き込む. (はみ出し防止)
+	BYTE* data = pDoc->GetPageTopAddr();
+	memcpy(data, m_AsmObjToBinBuf, PAGESIZE);
 }
 
 void CAsmViewV2::SetAsmObj(LONG n, BYTE* data)
