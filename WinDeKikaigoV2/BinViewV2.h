@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // CBinViewV2 ビュー
 
-class CBinViewV2 : public CView
+class CBinViewV2 : public CScrollView
 {
 protected:
 	CBinViewV2();           // 動的生成に使用されるプロテクト コンストラクタ
@@ -59,7 +59,7 @@ protected:
 	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 	protected:
 	virtual void OnDraw(CDC* pDC);      // このビューを描画するためにオーバーライドしました。
-	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
+	virtual void OnUpdate(CScrollView* pSender, LPARAM lHint, CObject* pHint);
 	//}}AFX_VIRTUAL
 
 // インプリメンテーション

@@ -32,7 +32,7 @@ const LPTSTR CBinViewV2::DATA_HEX2FMT[] = {
 /////////////////////////////////////////////////////////////////////////////
 // CBinViewV2
 
-IMPLEMENT_DYNCREATE(CBinViewV2, CView)
+IMPLEMENT_DYNCREATE(CBinViewV2, CScrollView)
 
 CBinViewV2::CBinViewV2()
 {
@@ -43,7 +43,7 @@ CBinViewV2::~CBinViewV2()
 }
 
 
-BEGIN_MESSAGE_MAP(CBinViewV2, CView)
+BEGIN_MESSAGE_MAP(CBinViewV2, CScrollView)
 	//{{AFX_MSG_MAP(CBinViewV2)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
@@ -98,6 +98,9 @@ void CBinViewV2::OnDraw(CDC* pDC)
 		height += NEXT;
 	}
 
+	// スクロール範囲の決定
+	SetScrollSizes(MM_TEXT, CSize(1, height));
+
 	// 後処理
 	pDC->SelectObject(&m_font);
 }
@@ -108,12 +111,12 @@ void CBinViewV2::OnDraw(CDC* pDC)
 #ifdef _DEBUG
 void CBinViewV2::AssertValid() const
 {
-	CView::AssertValid();
+	CScrollView::AssertValid();
 }
 
 void CBinViewV2::Dump(CDumpContext& dc) const
 {
-	CView::Dump(dc);
+	CScrollView::Dump(dc);
 }
 
 // 追加！
@@ -162,7 +165,7 @@ void CBinViewV2::CaretPosUpdate()
 
 	DWORD sel = m_nSel/m_eDigit;
 	fixPoint.x = (sel%m_nMaxColumn) * (m_dwFontWidth*GROUPNUM);
-	fixPoint.y = (sel/m_nMaxColumn) * (m_dwFontHeight+m_dwRowMargin);
+	fixPoint.y = (sel/m_nMaxColumn) * (m_dwFontHeight+m_dwRowMargin) - CScrollView::GetScrollPosition().y;
 
 	DWORD selmod = m_nSel % m_eDigit;
 	fixPoint.x += selmod * m_dwFontWidth*2;
@@ -212,19 +215,23 @@ BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwS
 //	CreateSolidCaret(0, 16);
 //	ShowCaret();
 
+	// CScrollView を作成するためのダミー値
+	SetScrollSizes(MM_TEXT, CSize(1,1));
+
 	return bResult;
 }
 
 void CBinViewV2::OnLButtonDown(UINT nFlags, CPoint point) 
 {
 	// 座標計算
-	DWORD x, row, xmod;
+	DWORD x, y, row, xmod;
 	const DWORD GROUPNUM = m_eDigit*2+1; // "XX " で1単位とする
+	y = CScrollView::GetScrollPosition().y + point.y;
 
 	x = point.x / m_dwFontWidth;
 	xmod = (x % GROUPNUM)/2; // 空白クリック時に次項を選択するが許容する。
 	x /= GROUPNUM;
-	row = point.y / (m_dwFontHeight + m_dwRowMargin);
+	row = y / (m_dwFontHeight + m_dwRowMargin);
 	m_nSel = row * m_nMaxColumn + x;
 	m_nSel *= m_eDigit;
 	m_nSel += xmod;
@@ -245,14 +252,14 @@ void CBinViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	pDoc->m_nSel = m_nSel;
 	pDoc->UpdateAllViews(this);
 
-	CView::OnLButtonDown(nFlags, point);
+	CScrollView::OnLButtonDown(nFlags, point);
 }
 
 void CBinViewV2::OnLButtonUp(UINT nFlags, CPoint point) 
 {
 	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
 	
-	CView::OnLButtonUp(nFlags, point);
+	CScrollView::OnLButtonUp(nFlags, point);
 }
 
 void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
@@ -314,22 +321,22 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	pDoc->m_nSel = m_nSel;
 	pDoc->UpdateAllViews(this);
 
-	CView::OnKeyDown(nChar, nRepCnt, nFlags);
+	CScrollView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
-void CBinViewV2::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
+void CBinViewV2::OnUpdate(CScrollView* pSender, LPARAM lHint, CObject* pHint) 
 {
 	// 同期 (AsmView -> BinView)
 	CWinDeKikaigoV2Doc* pDoc = GetDocument();
 	m_nSel = pDoc->m_nSel;
 	CaretPosUpdate();
 
-	CView::OnUpdate(pSender, lHint, pHint);	
+	CScrollView::OnUpdate(pSender, lHint, pHint);	
 }
 
 void CBinViewV2::OnSetFocus(CWnd* pOldWnd) 
 {
-	CView::OnSetFocus(pOldWnd);
+	CScrollView::OnSetFocus(pOldWnd);
 
 	CreateSolidCaret(0, 16);
 	ShowCaret();
@@ -337,7 +344,7 @@ void CBinViewV2::OnSetFocus(CWnd* pOldWnd)
 
 void CBinViewV2::OnKillFocus(CWnd* pNewWnd) 
 {
-	CView::OnKillFocus(pNewWnd);
+	CScrollView::OnKillFocus(pNewWnd);
 	
 //	HideCaret();	
 }
