@@ -168,7 +168,7 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	if (!m_wndSplitter.CreateStatic(this, 1, 2)) // ècxâ°
 		return FALSE;
 
-	if (!m_wndSplitter.CreateView(0, 0, RUNTIME_CLASS(CBinViewV2), CSize(150, -1), pContext) ||
+	if (!m_wndSplitter.CreateView(0, 0, RUNTIME_CLASS(CBinViewV2), CSize(200, -1), pContext) ||
 		!m_wndSplitter.CreateView(0, 1, RUNTIME_CLASS(CAsmViewV2), CSize(-1, -1), pContext)	
 		)
 	{

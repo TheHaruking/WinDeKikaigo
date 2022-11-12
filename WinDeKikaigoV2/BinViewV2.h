@@ -31,9 +31,9 @@ public:
 // オペレーション
 protected:
 	CFont m_font;
-	LONG  m_dwFontWidth;
-	LONG  m_dwFontHeight;
-	LONG  m_dwRowMargin;
+	LONG  m_nFontWidth;
+	LONG  m_nFontHeight;
+	LONG  m_nRowMargin;
 	LONG  m_nMaxColumn;
 	LONG  m_nSel;
 	BOOL  m_bIsSecond;

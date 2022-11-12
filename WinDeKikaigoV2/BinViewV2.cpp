@@ -66,7 +66,7 @@ void CBinViewV2::OnDraw(CDC* pDC)
 	pFontOld = pDC->SelectObject(&m_font);
 
 	// 
-	DWORD NEXT = m_dwFontHeight + m_dwRowMargin;
+	DWORD NEXT = m_nFontHeight + m_nRowMargin;
 	DWORD ofs = 0;
 	DWORD height = 0;
 
@@ -92,7 +92,7 @@ void CBinViewV2::OnDraw(CDC* pDC)
 		ofs = i*m_nMaxColumn;
 
 		// アドレス部.
-		pDC->Rectangle(0, height, m_nAddrWidth, height + m_dwFontHeight + 2);
+		pDC->Rectangle(0, height, m_nAddrWidth, height + m_nFontHeight + 2);
 
 		bufLine.Format(L" %04X", BASEADDR + ofs);
 		pDC->SetTextColor(RGB(255,255,255));
@@ -102,6 +102,10 @@ void CBinViewV2::OnDraw(CDC* pDC)
 		bufLine.Format(L"");
 		pDC->SetTextColor(RGB(0,0,0));
 		for (INT j = 0; j < m_nMaxColumn; j++) {
+			// ページ最大を超えないようにする
+			if (count >= MAXCOUNTTBL[m_eDigit])
+				break;
+
 			switch (m_eDigit) {
 			case DIGIT_BYTE:  dw = ((BYTE*) data)[ofs+j]; break;
 			case DIGIT_WORD:  dw = ((WORD*) data)[ofs+j]; break;
@@ -181,11 +185,11 @@ void CBinViewV2::CaretPosUpdate()
 	const DWORD GROUPNUM = m_eDigit*2+1; // "XX " で1単位とする
 
 	DWORD sel = m_nSel/m_eDigit;
-	fixPoint.x = (sel%m_nMaxColumn) * (m_dwFontWidth*GROUPNUM) + m_nDataXOfs;
-	fixPoint.y = (sel/m_nMaxColumn) * (m_dwFontHeight+m_dwRowMargin) - CScrollView::GetScrollPosition().y;
+	fixPoint.x = (sel%m_nMaxColumn) * (m_nFontWidth*GROUPNUM) + m_nDataXOfs;
+	fixPoint.y = (sel/m_nMaxColumn) * (m_nFontHeight+m_nRowMargin) - CScrollView::GetScrollPosition().y;
 
 	DWORD selmod = m_nSel % m_eDigit;
-	fixPoint.x += selmod * m_dwFontWidth*2;
+	fixPoint.x += selmod * m_nFontWidth*2;
 
 	SetCaretPos(fixPoint);
 }
@@ -198,16 +202,16 @@ BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwS
 	BOOL bResult = CWnd::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
 
 	// メンバ初期化
-	m_dwFontHeight = 16;	// フォントの高さ
-//	m_dwFontWidth = 8;		// フォントの幅 (m_font.CreateFont 関数後に取得する)
-	m_dwRowMargin = 1;		// フォントの行余白
+	m_nFontHeight = 16;		// フォントの高さ
+//	m_nFontWidth = 8;		// フォントの幅 (m_font.CreateFont 関数後に取得する)
+	m_nRowMargin = 1;		// フォントの行余白
 	m_nMaxColumn = 4;		// 列数
-	m_nSel = 0;			// 選択中の番号
+	m_nSel = 0;				// 選択中の番号
 	m_bIsSecond = FALSE;	// 下位4ビット編集中か？
-	m_eDigit = DIGIT_BYTE; // 編集モード(桁)
+	m_eDigit = DIGIT_BYTE;	// 編集モード(桁)
 
 	m_font.CreateFont(
-		m_dwFontHeight, 0,		// 高さ、幅
+		m_nFontHeight, 0,		// 高さ、幅
 		0, 0, FW_DONTCARE,		// 角度、角度、太さ
 		FALSE, FALSE, FALSE,	// 斜体、下線、取消線
 		ANSI_CHARSET,			// 文字セット
@@ -224,13 +228,13 @@ BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwS
 	SIZE size;
 
 	::GetTextExtentPointW(pDC->m_hDC, L"0", 1 , &size);
-	m_dwFontWidth = size.cx; // フォントの幅はここで設定！
+	m_nFontWidth = size.cx; // フォントの幅はここで設定！
 	pDC->SelectObject(&oldFont);
 	ReleaseDC(pDC);
 
 	// アドレス表示部の横幅を計算.
-	m_nAddrWidth = m_dwFontWidth * 6;
-	m_nDataXOfs  = m_nAddrWidth  + m_dwFontWidth*1;
+	m_nAddrWidth = m_nFontWidth * 6;
+	m_nDataXOfs  = m_nAddrWidth + m_nFontWidth*1;
 
 	// キャレット
 //	CreateSolidCaret(0, 16);
@@ -256,17 +260,20 @@ void CBinViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 
 	// データ表示部を超えた場合も何もせず終了.
-	if (point.x > (m_nDataXOfs + (GROUPNUM*m_nMaxColumn) * m_dwFontWidth)) {
+	if (point.x > (m_nDataXOfs + (GROUPNUM*m_nMaxColumn) * m_nFontWidth)) {
 		CScrollView::OnLButtonDown(nFlags, point);
 		return;
 	}
 
 	x = point.x - m_nDataXOfs; // アドレス表示部を引いておく.
-	x /= m_dwFontWidth; 
+	x /= m_nFontWidth; 
 	x /= GROUPNUM;
-	row = y / (m_dwFontHeight + m_dwRowMargin);
+	row = y / (m_nFontHeight + m_nRowMargin);
 	m_nSel = row * m_nMaxColumn + x;
 	m_nSel *= m_eDigit;
+
+	m_nSel = (m_nSel >= 0) ? m_nSel : 0; // 下限チェック
+	m_nSel = (m_nSel <  PAGESIZE) ? m_nSel : PAGESIZE-1; // 上限チェック
 	
 	// 確認用
 #ifdef _DEBUG
@@ -334,12 +341,11 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 
 	// 範囲チェック
-	{
-		const LONG max = PAGESIZE - 1;
-		m_nSel = (m_nSel >= 0)   ? m_nSel : 0;		// 下限値
-		m_nSel = (m_nSel <= max) ? m_nSel : max;	// 上限値
-		m_nMaxColumn = (m_nMaxColumn >= 1) ? m_nMaxColumn : 1;
-	}
+	m_nSel = (m_nSel >= 0) ? m_nSel : 0;					// 下限値
+	m_nSel = (m_nSel <  PAGESIZE) ? m_nSel : PAGESIZE-1;	// 上限値
+
+	m_nMaxColumn = (m_nMaxColumn >= 1)  ? m_nMaxColumn : 1;		// 下限値
+	m_nMaxColumn = (m_nMaxColumn <= 16) ? m_nMaxColumn : 16;	// 上限値
 
 	// 移動したら bIsSecond をリセットする
 	if (bNeedReset_IsSecond)

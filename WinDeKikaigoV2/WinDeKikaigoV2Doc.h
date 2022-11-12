@@ -27,6 +27,7 @@ public:
 
 protected:
 	BYTE  m_data[DATASIZE];	// テスト用仮データ
+	BYTE  m_dataReserve[0x10];  // BinView, AsmView の終端ではみ出しうるデータ. (安全のため余分なデータをつけておく)
 	LONG  m_nPage;			// BinView, AsmView で選択中のページ.
 	BYTE* m_pPageTop;		// BinView, AsmView で選択中のページ先頭アドレス.
 	DWORD m_dwPageKind[PAGENUM];		// ページ毎に設定される命令/データの種類.
