@@ -50,6 +50,7 @@ BEGIN_MESSAGE_MAP(CBinViewV2, CScrollView)
 	ON_WM_KEYDOWN()
 	ON_WM_SETFOCUS()
 	ON_WM_KILLFOCUS()
+	ON_WM_MOUSEWHEEL()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -324,7 +325,7 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	CScrollView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
-void CBinViewV2::OnUpdate(CScrollView* pSender, LPARAM lHint, CObject* pHint) 
+void CBinViewV2::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
 	// 同期 (AsmView -> BinView)
 	CWinDeKikaigoV2Doc* pDoc = GetDocument();
@@ -347,4 +348,16 @@ void CBinViewV2::OnKillFocus(CWnd* pNewWnd)
 	CScrollView::OnKillFocus(pNewWnd);
 	
 //	HideCaret();	
+}
+
+BOOL CBinViewV2::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) 
+{
+	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
+	
+//	return CScrollView::OnMouseWheel(nFlags, zDelta, pt);
+
+	// CSplitterWnd を継承して OnMouseWheel をオーバーライドするのが面倒なため、CScrollView の内部的な関数 DoMouseWheel を直接呼んでしまうことにする.
+	if (nFlags & (MK_SHIFT | MK_CONTROL))
+		return FALSE;
+	return CScrollView::DoMouseWheel(nFlags, zDelta, pt);
 }

@@ -226,6 +226,7 @@ BEGIN_MESSAGE_MAP(CAsmViewV2, CScrollView)
 	//{{AFX_MSG_MAP(CAsmViewV2)
 	ON_WM_KEYDOWN()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_MOUSEWHEEL()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -582,4 +583,16 @@ void CAsmViewV2::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	m_nCurSel = m_ip2num[m_nCurIp];
 
 	CView::OnUpdate(pSender, lHint, pHint);	
+}
+
+BOOL CAsmViewV2::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) 
+{
+	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
+	
+//	return CScrollView::OnMouseWheel(nFlags, zDelta, pt);
+
+	// CSplitterWnd を継承して OnMouseWheel をオーバーライドするのが面倒なため、CScrollView の内部的な関数 DoMouseWheel を直接呼んでしまうことにする.
+	if (nFlags & (MK_SHIFT | MK_CONTROL))
+		return FALSE;
+	return CScrollView::DoMouseWheel(nFlags, zDelta, pt);
 }
