@@ -31,9 +31,9 @@ public:
 // オペレーション
 protected:
 	CFont m_font;
-	DWORD m_dwFontWidth;
-	DWORD m_dwFontHeight;
-	DWORD m_dwRowMargin;
+	LONG  m_dwFontWidth;
+	LONG  m_dwFontHeight;
+	LONG  m_dwRowMargin;
 	LONG  m_nMaxColumn;
 	LONG  m_nSel;
 	BOOL  m_bIsSecond;
@@ -44,6 +44,8 @@ protected:
 		DIGIT_QWORD = 8
 	};
 	KINDDIGIT m_eDigit;
+	LONG  m_nAddrWidth;
+	LONG  m_nDataXOfs;
 
 // 定数
 protected:

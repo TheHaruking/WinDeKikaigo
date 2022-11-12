@@ -72,8 +72,15 @@ void CBinViewV2::OnDraw(CDC* pDC)
 
 	CString buf, bufLine;
 	BYTE* data = pDoc->GetPageTopAddr();
+	const DWORD BASEADDR = pDoc->GetPage() * PAGESIZE;
 	DWORD dw;
 	DWORD count = 0;
+
+	CBrush brush(RGB(160,160,160));
+	CBrush* pBrushOld = pDC->SelectObject(&brush);
+	CPen pen(PS_NULL, 0, RGB(160, 160, 160));
+	CPen* pPenOld = pDC->SelectObject(&pen);
+	pDC->SetBkMode(TRANSPARENT);
 
 	// DIGIT_BYTE:1 ... DIGIT_QWORD:8
 	const DWORD MAXCOUNTTBL[9] = {
@@ -83,8 +90,17 @@ void CBinViewV2::OnDraw(CDC* pDC)
 	// PAGESIZE バイト(DIGIT_BYTEの場合) 分出力する
 	for (int i = 0; count < MAXCOUNTTBL[m_eDigit]; i++) {
 		ofs = i*m_nMaxColumn;
-		
+
+		// アドレス部.
+		pDC->Rectangle(0, height, m_nAddrWidth, height + m_dwFontHeight + 2);
+
+		bufLine.Format(L" %04X", BASEADDR + ofs);
+		pDC->SetTextColor(RGB(255,255,255));
+		pDC->TextOut(0, height, bufLine);
+
+		// データ部.
 		bufLine.Format(L"");
+		pDC->SetTextColor(RGB(0,0,0));
 		for (INT j = 0; j < m_nMaxColumn; j++) {
 			switch (m_eDigit) {
 			case DIGIT_BYTE:  dw = ((BYTE*) data)[ofs+j]; break;
@@ -95,7 +111,7 @@ void CBinViewV2::OnDraw(CDC* pDC)
 			bufLine += buf;
 			count++;
 		}
-		pDC->TextOut(0, height, bufLine);
+		pDC->TextOut(m_nDataXOfs, height, bufLine);
 		height += NEXT;
 	}
 
@@ -165,7 +181,7 @@ void CBinViewV2::CaretPosUpdate()
 	const DWORD GROUPNUM = m_eDigit*2+1; // "XX " で1単位とする
 
 	DWORD sel = m_nSel/m_eDigit;
-	fixPoint.x = (sel%m_nMaxColumn) * (m_dwFontWidth*GROUPNUM);
+	fixPoint.x = (sel%m_nMaxColumn) * (m_dwFontWidth*GROUPNUM) + m_nDataXOfs;
 	fixPoint.y = (sel/m_nMaxColumn) * (m_dwFontHeight+m_dwRowMargin) - CScrollView::GetScrollPosition().y;
 
 	DWORD selmod = m_nSel % m_eDigit;
@@ -208,9 +224,13 @@ BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwS
 	SIZE size;
 
 	::GetTextExtentPointW(pDC->m_hDC, L"0", 1 , &size);
-	m_dwFontWidth = size.cx; // 横幅設定！
+	m_dwFontWidth = size.cx; // フォントの幅はここで設定！
 	pDC->SelectObject(&oldFont);
 	ReleaseDC(pDC);
+
+	// アドレス表示部の横幅を計算.
+	m_nAddrWidth = m_dwFontWidth * 6;
+	m_nDataXOfs  = m_nAddrWidth  + m_dwFontWidth*1;
 
 	// キャレット
 //	CreateSolidCaret(0, 16);
@@ -225,17 +245,28 @@ BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwS
 void CBinViewV2::OnLButtonDown(UINT nFlags, CPoint point) 
 {
 	// 座標計算
-	DWORD x, y, row, xmod;
-	const DWORD GROUPNUM = m_eDigit*2+1; // "XX " で1単位とする
+	LONG x, y, row;
+	const LONG GROUPNUM = m_eDigit*2+1; // "XX " で1単位とする
 	y = CScrollView::GetScrollPosition().y + point.y;
 
-	x = point.x / m_dwFontWidth;
-	xmod = (x % GROUPNUM)/2; // 空白クリック時に次項を選択するが許容する。
+	// アドレス表示部クリック時は何もせず終了.
+	if (point.x < m_nDataXOfs) {
+		CScrollView::OnLButtonDown(nFlags, point);
+		return;
+	}
+
+	// データ表示部を超えた場合も何もせず終了.
+	if (point.x > (m_nDataXOfs + (GROUPNUM*m_nMaxColumn) * m_dwFontWidth)) {
+		CScrollView::OnLButtonDown(nFlags, point);
+		return;
+	}
+
+	x = point.x - m_nDataXOfs; // アドレス表示部を引いておく.
+	x /= m_dwFontWidth; 
 	x /= GROUPNUM;
 	row = y / (m_dwFontHeight + m_dwRowMargin);
 	m_nSel = row * m_nMaxColumn + x;
 	m_nSel *= m_eDigit;
-	m_nSel += xmod;
 	
 	// 確認用
 #ifdef _DEBUG
