@@ -81,19 +81,14 @@ void CBinViewV2::OnDraw(CDC* pDC)
 	CPen pen(PS_NULL, 0, RGB(160, 160, 160));
 	CPen* pPenOld = pDC->SelectObject(&pen);
 
-	// DIGIT_BYTE:1 ... DIGIT_QWORD:8
-	const LONG MAXCOUNTTBL[9] = {
-		0, PAGESIZE/1, PAGESIZE/2, 0, PAGESIZE/4, 0, 0, 0, PAGESIZE/8
-	};
-
-	// PAGESIZE バイト(DIGIT_BYTEの場合) 分出力する
-	for (int i = 0; count < MAXCOUNTTBL[m_eDigit]; i++) {
+	// PAGESIZE バイト分出力する
+	for (int i = 0; count < PAGESIZE; i++) {
 		ofs = i*m_nMaxColumn;
 
 		// アドレス部.
 		pDC->Rectangle(0, height, m_nAddrWidth, height + m_nFontHeight + 2);
 
-		buf.Format(L" %04X", BASEADDR + ofs);
+		buf.Format(L" %04X", BASEADDR + ofs*m_eDigit);
 		pDC->SetBkMode(TRANSPARENT);
 		pDC->SetTextColor(RGB(255,255,255));
 		pDC->TextOut(0, height, buf);
@@ -103,7 +98,7 @@ void CBinViewV2::OnDraw(CDC* pDC)
 
 		for (INT j = 0; j < m_nMaxColumn; j++) {
 			// ページ最大を超えないようにする
-			if (count >= MAXCOUNTTBL[m_eDigit])
+			if (count >= PAGESIZE)
 				break;
 
 			switch (m_eDigit) {
@@ -122,7 +117,8 @@ void CBinViewV2::OnDraw(CDC* pDC)
 				pDC->SetBkColor(RGB(255,255,255));
 			}
 			pDC->TextOut(m_nDataXOfs + ((m_eDigit*2+1)*j)*m_nFontWidth, height, buf);
-			count++;
+
+			count += m_eDigit;
 		}
 
 		height += NEXT;
