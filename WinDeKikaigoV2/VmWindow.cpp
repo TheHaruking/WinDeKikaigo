@@ -92,13 +92,15 @@ void CVmWindow::OnPaint()
 		m_pBytes, m_pBmi, DIB_RGB_COLORS, SRCCOPY);
 
 	// スプライト画像 描画
-	for (int i = 0; i < 16; i++) {
+	LONG id;
+	for (int i = 0; i < 64; i++) {
+		id = m_pSprList[i].id;
 		::TransparentBlt(dc.m_hDC,
 			/*コピー先 座標  */ m_pSprList[i].x*S, m_pSprList[i].y*S,
-			/*コピー先 サイズ*/ m_vbmpList[i].hBitmapWidth*S, m_vbmpList[i].hBitmapHeight*S,
-			/*コピー元 BMPDC */ m_vbmpList[m_pSprList[i].id].hBitmapDC,
+			/*コピー先 サイズ*/ m_vbmpList[id].hBitmapWidth*S, m_vbmpList[id].hBitmapHeight*S,
+			/*コピー元 BMPDC */ m_vbmpList[id].hBitmapDC,
 			/*コピー元 原点  */ 0, 0,
-			/*コピー元 サイズ*/ m_vbmpList[i].hBitmapWidth, m_vbmpList[i].hBitmapHeight,
+			/*コピー元 サイズ*/ m_vbmpList[id].hBitmapWidth, m_vbmpList[id].hBitmapHeight,
 			/*コピー元 透過色*/ RGB(255, 255, 255));
 	}
 

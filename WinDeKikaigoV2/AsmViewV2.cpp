@@ -65,7 +65,7 @@ const DWORD CAsmViewV2::BIN2ADR[256] = {
 };
 
 const LPTSTR CAsmViewV2::OP2ASM[OP_MAX] = {
-	L"UND",
+	L"**未定義命令**",
 	// 読み書き
 	L"LDA", L"LDX", L"LDY", L"STA", L"STX", L"STY",	// 1-6
 	L"TXA", L"TYA", L"TXS", L"TAX", L"TAY", L"TSX",	// 7-12
@@ -273,8 +273,8 @@ void CAsmViewV2::OnDraw(CDC* pDC)
 		dwOpr = m_AsmObj[i].nSize;   // 1 or 2 or 3
 		
 		// UND だった場合中断
-		if (dwOp == OP_UND)
-			break;
+//		if (dwOp == OP_UND)
+//			break;
 		
 		// オペランド.
 		DWORD val1, val2;
@@ -482,8 +482,8 @@ void CAsmViewV2::BinToAsmObj()
 		dwOpr = ADR2OPR[dwAdr];   // 0 or 1 or 2
 
 		// UND だった場合中断
-		if (dwOp == OP_UND)
-			break;
+//		if (dwOp == OP_UND)
+//			break;
 
 		// 座標からipを特定できるように保存しておく
 		m_num2ip[i] = ip;

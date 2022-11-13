@@ -5,6 +5,8 @@
 #include "WinDeKikaigoV2.h"
 #include "WinDeKikaigoV2Doc.h"
 #include "BinViewV2.h"
+#include "MainFrm.h"
+#include "VmWindow.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -368,6 +370,14 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	// 同期 (BinView -> AsmView)
 	pDoc->m_nSel = m_nSel;
 	pDoc->UpdateAllViews(this);
+
+	// 同期 (仮想マシン)
+	CVmWindow* wndVmWnd = &(((CMainFrame*)AfxGetMainWnd())->m_wndVmWnd);
+	// 仮想マシンウィンドウが開いている場合.
+	if (wndVmWnd->m_hWnd != NULL) {
+		wndVmWnd->Invalidate(FALSE); // 削除はしない.
+		wndVmWnd->UpdateWindow();
+	}
 
 	CScrollView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
