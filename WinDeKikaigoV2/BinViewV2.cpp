@@ -70,20 +70,19 @@ void CBinViewV2::OnDraw(CDC* pDC)
 	DWORD ofs = 0;
 	DWORD height = 0;
 
-	CString buf, bufLine;
+	CString buf;
 	BYTE* data = pDoc->GetPageTopAddr();
 	const DWORD BASEADDR = pDoc->GetPage() * PAGESIZE;
 	DWORD dw;
-	DWORD count = 0;
+	LONG count = 0;
 
 	CBrush brush(RGB(160,160,160));
 	CBrush* pBrushOld = pDC->SelectObject(&brush);
 	CPen pen(PS_NULL, 0, RGB(160, 160, 160));
 	CPen* pPenOld = pDC->SelectObject(&pen);
-	pDC->SetBkMode(TRANSPARENT);
 
 	// DIGIT_BYTE:1 ... DIGIT_QWORD:8
-	const DWORD MAXCOUNTTBL[9] = {
+	const LONG MAXCOUNTTBL[9] = {
 		0, PAGESIZE/1, PAGESIZE/2, 0, PAGESIZE/4, 0, 0, 0, PAGESIZE/8
 	};
 
@@ -94,13 +93,14 @@ void CBinViewV2::OnDraw(CDC* pDC)
 		// アドレス部.
 		pDC->Rectangle(0, height, m_nAddrWidth, height + m_nFontHeight + 2);
 
-		bufLine.Format(L" %04X", BASEADDR + ofs);
+		buf.Format(L" %04X", BASEADDR + ofs);
+		pDC->SetBkMode(TRANSPARENT);
 		pDC->SetTextColor(RGB(255,255,255));
-		pDC->TextOut(0, height, bufLine);
+		pDC->TextOut(0, height, buf);
 
 		// データ部.
-		bufLine.Format(L"");
-		pDC->SetTextColor(RGB(0,0,0));
+		pDC->SetBkMode(OPAQUE);
+
 		for (INT j = 0; j < m_nMaxColumn; j++) {
 			// ページ最大を超えないようにする
 			if (count >= MAXCOUNTTBL[m_eDigit])
@@ -112,10 +112,19 @@ void CBinViewV2::OnDraw(CDC* pDC)
 			case DIGIT_DWORD: dw = ((DWORD*)data)[ofs+j]; break;
 			}
 			buf.Format(DATA_HEX2FMT[m_eDigit], dw);
-			bufLine += buf;
+
+			// 選択状態
+			if ((count >= m_nSel) && (count < m_nSelEnd)) {
+				pDC->SetTextColor(RGB(255,255,255));
+				pDC->SetBkColor(RGB(0,0,0));
+			} else {
+				pDC->SetTextColor(RGB(0,0,0));
+				pDC->SetBkColor(RGB(255,255,255));
+			}
+			pDC->TextOut(m_nDataXOfs + ((m_eDigit*2+1)*j)*m_nFontWidth, height, buf);
 			count++;
 		}
-		pDC->TextOut(m_nDataXOfs, height, bufLine);
+
 		height += NEXT;
 	}
 
@@ -185,7 +194,7 @@ void CBinViewV2::CaretPosUpdate()
 	const DWORD GROUPNUM = m_eDigit*2+1; // "XX " で1単位とする
 
 	DWORD sel = m_nSel/m_eDigit;
-	fixPoint.x = (sel%m_nMaxColumn) * (m_nFontWidth*GROUPNUM) + m_nDataXOfs;
+	fixPoint.x = (sel%m_nMaxColumn) * (m_nFontWidth*GROUPNUM) + ((m_bIsSecond)?m_nFontWidth:0) + m_nDataXOfs;
 	fixPoint.y = (sel/m_nMaxColumn) * (m_nFontHeight+m_nRowMargin) - CScrollView::GetScrollPosition().y;
 
 	DWORD selmod = m_nSel % m_eDigit;
@@ -207,6 +216,7 @@ BOOL CBinViewV2::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwS
 	m_nRowMargin = 1;		// フォントの行余白
 	m_nMaxColumn = 4;		// 列数
 	m_nSel = 0;				// 選択中の番号
+	m_nSelEnd = 0;			// 選択範囲終点の番号
 	m_bIsSecond = FALSE;	// 下位4ビット編集中か？
 	m_eDigit = DIGIT_BYTE;	// 編集モード(桁)
 
@@ -274,6 +284,9 @@ void CBinViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 
 	m_nSel = (m_nSel >= 0) ? m_nSel : 0; // 下限チェック
 	m_nSel = (m_nSel <  PAGESIZE) ? m_nSel : PAGESIZE-1; // 上限チェック
+	m_nSelEnd = m_nSel;
+
+	m_bIsSecond = FALSE; // 2桁目フラグリセット
 	
 	// 確認用
 #ifdef _DEBUG
@@ -343,6 +356,7 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	// 範囲チェック
 	m_nSel = (m_nSel >= 0) ? m_nSel : 0;					// 下限値
 	m_nSel = (m_nSel <  PAGESIZE) ? m_nSel : PAGESIZE-1;	// 上限値
+	m_nSelEnd = m_nSel;
 
 	m_nMaxColumn = (m_nMaxColumn >= 1)  ? m_nMaxColumn : 1;		// 下限値
 	m_nMaxColumn = (m_nMaxColumn <= 16) ? m_nMaxColumn : 16;	// 上限値
@@ -367,6 +381,7 @@ void CBinViewV2::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	// 同期 (AsmView -> BinView)
 	CWinDeKikaigoV2Doc* pDoc = GetDocument();
 	m_nSel = pDoc->m_nSel;
+	m_nSelEnd = pDoc->m_nSelEnd;
 	CaretPosUpdate();
 
 	CScrollView::OnUpdate(pSender, lHint, pHint);	

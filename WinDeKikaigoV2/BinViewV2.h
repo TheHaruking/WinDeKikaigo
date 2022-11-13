@@ -36,6 +36,7 @@ protected:
 	LONG  m_nRowMargin;
 	LONG  m_nMaxColumn;
 	LONG  m_nSel;
+	LONG  m_nSelEnd;
 	BOOL  m_bIsSecond;
 	enum KINDDIGIT {
 		DIGIT_BYTE = 1,

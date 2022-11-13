@@ -24,6 +24,7 @@ protected: // シリアライズ機能のみから作成します。
 // アトリビュート
 public:
 	LONG m_nSel;			// BinView, AsmView で選択中のインデックス.
+	LONG m_nSelEnd;			// BinView, AsmView で選択終端のインデックス.
 
 protected:
 	BYTE  m_data[DATASIZE];	// テスト用仮データ

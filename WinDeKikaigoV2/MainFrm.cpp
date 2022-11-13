@@ -199,6 +199,8 @@ void CMainFrame::OnAppDebug()
 	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
 	m_cpu.Exec();
 	m_wndCpuOutput.Update();
+	pDoc->m_nSel = m_cpu.GetRegPC();
+	pDoc->m_nSelEnd = m_cpu.GetRegPC();
 	pDoc->UpdateAllViews(NULL);
 	
 	// 仮想マシンウィンドウが開いている場合.

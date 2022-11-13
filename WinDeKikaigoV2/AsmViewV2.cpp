@@ -381,6 +381,7 @@ void CAsmViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	// “¯Šú (AsmView -> BinView)
 	CWinDeKikaigoV2Doc* pDoc = GetDocument();
 	pDoc->m_nSel = m_nCurIp;
+	pDoc->m_nSelEnd = m_nCurIp + m_AsmObj[m_nCurSel].nSize;
 	pDoc->UpdateAllViews(this);
 
 	CScrollView::OnKeyDown(nChar, nRepCnt, nFlags);
@@ -421,6 +422,7 @@ void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	// “¯Šú (AsmView -> BinView)
 	CWinDeKikaigoV2Doc* pDoc = GetDocument();
 	pDoc->m_nSel = m_nCurIp;
+	pDoc->m_nSelEnd = m_nCurIp + m_AsmObj[m_nCurSel].nSize;
 	pDoc->UpdateAllViews(this);
 }
 

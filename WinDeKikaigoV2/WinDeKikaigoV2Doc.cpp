@@ -56,6 +56,7 @@ BOOL CWinDeKikaigoV2Doc::OnNewDocument()
 	}
 
 	m_nSel = 0;
+	m_nSelEnd = 0;
 	SetPage(0);
 
 	return TRUE;
@@ -104,8 +105,14 @@ void CWinDeKikaigoV2Doc::Dump(CDumpContext& dc) const
 
 void CWinDeKikaigoV2Doc::SetPage(LONG nPage)
 {
-	ASSERT(nPage < PAGENUM);
-	ASSERT(nPage >=  0);
+	if ((nPage < 0) || (nPage >= PAGENUM)) {
+		CString buf;
+		buf.Format(
+			L"ERROR:\n指定されたページは許容範囲を超えています。\n・指定されたページ: 0x%02X\n・許容範囲: 0x%02X ～ 0x%0X",
+			nPage, 0x00, PAGENUM-1);
+		AfxMessageBox(buf);
+		return;
+	}
 
 	m_nPage = nPage;
 	m_pPageTop = &(m_data[nPage * PAGESIZE]);
