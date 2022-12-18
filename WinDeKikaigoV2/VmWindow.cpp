@@ -11,8 +11,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-const LONG CVmWindow::WIDTH = 256;
-const LONG CVmWindow::HEIGHT = 192;
 /////////////////////////////////////////////////////////////////////////////
 // CVmWindow
 
@@ -30,27 +28,16 @@ CVmWindow::CVmWindow()
     bmh.biBitCount = 8; // 256 色.
     bmh.biCompression = BI_RGB;
     bmh.biPlanes = 1;
-    bmh.biWidth = WIDTH;
-    bmh.biHeight = -HEIGHT; // TOPDOWN 形式にする.
+    bmh.biWidth = VM_WIDTH;
+    bmh.biHeight = -VM_HEIGHT; // TOPDOWN 形式にする.
 	bmh.biClrUsed = 0;
-
-	// パレット部の設定 (仮).
-	RGBQUAD* palette = &(m_pBmi->bmiColors[0]);
-    for (i = 0; i < 256; i++)
-    {
-        RGBQUAD rgb = { 0 };
-        rgb.rgbRed = i;
-        rgb.rgbGreen = 0;
-        rgb.rgbBlue = 0;
-        palette[i] = rgb;
-    }
 
 	// 拡大率
 	m_dwScale = 2;
 
 	// Bitmap Object
 	memset(m_vbmpList, 0, sizeof(m_vbmpList));
-	for (i = 0; i < 16; i++) {
+	for (i = 0; i < VM_BMPNUM; i++) {
 		LoadBitmapFileToArrayObj(m_vbmpList, i);
 	}
 }
@@ -60,7 +47,7 @@ CVmWindow::~CVmWindow()
 	int i;
 
 	// Bitmap オブジェクト破棄
-	for (i = 0; i < 16; i++) {
+	for (i = 0; i < VM_BMPNUM; i++) {
 		if (m_vbmpList[i].hBitmap)
 			::DeleteObject(m_vbmpList[i].hBitmap);
 	}
@@ -85,22 +72,36 @@ void CVmWindow::OnPaint()
 {
 	CPaintDC dc(this); // 描画用のデバイス コンテキスト
 	const DWORD S = m_dwScale; // 拡大率
+	int i;
 	
+	// Palette 更新
+//	memcpy(&(m_pBmi->bmiColors[0]), m_pPalette, 4*256); // BGR 版.
+	// RGB 版. (Blue と Red を入れ替える)
+	for (i = 0; i < 256; i++) {
+		RGBQUAD buf = ((RGBQUAD*)m_pPalette)[i];
+		BYTE byte1  = buf.rgbBlue;
+		buf.rgbBlue = buf.rgbRed;
+		buf.rgbRed  = byte1;
+		m_pBmi->bmiColors[i] = buf;
+	}
+
 	// VRAM 描画
-	::StretchDIBits(dc.m_hDC, 0, 0, WIDTH*S, HEIGHT*S,
-		0, 0, WIDTH, HEIGHT,
+	::StretchDIBits(dc.m_hDC, 0, 0, VM_WIDTH*S, VM_HEIGHT*S,
+		0, 0, VM_WIDTH, VM_HEIGHT,
 		m_pBytes, m_pBmi, DIB_RGB_COLORS, SRCCOPY);
 
 	// スプライト画像 描画
 	LONG id;
-	for (int i = 0; i < 64; i++) {
+	VMBITMAP vbmp;
+	for (i = 0; i < VM_SPRNUM; i++) {
 		id = m_pSprList[i].id;
+		vbmp = m_vbmpList[id];
 		::TransparentBlt(dc.m_hDC,
 			/*コピー先 座標  */ m_pSprList[i].x*S, m_pSprList[i].y*S,
-			/*コピー先 サイズ*/ m_vbmpList[id].hBitmapWidth*S, m_vbmpList[id].hBitmapHeight*S,
-			/*コピー元 BMPDC */ m_vbmpList[id].hBitmapDC,
+			/*コピー先 サイズ*/ vbmp.hBitmapWidth*S, vbmp.hBitmapHeight*S,
+			/*コピー元 BMPDC */ vbmp.hBitmapDC,
 			/*コピー元 原点  */ 0, 0,
-			/*コピー元 サイズ*/ m_vbmpList[id].hBitmapWidth, m_vbmpList[id].hBitmapHeight,
+			/*コピー元 サイズ*/ vbmp.hBitmapWidth, vbmp.hBitmapHeight,
 			/*コピー元 透過色*/ RGB(255, 255, 255));
 	}
 
@@ -114,12 +115,13 @@ void CVmWindow::SetDocument(CWinDeKikaigoV2Doc* pDoc)
 	// 0x2000 : VRAM.
    	m_pBytes	= m_pDoc->GetDataAddr(0x2000);
 	m_pSprList	= (SPRITEMEM*)m_pDoc->GetDataAddr(0xE000);
+	m_pPalette  = (PALETTEMEM*)m_pDoc->GetDataAddr(0xE400);
 }
 
 BOOL CVmWindow::CreateEx(CWnd* pParentWnd)
 {
 	DWORD dwStyle = WS_SYSMENU | WS_CAPTION | WS_POPUP | WS_VISIBLE;
-	CRect rect(60, 60, 60 + WIDTH*m_dwScale, 60 + HEIGHT*m_dwScale); // 画面サイズは 256 x 192
+	CRect rect(60, 60, 60 + VM_WIDTH*m_dwScale, 60 + VM_HEIGHT*m_dwScale); // 画面サイズは 256 x 192
 
 	// m_VmWnd を作成 (Popup Window は Create"Ex" でないといけない。)
 	AdjustWindowRectEx(&rect, dwStyle, FALSE, 0);
@@ -138,7 +140,7 @@ int CVmWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CDC* pDC = this->GetDC();
 	VMBITMAP* pvbmp;
 
-	for (int i = 0; i < 16; i++) {
+	for (int i = 0; i < VM_BMPNUM; i++) {
 		pvbmp = &(m_vbmpList[i]);
 		if (pvbmp->hBitmap != NULL) {
 			pvbmp->hBitmapDC = ::CreateCompatibleDC(pDC->m_hDC);
@@ -157,7 +159,7 @@ void CVmWindow::OnDestroy()
 	
 	// スプライト画像 DC 削除
 	VMBITMAP* pvbmp;
-	for (int i = 0; i < 16; i++) {
+	for (int i = 0; i < VM_BMPNUM; i++) {
 		pvbmp = &(m_vbmpList[i]);
 		if (pvbmp->hBitmapDC)
 			::DeleteDC(pvbmp->hBitmapDC);

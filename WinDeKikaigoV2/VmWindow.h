@@ -9,6 +9,11 @@
 
 #include "WinDeKikaigoV2Doc.h"
 
+#define VM_WIDTH	256
+#define VM_HEIGHT	192
+#define VM_BMPNUM	16
+#define VM_SPRNUM	256
+
 /////////////////////////////////////////////////////////////////////////////
 // CVmWindow ウィンドウ
 
@@ -23,9 +28,6 @@ public:
 
 // オペレーション
 private:
-	static const LONG WIDTH;
-	static const LONG HEIGHT;
-
 	CWinDeKikaigoV2Doc* m_pDoc;
 	BYTE* m_pBytes;
 	BITMAPINFO* m_pBmi;
@@ -38,7 +40,7 @@ private:
 		LONG hBitmapHeight;
 		LONG x;
 		LONG y;
-	} m_vbmpList[16];
+	} m_vbmpList[VM_BMPNUM];
 
 	struct SPRITEMEM {
 		BYTE id;
@@ -46,6 +48,13 @@ private:
 		BYTE x;
 		BYTE y;
 	} *m_pSprList;
+
+	struct PALETTEMEM {
+		BYTE r;
+		BYTE g;
+		BYTE b;
+		BYTE reserved;
+	} *m_pPalette;
 
 private:
 
