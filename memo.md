@@ -1,5 +1,10 @@
 # Windows で機械語！
 
+## このソフトは？
+
+手軽に機械語を味わうためのソフトウェアです。  
+16bit、32bit、64bit の CPU よりも、8 bit の CPU の方が機械語プログラミングが容易である点と、私自身が親しんでいることから、6502 エミュレーションを通して機械語プログラムを実行する作りになっています。
+
 ## ■ VM 仕様
 
 ### 出力
@@ -7,43 +12,19 @@
 | 項目 | 内容 |
 |-|-|
 | 画面 サイズ | 256 x 192 |
-| 画面 色数| (1bit, 2bit, 4bit) 8bit (16bit, 24bit, 32bit) |
-| 画面 パレット | (未定) |
-| スプライト サイズ | 8x8 |
+| 画面 色数| 8bit (256 色) |
 | スプライト 枚数 | 256 |
-| スプライト 要素 (4-8 bytes) | 画像ID, X座標, Y座標 (拡大, 回転, 優先度) |
-| コンソール | 8x8 フォント (32 x 24) |
-| コンソール 要素 | 文字コード (SHIFT-JIS, UCS2, UTF-32, UTF-8), スクロール, 色 |
+| スプライト 要素 (4-8 bytes) | 画像ID, X座標, Y座標 |
 
 ### 入力
 
 | 項目 | 内容 |
 |-|-|
-| ボタン | [J] [K] [;] [SPACE] [W] [A] [S] [D] (変更可能) |
-| マウスボタン | 左ボタン, 右ボタン, 中ボタン, ホイール |
-| マウス | 座標取得対応 |
+| ボタン (未実装) | [J] [K] [;] [SPACE] [W] [A] [S] [D] (変更可能) |
+| マウスボタン (未実装) | 左ボタン, 右ボタン, 中ボタン, ホイール |
+| マウス (未実装) | 座標取得対応 |
 
-### マシンモデル
-
-| ビット | アドレス範囲 | 画面 (VRAM) | スプライト | コンソール | 入力 |
-|-|-|-|-|-|-|-|
-| 8 bit | 0x0000 <br>- 0xFFFF | 0x2000 <br>- 0xDFFF (MAX:8bit) | 0xE000 <br>- 0xE??? | 0xF000 <br>- 0xF??? | 0xF??? <br>- 0xF??? |
-| 32bit | 0x00000000 <br>- 0xFFFFFFFF | 0x04000000 <br>- 0x04002FFFF (MAX:32bit) | 0x03800000<br>- 0x03800??? | 0x03400000<br>- 0x03400??? | 0x03000000<br>- 0x03000??? |
-
-### スプライト配列 
-
-(ひとまず現 ver では) 4 バイトで 1 スプライトを扱う。
- 
-ID -- XX YY
-
-|||
-|-|-|
-| 1 バイト目 | 画像 ID。0 は透明な画像とする。(= 表示 ON / OFF を兼ねさせる) |
-| 2 バイト目 | 未定 |
-| 3 バイト目 | X 座標 |
-| 4 バイト目 | Y 座標 |
-
-### メモリマップ (8bit)
+### メモリマップ
 
 | アドレス | 内容 |
 |-|-|
@@ -68,89 +49,27 @@ ID -- XX YY
 
 | アドレス | 内容 | 各バイトの意味 | 説明
 |-|-|-|-|
-| 0x0000 - 0x1FFF | (空き) | - | ユーザーが自由に使えるエリアです |
-| 0x2000 - 0xDFFF | VRAM | 色 id | 画面描画の元となるメモリ領域です。色 id を指定すると、そのアドレスに対応した画素の色が変わります。色 id は 0x00 - 0xFF の指定が出来ます。 |
-| 0xE000 - 0xE3FF | スプライト | 1バイト目 : 画像id<br>2バイト目 : (未使用)<br>3バイト目 : X座標<br>4バイト目 : Y座標 | スプライトの画像を指定できます。また、動かすこともできます。1要素は4バイトで構成されます。計 256 要素あります。画像id は 0x00 - 0x0F の範囲しか指定できません。 |
-| 0xE400 - 0xE7FF | パレット | 1バイト目 : 赤<br>2バイト目 : 緑<br>3バイト目 : 青<br>4バイト目 : (未使用)| VRAM で使用される色id で参照することとなる色を変更できます。<br>1要素は4バイトで構成されます。計 256 要素あります。 |
-
-
-| アドレス | 内容 |
-|-|-|
-| 0xFFFA | (6502) NMI 割り込みベクタ |
-| 0xFFFC | (6502) RESET 割り込みベクタ |
-| 0xFFFE | (6502) IRQ/BRK 割り込みベクタ |
+| 0x0000 - 0x00FF | (空き) | - | ユーザーが自由に使える領域です。 |
+| 0x0100 - 0x01FF | 6502 スタック領域 | - | CPU がスタックとして使用する領域です。 |
+| 0x0200 - 0x1FFF | (空き) | - | ユーザーが自由に使える領域です。 |
+| 0x2000 - 0xDFFF | VRAM | 色 id | 画面描画の元となるメモリ領域です。色 id を指定すると、そのアドレスに対応した画素の色が変わります。色 id は 0x00 - 0xFF の指定が出来ます。色 id が参照する色そのものはパレット領域を書き換えることで設定できます。 |
+| 0xE000 - 0xE3FF | スプライト | 1バイト目 : 画像id<br>2バイト目 : (未使用)<br>3バイト目 : X座標<br>4バイト目 : Y座標 | スプライトの画像を指定できます。また、スプライトを動かすこともできます。1要素は4バイトで構成されます。計 256 要素あります。画像id は 0x00 - 0x0F の範囲しか指定できません。 |
+| 0xE400 - 0xE7FF | パレット | 1バイト目 : 赤<br>2バイト目 : 緑<br>3バイト目 : 青<br>4バイト目 : (未使用)| 色 id で参照される色を変更できます。<br>1要素は4バイトで構成されます。計 256 要素あります。 |
+| 0xE800 - 0xEFFF | (予約) | - | 現状は未使用です。ただし、ユーザーが使用することは想定されていません。|
+| 0xF000 - 0xFFF9 | (予約) | - | 現状は未使用です。ただし、ユーザーが使用することは想定されていません。|
+| 0xFFFA - 0xFFFF | 6502 割り込みベクタ | 1-2バイト目: NMI<br> 3-4バイト目: RESET<br>5-6バイト目: IRQ/BRK | 6502 が参照する領域です。(ただし、未実装なので現状は未使用です。) |
 
 ### VM 設定
 
 | 項目 | 内容 |
 |-|-|
-| 画面拡大率 | 1x, 2x, 3x, 4x |
-| キーコンフィグ | |
-| パレット設定 | |
-
-## ■ ファイル構成
-
-将来の予定
-
-+ 基本ソース
-  - AsmViewV2.cpp
-  - AsmViewV2.h
-  - BinViewV2.cpp
-  - BinViewV2.h
-  - MainFrm.cpp
-  - MainFrm.h
-  - StdAfx.cpp
-  - StdAfx.h
-  - WinDeKikaigoV2.cpp
-  - WinDeKikaigoV2.h
-  - WinDeKikaigoV2Doc.cpp
-  - WinDeKikaigoV2Doc.h
-  - WinDeKikaigoV2View.cpp
-  - WinDeKikaigoV2View.h
-  - resource.h
-  - WinDeKikaigoV2.rc
-
-+ CPU 基底クラス
-  - BaseEmu.cpp
-  - BaseEmu.h
-  - BaseEmuOutput.cpp
-  - BaseEmuOutput.h
-  - BaseAsmInputBar.cpp
-  - BaseAsmInputBar.h
-  - BaseAsmInputBarDlg.cpp
-  - BaseAsmInputBarDlg.h
-
-+ CPU 依存クラス A
-  - 6502Emu.cpp (Emu6502.cpp)
-  - 6502Emu.h (Emu6502.h)
-  - 6502EmuOutput.cpp (Emu6502OutputV2.cpp)
-  - 6502EmuOutput.h (Emu6502OutputV2.h)
-  - 6502AsmInputBar.cpp (AsmInputBar.cpp)
-  - 6502AsmInputBar.h (AsmInputBar.h)
-  - 6502AsmInputBarDlg.cpp (AsmInputBarDlg.cpp)
-  - 6502AsmInputBarDlg.h (AsmInputBarDlg.h)
-
-+ CPU 依存クラス B	
-  - ArmV4Emu.cpp
-  - ArmV4Emu.h
-  - ArmV4EmuOutput.cpp
-  - ArmV4EmuOutput.h
-  - ArmV4AsmInputBar.cpp
-  - ArmV4AsmInputBar.h
-  - ArmV4AsmInputBarDlg.cpp
-  - ArmV4AsmInputBarDlg.h
-
-+ 画像リソース
-  - 画像\spr_000.bmp
-  - 画像\spr_001.bmp
-  - 画像\spr_002.bmp
-  - ...
-  - 画像\spr_255.bmp
+| 画面拡大率 (UI未実装) | 1x, 2x, 3x, 4x |
+| キーコンフィグ (未実装) | |
+| パレット設定 (UI未実装) | |
 
 ## ■ 制限事項
 
-+ 下記は実装されていません
++ 下記は実装されません
   - クロック単位でのエミュレーション
   - デシマルモード
-  - 各種割り込み (NMI, RESET, IRQ, BRK)
   - 未定義命令
