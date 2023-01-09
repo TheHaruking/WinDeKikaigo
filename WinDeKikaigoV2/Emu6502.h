@@ -41,6 +41,9 @@ protected:
 	} STATUSREG;
 	STATUSREG m_regP;
 	BYTE m_regS;
+#ifdef _DEBUG
+	CString m_dbgstr;
+#endif
 
 protected:
 	inline BYTE imm()  { BYTE ret = m_pData[m_regPC]; m_regPC++; return ret; }
@@ -141,6 +144,7 @@ public:
 	void Reset();
 	void Exec();
 	inline WORD GetRegPC() { return m_regPC; };
+	void Run();
 };
 
 #endif // !defined(AFX_EMU6502_H__A50E5E02_C522_4A1E_B638_B5FE2CD1822C__INCLUDED_)

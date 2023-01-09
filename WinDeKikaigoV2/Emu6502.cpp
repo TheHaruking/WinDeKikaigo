@@ -42,9 +42,8 @@ void CEmu6502::Init(BYTE* pData)
 
 	// 確認用
 #ifdef _DEBUG
-	CString buf;
-	buf.Format(L"                             NV_bdiZC\r\n");
-	OutputDebugString(buf);
+	m_dbgstr.Format(L"                             NV_bdiZC\r\n");
+	OutputDebugString(m_dbgstr);
 #endif
 }
 
@@ -247,8 +246,7 @@ void CEmu6502::Exec()
 
 	// 確認用
 #ifdef _DEBUG
-	CString buf;
-	buf.Format(L"PC:%04X, op:%02X, A:%02X, X:%02X, Y:%02X, P:%d%d_%d%d%d%d%d [NEXT:%04X]\r\n", regPC_old, op, m_regA, m_regX, m_regY, m_regP.bitN, m_regP.bitV, /*m_regP.bitR, */ m_regP.bitB, m_regP.bitD, m_regP.bitI, m_regP.bitZ, m_regP.bitC, m_regPC);
-	OutputDebugString(buf);
+	m_dbgstr.Format(L"PC:%04X, op:%02X, A:%02X, X:%02X, Y:%02X, P:%d%d_%d%d%d%d%d [NEXT:%04X]\r\n", regPC_old, op, m_regA, m_regX, m_regY, m_regP.bitN, m_regP.bitV, /*m_regP.bitR, */ m_regP.bitB, m_regP.bitD, m_regP.bitI, m_regP.bitZ, m_regP.bitC, m_regPC);
+	OutputDebugString(m_dbgstr);
 #endif
 }

@@ -75,16 +75,16 @@ void CVmWindow::OnPaint()
 	int i;
 	
 	// Palette XV
-//	memcpy(&(m_pBmi->bmiColors[0]), m_pPalette, 4*256); // BGR ”Å.
+	memcpy(&(m_pBmi->bmiColors[0]), m_pPalette, 4*256); // BGR ”Å.
 	// RGB ”Å. (Blue ‚Æ Red ‚ð“ü‚ê‘Ö‚¦‚é)
-	for (i = 0; i < 256; i++) {
+/*	for (i = 0; i < 256; i++) {
 		RGBQUAD buf = ((RGBQUAD*)m_pPalette)[i];
 		BYTE byte1  = buf.rgbBlue;
 		buf.rgbBlue = buf.rgbRed;
 		buf.rgbRed  = byte1;
 		m_pBmi->bmiColors[i] = buf;
 	}
-
+*/
 	// VRAM •`‰æ
 	::StretchDIBits(dc.m_hDC, 0, 0, VM_WIDTH*S, VM_HEIGHT*S,
 		0, 0, VM_WIDTH, VM_HEIGHT,

@@ -40,6 +40,7 @@ public:
 public:
 	void OnInputLda();
 	virtual ~CMainFrame();
+//	UINT MyThreadProc(LPVOID pParam);
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -57,6 +58,8 @@ public:  // コントロール バー用メンバ
 	CEmu6502 m_cpu;
 	CEmu6502OutputV2 m_wndCpuOutput;
 
+	CWinThread*	m_clock;
+
 // 生成されたメッセージ マップ関数
 protected:
 	//{{AFX_MSG(CMainFrame)
@@ -70,6 +73,7 @@ protected:
 	afx_msg void OnUpdateAppRightpane(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateAppVm(CCmdUI* pCmdUI);
 	afx_msg void OnAppTest();
+	afx_msg void OnAppRun();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

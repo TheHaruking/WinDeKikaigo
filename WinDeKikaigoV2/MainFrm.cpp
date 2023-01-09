@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_APP_RIGHTPANE, OnUpdateAppRightpane)
 	ON_UPDATE_COMMAND_UI(ID_APP_VM, OnUpdateAppVm)
 	ON_COMMAND(ID_APP_TEST, OnAppTest)
+	ON_COMMAND(ID_APP_RUN, OnAppRun)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -274,4 +275,31 @@ void CMainFrame::OnAppTest()
 	dlg.DoModal();
 	pDoc->SetPage(dlg.GetAddr());
 	pDoc->UpdateAllViews(NULL);
+}
+
+UINT MyThreadProc(LPVOID pParam)
+{
+	CMainFrame* self = (CMainFrame*)pParam;
+
+	// ひとまず 0x100 回のみ実行
+	for (int i = 0; i < 0x100; i++) {
+		self->m_cpu.Exec();
+//		self->m_wndCpuOutput.Update();
+		// 仮想マシンウィンドウが開いている場合.
+		if (self->m_wndVmWnd.m_hWnd != NULL) {
+			self->m_wndVmWnd.Invalidate(FALSE); // 削除はしない.
+			self->m_wndVmWnd.UpdateWindow();
+		}
+
+//		Sleep(16);
+	}
+	return 0;
+}
+
+void CMainFrame::OnAppRun() 
+{
+	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
+//	if (m_clock->m_hThread == NULL) {
+	m_clock = AfxBeginThread(MyThreadProc, this);
+//	}
 }
