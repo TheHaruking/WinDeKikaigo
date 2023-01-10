@@ -142,9 +142,8 @@ public:
 
 	void Init(BYTE* pData);
 	void Reset();
-	void Exec();
+	DWORD Exec();
 	inline WORD GetRegPC() { return m_regPC; };
-	void Run();
 };
 
 #endif // !defined(AFX_EMU6502_H__A50E5E02_C522_4A1E_B638_B5FE2CD1822C__INCLUDED_)

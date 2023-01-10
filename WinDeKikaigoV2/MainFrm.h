@@ -59,6 +59,7 @@ public:  // コントロール バー用メンバ
 	CEmu6502OutputV2 m_wndCpuOutput;
 
 	CWinThread*	m_clock;
+	BOOL		m_bRunning;
 
 // 生成されたメッセージ マップ関数
 protected:
@@ -74,6 +75,8 @@ protected:
 	afx_msg void OnUpdateAppVm(CCmdUI* pCmdUI);
 	afx_msg void OnAppTest();
 	afx_msg void OnAppRun();
+	afx_msg void OnAppStop();
+	afx_msg void OnUpdateAppRun(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

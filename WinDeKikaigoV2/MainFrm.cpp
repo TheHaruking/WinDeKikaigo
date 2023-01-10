@@ -36,6 +36,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_APP_VM, OnUpdateAppVm)
 	ON_COMMAND(ID_APP_TEST, OnAppTest)
 	ON_COMMAND(ID_APP_RUN, OnAppRun)
+	ON_COMMAND(ID_APP_STOP, OnAppStop)
+	ON_UPDATE_COMMAND_UI(ID_APP_RUN, OnUpdateAppRun)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -54,6 +56,7 @@ static UINT indicators[] =
 CMainFrame::CMainFrame()
 {
 	// TODO: この位置にメンバの初期化処理コードを追加してください。
+	m_bRunning = FALSE;
 }
 
 CMainFrame::~CMainFrame()
@@ -281,25 +284,47 @@ UINT MyThreadProc(LPVOID pParam)
 {
 	CMainFrame* self = (CMainFrame*)pParam;
 
-	// ひとまず 0x100 回のみ実行
-	for (int i = 0; i < 0x100; i++) {
-		self->m_cpu.Exec();
-//		self->m_wndCpuOutput.Update();
+	// 実行ループ
+	for (;;) {
+		if (self->m_cpu.Exec())
+			self->m_bRunning = FALSE; // エラー発生時.
+
+//		self->m_wndCpuOutput.Update(); // 別スレッドで行ってはならない！
 		// 仮想マシンウィンドウが開いている場合.
 		if (self->m_wndVmWnd.m_hWnd != NULL) {
 			self->m_wndVmWnd.Invalidate(FALSE); // 削除はしない.
 			self->m_wndVmWnd.UpdateWindow();
 		}
-
-//		Sleep(16);
+		
+		// 停止ボタン確認.
+		Sleep(0);
+		if (self->m_bRunning == FALSE)
+			break;
 	}
+
 	return 0;
 }
 
 void CMainFrame::OnAppRun() 
 {
 	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
-//	if (m_clock->m_hThread == NULL) {
-	m_clock = AfxBeginThread(MyThreadProc, this);
-//	}
+	if (m_bRunning == FALSE)
+	{
+		m_clock = AfxBeginThread(MyThreadProc, this);
+		m_bRunning = TRUE;
+	}
+}
+
+void CMainFrame::OnAppStop() 
+{
+	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
+	m_bRunning = FALSE;
+	// 更新.
+	m_wndCpuOutput.Update();
+}
+
+void CMainFrame::OnUpdateAppRun(CCmdUI* pCmdUI) 
+{
+	// TODO: この位置に command update UI ハンドラ用のコードを追加してください
+	pCmdUI->SetCheck(m_bRunning);
 }

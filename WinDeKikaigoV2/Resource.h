@@ -159,6 +159,7 @@
 #define ID_APP_VM                       32775
 #define ID_APP_TEST                     32776
 #define ID_APP_RUN                      32777
+#define ID_APP_STOP                     32778
 
 // Next default values for new objects
 // 
@@ -166,7 +167,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        199
-#define _APS_NEXT_COMMAND_VALUE         32778
+#define _APS_NEXT_COMMAND_VALUE         32779
 #define _APS_NEXT_CONTROL_VALUE         1039
 #define _APS_NEXT_SYMED_VALUE           109
 #endif

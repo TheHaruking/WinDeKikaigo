@@ -52,7 +52,7 @@ void CEmu6502::Reset()
 	Init(m_pData);
 }
 
-void CEmu6502::Exec()
+DWORD CEmu6502::Exec()
 {
 #ifdef _DEBUG
 	WORD regPC_old = m_regPC; // 確認用
@@ -241,7 +241,7 @@ void CEmu6502::Exec()
 		CString errmsg;
 		errmsg.Format(L"未定義命令 (0x%02X) です。\r\n実行を中断します。", op);
 		MessageBox(AfxGetMainWnd()->m_hWnd, errmsg, L"未定義命令実行エラー", 0);
-		return;
+		return 1;
 	}
 
 	// 確認用
@@ -249,4 +249,5 @@ void CEmu6502::Exec()
 	m_dbgstr.Format(L"PC:%04X, op:%02X, A:%02X, X:%02X, Y:%02X, P:%d%d_%d%d%d%d%d [NEXT:%04X]\r\n", regPC_old, op, m_regA, m_regX, m_regY, m_regP.bitN, m_regP.bitV, /*m_regP.bitR, */ m_regP.bitB, m_regP.bitD, m_regP.bitI, m_regP.bitZ, m_regP.bitC, m_regPC);
 	OutputDebugString(m_dbgstr);
 #endif
+	return 0;
 }
