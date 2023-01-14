@@ -60,6 +60,7 @@ public:  // コントロール バー用メンバ
 
 	CWinThread*	m_clock;
 	BOOL		m_bRunning;
+	DWORD		m_tick;
 
 // 生成されたメッセージ マップ関数
 protected:

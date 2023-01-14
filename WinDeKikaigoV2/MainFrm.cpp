@@ -57,6 +57,7 @@ CMainFrame::CMainFrame()
 {
 	// TODO: この位置にメンバの初期化処理コードを追加してください。
 	m_bRunning = FALSE;
+	m_tick = GetTickCount();
 }
 
 CMainFrame::~CMainFrame()
@@ -283,6 +284,7 @@ void CMainFrame::OnAppTest()
 UINT MyThreadProc(LPVOID pParam)
 {
 	CMainFrame* self = (CMainFrame*)pParam;
+	self->m_tick = GetTickCount();
 
 	// 実行ループ
 	for (;;) {
@@ -290,10 +292,15 @@ UINT MyThreadProc(LPVOID pParam)
 			self->m_bRunning = FALSE; // エラー発生時.
 
 //		self->m_wndCpuOutput.Update(); // 別スレッドで行ってはならない！
-		// 仮想マシンウィンドウが開いている場合.
+		// 仮想マシンウィンドウが開いている場合、画面更新.
 		if (self->m_wndVmWnd.m_hWnd != NULL) {
-			self->m_wndVmWnd.Invalidate(FALSE); // 削除はしない.
-			self->m_wndVmWnd.UpdateWindow();
+			// 画面更新は 16ms に 1 回に制限する.
+			DWORD tick = GetTickCount();
+			if ((tick - self->m_tick) >= 16) {
+				self->m_wndVmWnd.Invalidate(FALSE); // 削除はしない.
+				self->m_wndVmWnd.UpdateWindow();
+				self->m_tick = tick;
+			}
 		}
 		
 		// 停止ボタン確認.
@@ -308,10 +315,16 @@ UINT MyThreadProc(LPVOID pParam)
 void CMainFrame::OnAppRun() 
 {
 	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
-	if (m_bRunning == FALSE)
+	switch (m_bRunning)
 	{
+	case FALSE:
 		m_clock = AfxBeginThread(MyThreadProc, this);
 		m_bRunning = TRUE;
+		break;
+	default:
+		m_bRunning = FALSE;
+		m_wndCpuOutput.Update();
+		break;
 	}
 }
 

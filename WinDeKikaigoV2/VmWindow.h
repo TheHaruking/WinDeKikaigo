@@ -11,8 +11,8 @@
 
 #define VM_WIDTH	256
 #define VM_HEIGHT	192
-#define VM_BMPNUM	16
-#define VM_SPRNUM	256
+#define VM_BMPNUM	256
+#define VM_SPRNUM	64 // 多くなるほど遅い. (VM 環境で顕著)
 
 /////////////////////////////////////////////////////////////////////////////
 // CVmWindow ウィンドウ
