@@ -128,7 +128,7 @@ BOOL CVmWindow::CreateEx(CWnd* pParentWnd)
 	return CWnd::CreateEx(0, 
 	AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW, ::LoadCursor(AfxGetResourceHandle(), NULL)),
 		L"‰¼‘zƒ}ƒVƒ“", dwStyle, 
-		rect, pParentWnd, NULL, NULL );
+		rect, NULL, NULL, NULL );
 }
 
 int CVmWindow::OnCreate(LPCREATESTRUCT lpCreateStruct) 
