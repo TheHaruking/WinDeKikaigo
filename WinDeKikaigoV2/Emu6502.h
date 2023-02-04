@@ -49,14 +49,14 @@ protected:
 	inline BYTE imm()  { BYTE ret = m_pData[m_regPC]; m_regPC++; return ret; }
 	inline char rel()  { BYTE ret = (char)(m_pData[m_regPC]); m_regPC++; return ret; }
 	inline WORD imm16(){ WORD adr = *(WORD*)(&(m_pData[m_regPC])); m_regPC+=2; return adr; }
-	inline BYTE* zr()  { WORD adr = m_pData[m_regPC]; m_regPC++; return &(m_pData[adr]); }
-	inline BYTE* zrx() { WORD adr = m_pData[m_regPC]; m_regPC++; return &(m_pData[adr + m_regX]); }
-	inline BYTE* zry() { WORD adr = m_pData[m_regPC]; m_regPC++; return &(m_pData[adr + m_regY]); }
+	inline BYTE* zr()  { BYTE adr = m_pData[m_regPC]; m_regPC++; return &(m_pData[adr]); }
+	inline BYTE* zrx() { BYTE adr = m_pData[m_regPC]; m_regPC++; return &(m_pData[adr += m_regX]); }
+	inline BYTE* zry() { BYTE adr = m_pData[m_regPC]; m_regPC++; return &(m_pData[adr += m_regY]); }
 	inline BYTE* ad()  { WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); m_regPC++; return &(m_pData[adr]); }
-	inline BYTE* adx() { WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); m_regPC++; return &(m_pData[adr + m_regX]); }
-	inline BYTE* ady() { WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); m_regPC++; return &(m_pData[adr + m_regY]); }
+	inline BYTE* adx() { WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); m_regPC++; return &(m_pData[adr += m_regX]); }
+	inline BYTE* ady() { WORD adr = m_pData[m_regPC]; m_regPC++; adr |= (m_pData[m_regPC] << 8); m_regPC++; return &(m_pData[adr += m_regY]); }
 	inline BYTE* idx() { WORD adr = m_pData[m_regPC]; m_regPC++;  WORD adr2 = m_pData[adr + m_regX]; adr2 |= (m_pData[adr + m_regX +1] << 8); return &(m_pData[adr2]); }
-	inline BYTE* idy() { WORD adr = m_pData[m_regPC]; m_regPC++;  WORD adr2 = m_pData[adr]; adr2 |= (m_pData[adr+1] << 8); return &(m_pData[adr2 + m_regY]); }
+	inline BYTE* idy() { WORD adr = m_pData[m_regPC]; m_regPC++;  WORD adr2 = m_pData[adr]; adr2 |= (m_pData[adr+1] << 8); return &(m_pData[adr2 += m_regY]); }
 	inline WORD id16() { WORD adr = m_pData[m_regPC]; m_regPC+=2; WORD adr2 = m_pData[adr]; adr2 |= (m_pData[adr+1] << 8); return adr2; }
 
 	inline void setNZ(BYTE byte) { m_regP.bitN = (byte >> 7); m_regP.bitZ = (byte == 0); }
