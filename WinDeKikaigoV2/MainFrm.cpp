@@ -124,12 +124,13 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// AsmInputBar <- AsmView
 	m_wndDialogBar_R.m_pAsmView = (CAsmViewV2*)m_wndSplitter.GetPane(0,1);
 
-	// CEmu6502Output <- CEmu6502
-	m_wndCpuOutput.m_cpu = &m_cpu;
-
 	// CPU ƒ‚ƒWƒ…[ƒ‹‚Ì‰Šú‰»
 	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
 	m_cpu.Init(pDoc->GetDataAddr(0x0000));
+
+	// CEmu6502Output <- CEmu6502
+	m_wndCpuOutput.m_cpu = &m_cpu;
+	m_wndCpuOutput.Update();
 
 	return 0;
 }
