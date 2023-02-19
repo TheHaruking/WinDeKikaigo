@@ -47,9 +47,11 @@ public:
 // アトリビュート
 public:
 	CEmu6502* m_cpu;
+	CString   m_buf;
 
 // オペレーション
 public:
+	void EditToCpu(void*, CEdit&);
 	void Update();
 
 // オーバーライド
@@ -68,6 +70,7 @@ protected:
 
 	// 生成されたメッセージ マップ関数
 	//{{AFX_MSG(CEmu6502OutputV2)
+	afx_msg void OnChangeEditRega();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

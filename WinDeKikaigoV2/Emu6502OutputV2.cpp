@@ -51,6 +51,7 @@ void CEmu6502OutputV2::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CEmu6502OutputV2, CDialogBar)
 	//{{AFX_MSG_MAP(CEmu6502OutputV2)
+	ON_EN_CHANGE(IDC_EDIT_REGA, OnChangeEditRega)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -75,22 +76,21 @@ void CEmu6502OutputV2::Dump(CDumpContext& dc) const
 void CEmu6502OutputV2::Update()
 {
 	UpdateData(FALSE);
-	CString buf;
 
 	// レジスタ PC, A, X, Y, S
-	buf.Format(L"0x%04X", m_cpu->m_regPC); m_editRegPC.SetWindowText(buf);
-	buf.Format(L"0x%02X", m_cpu->m_regA); m_editRegA.SetWindowText(buf);
-	buf.Format(L"0x%02X", m_cpu->m_regX); m_editRegX.SetWindowText(buf);
-	buf.Format(L"0x%02X", m_cpu->m_regY); m_editRegY.SetWindowText(buf);
-	buf.Format(L"0x%02X", m_cpu->m_regS); m_editRegS.SetWindowText(buf);
+	m_buf.Format(L"0x%04X", m_cpu->m_regPC); m_editRegPC.SetWindowText(m_buf);
+	m_buf.Format(L"0x%02X", m_cpu->m_regA); m_editRegA.SetWindowText(m_buf);
+	m_buf.Format(L"0x%02X", m_cpu->m_regX); m_editRegX.SetWindowText(m_buf);
+	m_buf.Format(L"0x%02X", m_cpu->m_regY); m_editRegY.SetWindowText(m_buf);
+	m_buf.Format(L"0x%02X", m_cpu->m_regS); m_editRegS.SetWindowText(m_buf);
 
 	// スタック (積まれた分を表示)
 	{
 		CString bufStack;
 		for (int i = 0; i < (0xFF - m_cpu->m_regS); i++) {
 			WORD adrStack = 0x01FF - i;
-			buf.Format(L" %04X: 0x%02X\r\n", adrStack, m_cpu->m_pData[adrStack]);
-			bufStack += buf;
+			m_buf.Format(L" %04X: 0x%02X\r\n", adrStack, m_cpu->m_pData[adrStack]);
+			bufStack += m_buf;
 		}
 
 		m_editStack.SetWindowText(bufStack);
@@ -106,4 +106,18 @@ void CEmu6502OutputV2::Update()
 	m_chkFlagI.SetCheck(m_cpu->m_regP.bitI);
 	m_chkFlagZ.SetCheck(m_cpu->m_regP.bitZ);
 	m_chkFlagC.SetCheck(m_cpu->m_regP.bitC);
+}
+
+void CEmu6502OutputV2::OnChangeEditRega() 
+{
+ 	EditToCpu(&m_cpu->m_regA, m_editRegA);
+}
+
+void CEmu6502OutputV2::EditToCpu(void* dst, CEdit& edit)
+{
+	DWORD dwVal;
+	edit.GetWindowText(m_buf);
+	m_buf = m_buf.Left(4);
+	dwVal = wcstol(m_buf, NULL, 16);
+	*(BYTE*)dst = dwVal;
 }
