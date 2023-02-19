@@ -56,6 +56,14 @@ BEGIN_MESSAGE_MAP(CEmu6502OutputV2, CDialogBar)
 	ON_EN_CHANGE(IDC_EDIT_REGY, OnChangeEditRegY)
 	ON_EN_CHANGE(IDC_EDIT_REGS, OnChangeEditRegS)
 	ON_EN_CHANGE(IDC_EDIT_PC, OnChangeEditPC)
+	ON_BN_CLICKED(IDC_CHECK_FLAG_N, OnCheckFlagN)
+	ON_BN_CLICKED(IDC_CHECK_FLAG_V, OnCheckFlagV)
+	ON_BN_CLICKED(IDC_CHECK_FLAG_R, OnCheckFlagR)
+	ON_BN_CLICKED(IDC_CHECK_FLAG_B, OnCheckFlagB)
+	ON_BN_CLICKED(IDC_CHECK_FLAG_D, OnCheckFlagD)
+	ON_BN_CLICKED(IDC_CHECK_FLAG_I, OnCheckFlagI)
+	ON_BN_CLICKED(IDC_CHECK_FLAG_Z, OnCheckFlagZ)
+	ON_BN_CLICKED(IDC_CHECK_FLAG_C, OnCheckFlagC)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -175,4 +183,52 @@ void CEmu6502OutputV2::OnChangeEditPC()
 		return;
 
 	EditToCpu(&m_cpu->m_regPC,m_editRegPC, 2);
+}
+
+void CEmu6502OutputV2::OnCheckFlagN() 
+{
+	m_cpu->m_regP.bitN = m_chkFlagN.GetCheck();
+	::SetFocus(m_editRegPC);
+}
+
+void CEmu6502OutputV2::OnCheckFlagV() 
+{
+	m_cpu->m_regP.bitV = m_chkFlagV.GetCheck();
+	::SetFocus(m_editRegPC);
+}
+
+void CEmu6502OutputV2::OnCheckFlagR() 
+{
+	m_cpu->m_regP.bitR = m_chkFlagR.GetCheck();
+	::SetFocus(m_editRegPC);
+}
+
+void CEmu6502OutputV2::OnCheckFlagB() 
+{
+	m_cpu->m_regP.bitB = m_chkFlagB.GetCheck();
+	::SetFocus(m_editRegPC);
+}
+
+void CEmu6502OutputV2::OnCheckFlagD() 
+{
+	m_cpu->m_regP.bitD = m_chkFlagD.GetCheck();
+	::SetFocus(m_editRegPC);
+}
+
+void CEmu6502OutputV2::OnCheckFlagI() 
+{
+	m_cpu->m_regP.bitI = m_chkFlagI.GetCheck();
+	::SetFocus(m_editRegPC);
+}
+
+void CEmu6502OutputV2::OnCheckFlagZ() 
+{
+	m_cpu->m_regP.bitZ = m_chkFlagZ.GetCheck();
+	::SetFocus(m_editRegPC);
+}
+
+void CEmu6502OutputV2::OnCheckFlagC() 
+{
+	m_cpu->m_regP.bitC = m_chkFlagC.GetCheck();
+	::SetFocus(m_editRegPC);
 }

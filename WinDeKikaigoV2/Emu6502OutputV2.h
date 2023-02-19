@@ -75,6 +75,14 @@ protected:
 	afx_msg void OnChangeEditRegY();
 	afx_msg void OnChangeEditRegS();
 	afx_msg void OnChangeEditPC();
+	afx_msg void OnCheckFlagN();
+	afx_msg void OnCheckFlagV();
+	afx_msg void OnCheckFlagR();
+	afx_msg void OnCheckFlagB();
+	afx_msg void OnCheckFlagD();
+	afx_msg void OnCheckFlagI();
+	afx_msg void OnCheckFlagZ();
+	afx_msg void OnCheckFlagC();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
