@@ -51,7 +51,11 @@ void CEmu6502OutputV2::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CEmu6502OutputV2, CDialogBar)
 	//{{AFX_MSG_MAP(CEmu6502OutputV2)
-	ON_EN_CHANGE(IDC_EDIT_REGA, OnChangeEditRega)
+	ON_EN_CHANGE(IDC_EDIT_REGA, OnChangeEditRegA)
+	ON_EN_CHANGE(IDC_EDIT_REGX, OnChangeEditRegX)
+	ON_EN_CHANGE(IDC_EDIT_REGY, OnChangeEditRegY)
+	ON_EN_CHANGE(IDC_EDIT_REGS, OnChangeEditRegS)
+	ON_EN_CHANGE(IDC_EDIT_PC, OnChangeEditPC)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -108,16 +112,67 @@ void CEmu6502OutputV2::Update()
 	m_chkFlagC.SetCheck(m_cpu->m_regP.bitC);
 }
 
-void CEmu6502OutputV2::OnChangeEditRega() 
+void CEmu6502OutputV2::EditToCpu(void* dst, CEdit& edit, DWORD byte)
 {
- 	EditToCpu(&m_cpu->m_regA, m_editRegA);
+	edit.GetWindowText(m_buf);
+
+	DWORD val = wcstol(m_buf, NULL, 16);
+	
+	switch (byte)
+	{
+	case 1: *(BYTE*)dst  = (BYTE)val; break;
+	case 2: *(WORD*)dst  = (WORD)val; break;
+	case 4: *(DWORD*)dst = val; break;
+	default: ASSERT(0); break;
+	}
 }
 
-void CEmu6502OutputV2::EditToCpu(void* dst, CEdit& edit)
+void CEmu6502OutputV2::OnChangeEditRegA()
 {
-	DWORD dwVal;
-	edit.GetWindowText(m_buf);
-	m_buf = m_buf.Left(4);
-	dwVal = wcstol(m_buf, NULL, 16);
-	*(BYTE*)dst = dwVal;
+	// 対象の editbox にフォーカスがある場合のみ実行.
+	CWnd* wndFocus = this->GetFocus();
+	if (wndFocus != (CWnd*)&m_editRegA)
+		return;
+
+	EditToCpu(&m_cpu->m_regA, m_editRegA, 1);
+}
+
+void CEmu6502OutputV2::OnChangeEditRegX()
+{
+	// 対象の editbox にフォーカスがある場合のみ実行.
+	CWnd* wndFocus = this->GetFocus();
+	if (wndFocus != (CWnd*)&m_editRegX)
+		return;
+
+	EditToCpu(&m_cpu->m_regX, m_editRegX, 1);
+}
+
+void CEmu6502OutputV2::OnChangeEditRegY()
+{
+	// 対象の editbox にフォーカスがある場合のみ実行.
+	CWnd* wndFocus = this->GetFocus();
+	if (wndFocus != (CWnd*)&m_editRegY)
+		return;
+
+	EditToCpu(&m_cpu->m_regY, m_editRegY, 1);
+}
+
+void CEmu6502OutputV2::OnChangeEditRegS()
+{
+	// 対象の editbox にフォーカスがある場合のみ実行.
+	CWnd* wndFocus = this->GetFocus();
+	if (wndFocus != (CWnd*)&m_editRegS)
+		return;
+
+	EditToCpu(&m_cpu->m_regS, m_editRegS, 1);
+}
+
+void CEmu6502OutputV2::OnChangeEditPC()
+{
+	// 対象の editbox にフォーカスがある場合のみ実行.
+	CWnd* wndFocus = this->GetFocus();
+	if (wndFocus != (CWnd*)&m_editRegPC)
+		return;
+
+	EditToCpu(&m_cpu->m_regPC,m_editRegPC, 2);
 }

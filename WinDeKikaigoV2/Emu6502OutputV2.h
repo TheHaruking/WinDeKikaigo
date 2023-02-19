@@ -51,7 +51,7 @@ public:
 
 // オペレーション
 public:
-	void EditToCpu(void*, CEdit&);
+	void EditToCpu(void*, CEdit&, DWORD);
 	void Update();
 
 // オーバーライド
@@ -70,7 +70,11 @@ protected:
 
 	// 生成されたメッセージ マップ関数
 	//{{AFX_MSG(CEmu6502OutputV2)
-	afx_msg void OnChangeEditRega();
+	afx_msg void OnChangeEditRegA();
+	afx_msg void OnChangeEditRegX();
+	afx_msg void OnChangeEditRegY();
+	afx_msg void OnChangeEditRegS();
+	afx_msg void OnChangeEditPC();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
