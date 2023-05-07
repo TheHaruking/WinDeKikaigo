@@ -164,23 +164,23 @@ END
 
 IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
 BEGIN
-    POPUP "ﾌｧｲﾙ(&F)"
+    POPUP "ファイル(&F)"
     BEGIN
         MENUITEM "新規作成(&N)\tCtrl+N",        ID_FILE_NEW
         MENUITEM "開く(&O)...\tCtrl+O",         ID_FILE_OPEN
         MENUITEM "上書き保存(&S)\tCtrl+S",      ID_FILE_SAVE
         MENUITEM "名前を付けて保存(&A)...",     ID_FILE_SAVE_AS
         MENUITEM SEPARATOR
-        MENUITEM "最近使ったﾌｧｲﾙ",              ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM "最近使ったファイル",          ID_FILE_MRU_FILE1, GRAYED
         MENUITEM SEPARATOR
-        MENUITEM "ｱﾌﾟﾘｹｰｼｮﾝの終了(&X)",         ID_APP_EXIT
+        MENUITEM "終了(&X)",                    ID_APP_EXIT
     END
     POPUP "設定(&S)"
     BEGIN
         MENUITEM "実行速度 ★☆☆ (&1:遅い)",   ID_APP_SPEED1
         MENUITEM "実行速度 ★★☆ (&2:中)",     ID_APP_SPEED2
-        MENUITEM "実行速度 ★★★ (&3:速い)(CPU使用率注意！)", 
-                                                ID_APP_SPEEDMAX
+        MENUITEM "実行速度 ★★★ (&3:速い)",   ID_APP_SPEED3
+        MENUITEM "実行速度 *MAX* (&0:MAX)(CPU使用率注意！)", ID_APP_SPEEDMAX
     END
     POPUP "表示(&V)"
     BEGIN
@@ -189,7 +189,7 @@ BEGIN
         MENUITEM "レジスタ情報ペイン(&3)\tF3",  ID_APP_BOTTOMPANE
         MENUITEM "仮想マシンウィンドウ(&4)\tF4", ID_APP_VM
     END
-    POPUP "ﾍﾙﾌﾟ(&H)"
+    POPUP "ヘルプ(&H)"
     BEGIN
         MENUITEM "WinDeKikaigo について(&A)...", ID_APP_ABOUT
     END
@@ -594,7 +594,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_FILE_MRU_FILE1       "指定のﾌｧｲﾙを開く"
+    ID_FILE_MRU_FILE1       "指定のファイルを開く"
     ID_FILE_MRU_FILE2       "指定のﾌｧｲﾙを開く"
     ID_FILE_MRU_FILE3       "指定のﾌｧｲﾙを開く"
     ID_FILE_MRU_FILE4       "指定のﾌｧｲﾙを開く"
@@ -677,6 +677,7 @@ BEGIN
     ID_APP_TEST             "機能テスト用のボタンです\nテスト"
     ID_APP_RUN              "連続して実行します。速度は [設定] より変更できます。\n実行 (F5)"
     ID_APP_BOTTOMPANE       "レジスタ情報ペインを表示/非表示します\nレジスタ情報ペイン (F3)"
+    ID_APP_UPDATEUI         "(SendMessage用)"
 END
 
 #endif    // 日本語 resources

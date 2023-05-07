@@ -61,11 +61,11 @@ public:  // コントロール バー用メンバ
 	CWinThread*	m_clock;
 	BOOL		m_bRunning;
 	DWORD		m_dwRunningSpeed;
-	enum { SPEED_MAX, SPEED_1, SPEED_2 };
+	enum SPEED_MODE { SPEED_MAX, SPEED_1, SPEED_2, SPEED_3 };
 	DWORD		m_tick;
 
 	// テーブル変数
-	static const LONG SPEED2WAITTICK_TBL[3];
+	static const LONG SPEED2WAITTICK_TBL[sizeof(SPEED_MODE)];
 
 // 生成されたメッセージ マップ関数
 protected:
@@ -91,6 +91,9 @@ protected:
 	afx_msg void OnUpdateAppSpeed2(CCmdUI* pCmdUI);
 	afx_msg void OnAppSpeedmax();
 	afx_msg void OnUpdateAppSpeedmax(CCmdUI* pCmdUI);
+	afx_msg void OnAppUpdateUi();
+	afx_msg void OnAppSpeed3();
+	afx_msg void OnUpdateAppSpeed3(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

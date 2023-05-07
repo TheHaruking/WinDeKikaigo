@@ -398,10 +398,17 @@ void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	buf.Format(L"m_num2ip: %d\r\n", m_num2ip[y/HEIGHT]);
 	OutputDebugString(buf);
 #endif
+	// 同期 (AsmView -> Doc)
+	CWinDeKikaigoV2Doc* pDoc = GetDocument();
 
 	m_nCurSel = y/HEIGHT;
 	m_nCurIp = m_num2ip[m_nCurSel];
-	
+
+	pDoc->m_nSel = m_nCurIp;
+	pDoc->m_nSelEnd = m_nCurIp + m_AsmObj[m_nCurSel].nSize;
+
+	this->RedrawWindow();
+
 	// オペランド部入力判定.
 	if ((point.x >= m_num2width[m_nCurSel][0]) && (point.x <= m_num2width[m_nCurSel][1]))
 	{
@@ -419,10 +426,7 @@ void CAsmViewV2::OnLButtonDown(UINT nFlags, CPoint point)
 	this->RedrawWindow();
 	CScrollView::OnLButtonDown(nFlags, point);
 
-	// 同期 (AsmView -> BinView)
-	CWinDeKikaigoV2Doc* pDoc = GetDocument();
-	pDoc->m_nSel = m_nCurIp;
-	pDoc->m_nSelEnd = m_nCurIp + m_AsmObj[m_nCurSel].nSize;
+	// UI 全更新
 	pDoc->UpdateAllViews(this);
 }
 

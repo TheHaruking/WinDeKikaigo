@@ -45,6 +45,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_APP_SPEED2, OnUpdateAppSpeed2)
 	ON_COMMAND(ID_APP_SPEEDMAX, OnAppSpeedmax)
 	ON_UPDATE_COMMAND_UI(ID_APP_SPEEDMAX, OnUpdateAppSpeedmax)
+	ON_COMMAND(ID_APP_UPDATEUI, OnAppUpdateUi)
+	ON_COMMAND(ID_APP_SPEED3, OnAppSpeed3)
+	ON_UPDATE_COMMAND_UI(ID_APP_SPEED3, OnUpdateAppSpeed3)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -57,8 +60,8 @@ static UINT indicators[] =
 	ID_INDICATOR_SCRL,
 };
 
-const LONG CMainFrame::SPEED2WAITTICK_TBL[3] = {
-	0, 128, 16
+const LONG CMainFrame::SPEED2WAITTICK_TBL[sizeof(SPEED_MODE)] = {
+	0, 600, 60, 1
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -311,8 +314,6 @@ void CMainFrame::OnAppTest()
 UINT MyThreadProc(LPVOID pParam)
 {
 	CMainFrame* self = (CMainFrame*)pParam;
-//	HWND hWnd = (HWND)pParam;
-//	CMainFrame* self = (CMainFrame*)CWnd::FromHandle(hWnd);
 	self->m_tick = GetTickCount();
 
 	// 実行ループ
@@ -320,27 +321,29 @@ UINT MyThreadProc(LPVOID pParam)
 		if (self->m_cpu.Exec())
 			self->m_bRunning = FALSE; // エラー発生時.
 
-//		self->m_wndCpuOutput.Update(); // 別スレッドで行ってはならない！
-		// 仮想マシンウィンドウが開いている場合、画面更新.
-		if (self->m_wndVmWnd.m_hWnd != NULL) {
-			// 画面更新は 16ms に 1 回に制限する.
-			DWORD tick = GetTickCount();
-			if ((tick - self->m_tick) >= 16) {
+		// 画面更新は 16ms に 1 回に制限する.
+		DWORD tick = GetTickCount();
+		if ((tick - self->m_tick) >= 16) {
+			// レジスタ情報、BinView、AsmView を更新			
+/*			self->m_wndCpuOutput.Update();
+			の用に別スレッド側で直接 UI の Update 処理を呼び出すと例外が発生する。
+			下記のように、SendMessage 経由で呼び出すこと。
+*/
+			AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_APP_UPDATEUI, 0L);
+
+			// 仮想マシンウィンドウを更新 (開いている場合)
+			if (self->m_wndVmWnd.m_hWnd != NULL) {
 				self->m_wndVmWnd.Invalidate(FALSE); // 削除はしない.
 				self->m_wndVmWnd.UpdateWindow();
-				self->m_tick = tick;
 			}
+
+			// tick 更新
+			self->m_tick = tick;
 		}
 		
 		// 停止ボタン確認.
 		DWORD dwRunWaitTicks = self->SPEED2WAITTICK_TBL[self->m_dwRunningSpeed];
 		Sleep(dwRunWaitTicks);
-/*		if (self->m_dwRunningSpeed != self->SPEED_MAX)
-		{
-			CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(self->GetActiveView()->GetDocument());
-			pDoc->UpdateAllViews(NULL);
-		}
-*/
 
 		if (self->m_bRunning == FALSE)
 			break;
@@ -392,6 +395,12 @@ void CMainFrame::OnAppSpeed2()
 	m_dwRunningSpeed = SPEED_2;
 }
 
+void CMainFrame::OnAppSpeed3() 
+{
+	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
+	m_dwRunningSpeed = SPEED_3;	
+}
+
 void CMainFrame::OnAppSpeedmax() 
 {
 	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
@@ -412,9 +421,24 @@ void CMainFrame::OnUpdateAppSpeed2(CCmdUI* pCmdUI)
 	pCmdUI->SetCheck(bCheck);
 }
 
+void CMainFrame::OnUpdateAppSpeed3(CCmdUI* pCmdUI) 
+{
+	// TODO: この位置に command update UI ハンドラ用のコードを追加してください
+	BOOL bCheck = (m_dwRunningSpeed == SPEED_3);
+	pCmdUI->SetCheck(bCheck);
+}
+
 void CMainFrame::OnUpdateAppSpeedmax(CCmdUI* pCmdUI) 
 {
 	// TODO: この位置に command update UI ハンドラ用のコードを追加してください
 	BOOL bCheck = (m_dwRunningSpeed == SPEED_MAX);
 	pCmdUI->SetCheck(bCheck);	
+}
+
+void CMainFrame::OnAppUpdateUi() 
+{
+	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
+	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
+	m_wndCpuOutput.Update();
+	pDoc->UpdateAllViews(NULL);	
 }
