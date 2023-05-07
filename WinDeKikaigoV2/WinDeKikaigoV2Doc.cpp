@@ -139,10 +139,24 @@ BOOL CWinDeKikaigoV2Doc::OnNewDocument()
 
 	SetPage(0);
 
+	// MainFrame 側、CPU のリセット
+	AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_APP_RESET, 0L);
+
 	return TRUE;
 }
 
+BOOL CWinDeKikaigoV2Doc::OnOpenDocument(LPCTSTR lpszPathName) 
+{
+	if (!CDocument::OnOpenDocument(lpszPathName))
+		return FALSE;
+	
+	// TODO: この位置に固有の作成用コードを追加してください
 
+	// MainFrame 側、CPU のリセット
+	AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_APP_RESET, 0L);
+
+	return TRUE;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // CWinDeKikaigoV2Doc シリアライゼーション

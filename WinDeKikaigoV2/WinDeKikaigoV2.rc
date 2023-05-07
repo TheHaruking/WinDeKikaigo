@@ -251,7 +251,8 @@ BEGIN
                     SS_NOPREFIX
     LTEXT           "Copyright (C) 2023 ‚Í‚é‚«",IDC_STATIC,40,25,119,8
     DEFPUSHBUTTON   "OK",IDOK,178,7,50,14,WS_GROUP
-    LTEXT           "https://‚Í‚é‚Ö‚â.‚Ý‚ñ‚È",IDC_STATIC,155,40,75,8
+    LTEXT           "https://‚Í‚é‚Ö‚â.‚Ý‚ñ‚È",IDC_STATIC,155,40,75,8,NOT 
+                    WS_VISIBLE
 END
 
 IDD_DIALOGBAR_L DIALOG DISCARDABLE  0, 0, 80, 135

@@ -42,6 +42,7 @@ public:
 	public:
 	virtual BOOL OnNewDocument();
 	virtual void Serialize(CArchive& ar);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	//}}AFX_VIRTUAL
 
 // インプリメンテーション
