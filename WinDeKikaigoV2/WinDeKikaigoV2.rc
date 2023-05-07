@@ -132,6 +132,16 @@ IDB_OP_PLP              BITMAP  DISCARDABLE     "res\\plp.bmp"
 IDB_OP_PHP              BITMAP  DISCARDABLE     "res\\php.bmp"
 IDB_OP_PLA              BITMAP  DISCARDABLE     "res\\pla.bmp"
 IDB_CURSOR              BITMAP  DISCARDABLE     "res\\Å®.bmp"
+IDB_OPR_IMM             BITMAP  DISCARDABLE     "res\\opr_imm.bmp"
+IDB_OPR_ZP              BITMAP  DISCARDABLE     "res\\opr_zp.bmp"
+IDB_OPR_ADR             BITMAP  DISCARDABLE     "res\\opr_adr.bmp"
+IDB_OPR_ZPX             BITMAP  DISCARDABLE     "res\\opr_zpx.bmp"
+IDB_OPR_ZPY             BITMAP  DISCARDABLE     "res\\opr_zpy.bmp"
+IDB_OPR_ADRX            BITMAP  DISCARDABLE     "res\\opr_adrx.bmp"
+IDB_OPR_ADRY            BITMAP  DISCARDABLE     "res\\opr_adry.bmp"
+IDB_OPR_INDX            BITMAP  DISCARDABLE     "res\\opr_indx.bmp"
+IDB_OPR_INDY            BITMAP  DISCARDABLE     "res\\opr_indy.bmp"
+IDB_OPR_INDADR          BITMAP  DISCARDABLE     "res\\opr_inda.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -380,24 +390,26 @@ IDD_ASMINPUTBARDLG DIALOG DISCARDABLE  0, 0, 75, 77
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 FONT 9, "ÇlÇr ÇoÉSÉVÉbÉN"
 BEGIN
-    CONTROL         "",IDC_ASMDLG_1,"Static",SS_BLACKFRAME | SS_NOTIFY,30,5,
+    CONTROL         5257,IDC_ASMDLG_1,"Static",SS_BITMAP | SS_NOTIFY,30,5,15,
+                    15
+    CONTROL         5258,IDC_ASMDLG_2,"Static",SS_BITMAP | SS_NOTIFY,50,10,
                     15,15
-    CONTROL         "",IDC_ASMDLG_2,"Static",SS_BLACKFRAME | SS_NOTIFY,50,10,
+    CONTROL         5259,IDC_ASMDLG_3,"Static",SS_BITMAP | SS_NOTIFY,55,30,
                     15,15
-    CONTROL         "",IDC_ASMDLG_3,"Static",SS_BLACKFRAME | SS_NOTIFY,55,30,
+    CONTROL         5260,IDC_ASMDLG_4,"Static",SS_BITMAP | SS_NOTIFY,50,50,
+                    20,20
+    CONTROL         5261,IDC_ASMDLG_5,"Static",SS_BITMAP | SS_NOTIFY,30,55,
                     15,15
-    CONTROL         "",IDC_ASMDLG_4,"Static",SS_BLACKFRAME | SS_NOTIFY,50,50,
+    CONTROL         5262,IDC_ASMDLG_6,"Static",SS_BITMAP | SS_NOTIFY,10,50,
                     15,15
-    CONTROL         "",IDC_ASMDLG_5,"Static",SS_BLACKFRAME | SS_NOTIFY,30,55,
+    CONTROL         5263,IDC_ASMDLG_7,"Static",SS_BITMAP | SS_NOTIFY,5,30,15,
+                    15
+    CONTROL         5264,IDC_ASMDLG_8,"Static",SS_BITMAP | SS_NOTIFY,10,10,
                     15,15
-    CONTROL         "",IDC_ASMDLG_6,"Static",SS_BLACKFRAME | SS_NOTIFY,10,50,
-                    15,15
-    CONTROL         "",IDC_ASMDLG_7,"Static",SS_BLACKFRAME | SS_NOTIFY,5,30,
-                    15,15
-    CONTROL         "",IDC_ASMDLG_8,"Static",SS_BLACKFRAME | SS_NOTIFY,10,10,
-                    15,15
-    CONTROL         "",IDC_ASMDLG_0,"Static",SS_BLACKFRAME | SS_NOTIFY,30,30,
-                    15,15
+    CONTROL         200,IDC_ASMDLG_0,"Static",SS_BITMAP | SS_NOTIFY,30,30,15,
+                    15
+    CONTROL         5265,IDC_ASMDLG_9,"Static",SS_BITMAP | SS_NOTIFY,5,2,15,
+                    15
 END
 
 IDD_DIALOG1 DIALOG DISCARDABLE  0, 0, 187, 93

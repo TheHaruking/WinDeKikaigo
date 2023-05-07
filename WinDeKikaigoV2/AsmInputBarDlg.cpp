@@ -36,7 +36,7 @@ BEGIN_MESSAGE_MAP(CAsmInputBarDlg, CDialog)
 	//{{AFX_MSG_MAP(CAsmInputBarDlg)
 	ON_WM_KEYDOWN()
 	//}}AFX_MSG_MAP
-	ON_COMMAND_RANGE(IDC_ASMDLG_0, IDC_ASMDLG_8, OnClickedPanel)
+	ON_COMMAND_RANGE(IDC_ASMDLG_0, IDC_ASMDLG_9, OnClickedPanel)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -58,7 +58,7 @@ BOOL CAsmInputBarDlg::OnInitDialog()
 	this->MoveWindow(pos.x - width/2, pos.y - height/2, width, height);
 
 	// ƒ{ƒ^ƒ“‚Ì–³Œø‰»ˆ—
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 10; i++) {
 		if (m_ADRTABLE[1+i /* HEAD ‚Íœ‚­*/] == 0) {
 			GetDlgItem(IDC_ASMDLG_0+i)->ShowWindow(SW_HIDE);
 		}

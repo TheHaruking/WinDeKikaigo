@@ -13,6 +13,7 @@
 #define IDD_DIALOG1                     130
 #define IDB_CURSOR                      197
 #define IDD_ADDRINPUTDLG                198
+#define IDB_OPR_IMM                     200
 #define IDC_TEST_LABEL                  1021
 #define IDC_TEST_LABEL2                 1022
 #define IDC_EDIT_PC                     1031
@@ -95,6 +96,7 @@
 #define IDC_ASMDLG_6                    5106
 #define IDC_ASMDLG_7                    5107
 #define IDC_ASMDLG_8                    5108
+#define IDC_ASMDLG_9                    5109
 #define IDB_OP_UND                      5200
 #define IDB_OP_LDA                      5201
 #define IDB_OP_LDX                      5202
@@ -152,6 +154,15 @@
 #define IDB_OP_SED                      5254
 #define IDB_OP_SEC                      5255
 #define IDB_OP_NOP                      5256
+#define IDB_OPR_ZP                      5257
+#define IDB_OPR_ADR                     5258
+#define IDB_OPR_ZPX                     5259
+#define IDB_OPR_ZPY                     5260
+#define IDB_OPR_ADRX                    5261
+#define IDB_OPR_ADRY                    5262
+#define IDB_OPR_INDX                    5263
+#define IDB_OPR_INDY                    5264
+#define IDB_OPR_INDADR                  5265
 #define ID_APP_RIGHTPANE                32771
 #define ID_APP_LEFTPANE                 32772
 #define ID_APP_DEBUG                    32773
@@ -171,7 +182,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        199
+#define _APS_NEXT_RESOURCE_VALUE        201
 #define _APS_NEXT_COMMAND_VALUE         32785
 #define _APS_NEXT_CONTROL_VALUE         1039
 #define _APS_NEXT_SYMED_VALUE           109
