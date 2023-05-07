@@ -247,10 +247,11 @@ CAPTION "WinDeKikaigo ‚É‚Â‚¢‚Ä"
 FONT 9, "‚l‚r ‚oƒSƒVƒbƒN"
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
-    LTEXT           "WinDeKikaigo Version alpha",IDC_STATIC,40,10,119,8,
+    LTEXT           "WinDeKikaigo Version 0.9.1",IDC_STATIC,40,10,119,8,
                     SS_NOPREFIX
-    LTEXT           "Copyright (C) 2023",IDC_STATIC,40,25,119,8
+    LTEXT           "Copyright (C) 2023 ‚Í‚é‚«",IDC_STATIC,40,25,119,8
     DEFPUSHBUTTON   "OK",IDOK,178,7,50,14,WS_GROUP
+    LTEXT           "https://‚Í‚é‚Ö‚â.‚Ý‚ñ‚È",IDC_STATIC,155,40,75,8
 END
 
 IDD_DIALOGBAR_L DIALOG DISCARDABLE  0, 0, 80, 135
@@ -498,14 +499,14 @@ BEGIN
         BEGIN
             VALUE "Comments", "\0"
             VALUE "CompanyName", "\0"
-            VALUE "FileDescription", "WinDeKikaigoV2 MFC ±ÌßØ¹°¼®Ý\0"
+            VALUE "FileDescription", "WinDeKikaigo\0"
             VALUE "FileVersion", "0, 9, 0, 1\0"
-            VALUE "InternalName", "WinDeKikaigoV2\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022\0"
+            VALUE "InternalName", "WinDeKikaigo\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023\0"
             VALUE "LegalTrademarks", "\0"
-            VALUE "OriginalFilename", "WinDeKikaigoV2.EXE\0"
+            VALUE "OriginalFilename", "WinDeKikaigo.EXE\0"
             VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "WinDeKikaigoV2 ±ÌßØ¹°¼®Ý\0"
+            VALUE "ProductName", "WinDeKikaigo\0"
             VALUE "ProductVersion", "0, 9, 0, 1\0"
             VALUE "SpecialBuild", "\0"
         END
