@@ -146,13 +146,11 @@ BEGIN
     SEPARATOR
     BUTTON      ID_APP_LEFTPANE
     BUTTON      ID_APP_RIGHTPANE
+    BUTTON      ID_APP_BOTTOMPANE
     BUTTON      ID_APP_VM
-    SEPARATOR
-    BUTTON      ID_APP_ABOUT
     SEPARATOR
     BUTTON      ID_APP_DEBUG
     BUTTON      ID_APP_RUN
-    BUTTON      ID_APP_STOP
     BUTTON      ID_APP_RESET
     SEPARATOR
     BUTTON      ID_APP_TEST
@@ -177,22 +175,23 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "ｱﾌﾟﾘｹｰｼｮﾝの終了(&X)",         ID_APP_EXIT
     END
-    POPUP "編集(&E)"
+    POPUP "設定(&S)"
     BEGIN
-        MENUITEM "元に戻す(&U)\tCtrl+Z",        ID_EDIT_UNDO
-        MENUITEM SEPARATOR
-        MENUITEM "切り取り(&T)\tCtrl+X",        ID_EDIT_CUT
-        MENUITEM "ｺﾋﾟｰ(&C)\tCtrl+C",            ID_EDIT_COPY
-        MENUITEM "貼り付け(&P)\tCtrl+V",        ID_EDIT_PASTE
+        MENUITEM "実行速度 ★☆☆ (&1:遅い)",   ID_APP_SPEED1
+        MENUITEM "実行速度 ★★☆ (&2:中)",     ID_APP_SPEED2
+        MENUITEM "実行速度 ★★★ (&3:速い)(CPU使用率注意！)", 
+                                                ID_APP_SPEEDMAX
     END
     POPUP "表示(&V)"
     BEGIN
-        MENUITEM "ﾂｰﾙ ﾊﾞｰ(&T)",                 ID_VIEW_TOOLBAR
-        MENUITEM "ｽﾃｰﾀｽ ﾊﾞｰ(&S)",               ID_VIEW_STATUS_BAR
+        MENUITEM "ページ選択ペイン(&1)\tF1",    ID_APP_LEFTPANE
+        MENUITEM "アセンブリ選択ペイン(&2)\tF2", ID_APP_RIGHTPANE
+        MENUITEM "レジスタ情報ペイン(&3)\tF3",  ID_APP_BOTTOMPANE
+        MENUITEM "仮想マシンウィンドウ(&4)\tF4", ID_APP_VM
     END
     POPUP "ﾍﾙﾌﾟ(&H)"
     BEGIN
-        MENUITEM "WinDeKikaigoV2 のﾊﾞｰｼﾞｮﾝ情報(&A)...", ID_APP_ABOUT
+        MENUITEM "WinDeKikaigo について(&A)...", ID_APP_ABOUT
     END
 END
 
@@ -206,14 +205,18 @@ IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE
 BEGIN
     " ",            ID_APP_DEBUG,           ASCII,  NOINVERT
     "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
-    "J",            ID_APP_LEFTPANE,        VIRTKEY, CONTROL, NOINVERT
-    "K",            ID_APP_RIGHTPANE,       VIRTKEY, CONTROL, NOINVERT
     "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
     "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
+    "R",            ID_APP_RESET,           VIRTKEY, CONTROL, NOINVERT
     "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
     "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
     VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
     VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    VK_F1,          ID_APP_LEFTPANE,        VIRTKEY, NOINVERT
+    VK_F2,          ID_APP_RIGHTPANE,       VIRTKEY, NOINVERT
+    VK_F3,          ID_APP_BOTTOMPANE,      VIRTKEY, NOINVERT
+    VK_F4,          ID_APP_VM,              VIRTKEY, NOINVERT
+    VK_F5,          ID_APP_RUN,             VIRTKEY, NOINVERT
     VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
     VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
     VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
@@ -230,13 +233,13 @@ END
 
 IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 235, 55
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "WinDeKikaigoV2のﾊﾞｰｼﾞｮﾝ情報"
+CAPTION "WinDeKikaigo について"
 FONT 9, "ＭＳ Ｐゴシック"
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
-    LTEXT           "WinDeKikaigoV2 Version 1.0",IDC_STATIC,40,10,119,8,
+    LTEXT           "WinDeKikaigo Version alpha",IDC_STATIC,40,10,119,8,
                     SS_NOPREFIX
-    LTEXT           "Copyright (C) 2022",IDC_STATIC,40,25,119,8
+    LTEXT           "Copyright (C) 2023",IDC_STATIC,40,25,119,8
     DEFPUSHBUTTON   "OK",IDOK,178,7,50,14,WS_GROUP
 END
 
@@ -322,12 +325,12 @@ BEGIN
                     20,20
     CONTROL         5237,IDC_PANE_JSR,"Static",SS_BITMAP | SS_NOTIFY,25,135,
                     20,20
-    CONTROL         5239,IDC_PANE_BRK,"Static",SS_BITMAP | SS_NOTIFY,40,135,
-                    20,20
+    CONTROL         5239,IDC_PANE_BRK,"Static",SS_BITMAP | SS_NOTIFY | NOT 
+                    WS_VISIBLE,40,135,14,16
     CONTROL         5238,IDC_PANE_RTS,"Static",SS_BITMAP | SS_NOTIFY,25,151,
                     20,20
-    CONTROL         5240,IDC_PANE_RTI,"Static",SS_BITMAP | SS_NOTIFY,40,151,
-                    20,20
+    CONTROL         5240,IDC_PANE_RTI,"Static",SS_BITMAP | SS_NOTIFY | NOT 
+                    WS_VISIBLE,40,150,14,16
     GROUPBOX        "4. 比較",IDC_STATIC,65,125,55,50
     CONTROL         5232,IDC_PANE_CMP,"Static",SS_BITMAP | SS_NOTIFY,70,135,
                     20,20
@@ -368,12 +371,13 @@ BEGIN
                     20,20
     CONTROL         5252,IDC_PANE_CLV,"Static",SS_BITMAP | SS_NOTIFY,120,205,
                     20,20
-    CONTROL         5256,IDC_PANE_NOP,"Static",SS_BITMAP | SS_NOTIFY,125,135,
+    CONTROL         5256,IDC_PANE_NOP,"Static",SS_BITMAP | SS_NOTIFY,127,135,
                     20,20
+    GROUPBOX        "空",IDC_STATIC,125,125,20,50
 END
 
-IDD_ASMINPUTBARDLG DIALOG DISCARDABLE  0, 0, 74, 76
-STYLE DS_MODALFRAME | WS_POPUP
+IDD_ASMINPUTBARDLG DIALOG DISCARDABLE  0, 0, 75, 77
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 FONT 9, "ＭＳ Ｐゴシック"
 BEGIN
     CONTROL         "",IDC_ASMDLG_1,"Static",SS_BLACKFRAME | SS_NOTIFY,30,5,
@@ -464,8 +468,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
+ FILEVERSION 0,9,0,1
+ PRODUCTVERSION 0,9,0,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -478,17 +482,20 @@ VS_VERSION_INFO VERSIONINFO
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "041104B0"
+        BLOCK "041104b0"
         BEGIN
+            VALUE "Comments", "\0"
             VALUE "CompanyName", "\0"
             VALUE "FileDescription", "WinDeKikaigoV2 MFC ｱﾌﾟﾘｹｰｼｮﾝ\0"
-            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "FileVersion", "0, 9, 0, 1\0"
             VALUE "InternalName", "WinDeKikaigoV2\0"
             VALUE "LegalCopyright", "Copyright (C) 2022\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "WinDeKikaigoV2.EXE\0"
+            VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "WinDeKikaigoV2 ｱﾌﾟﾘｹｰｼｮﾝ\0"
-            VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "ProductVersion", "0, 9, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
         END
     END
     BLOCK "VarFileInfo"
@@ -572,7 +579,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    ID_FILE_NEW             "新規にﾌｧｲﾙを作成\n新規ﾌｧｲﾙ"
+    ID_FILE_NEW             "新規にﾌｧｲﾙを作成 (現在のプログラムを初期化します)\n新規ﾌｧｲﾙ"
     ID_FILE_OPEN            "既存のﾌｧｲﾙを開く\n開く"
     ID_FILE_CLOSE           "作業中のﾌｧｲﾙを閉じる\n閉じる"
     ID_FILE_SAVE            "作業中のﾌｧｲﾙを上書きして保存\n保存"
@@ -662,7 +669,14 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
+    ID_APP_RIGHTPANE        "アセンブリ選択ペインを表示/非表示します\nアセンブリ選択ペイン (F2)"
+    ID_APP_LEFTPANE         "ページ選択ペインを表示/非表示します\nページ選択ペイン (F1)"
+    ID_APP_DEBUG            "1行のみ実行し、停止します\nステップ実行 (SPACE)"
+    ID_APP_RESET            "プログラムカウンタ(PC)と、各種レジスタ(A,X,Y,S)の値をリセットします。\nリセット (Ctrl + R)"
+    ID_APP_VM               "仮想マシンを表示します\n仮想マシン (F4)"
     ID_APP_TEST             "機能テスト用のボタンです\nテスト"
+    ID_APP_RUN              "連続して実行します。速度は [設定] より変更できます。\n実行 (F5)"
+    ID_APP_BOTTOMPANE       "レジスタ情報ペインを表示/非表示します\nレジスタ情報ペイン (F3)"
 END
 
 #endif    // 日本語 resources

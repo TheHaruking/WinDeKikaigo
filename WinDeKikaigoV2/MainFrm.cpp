@@ -36,8 +36,15 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_APP_VM, OnUpdateAppVm)
 	ON_COMMAND(ID_APP_TEST, OnAppTest)
 	ON_COMMAND(ID_APP_RUN, OnAppRun)
-	ON_COMMAND(ID_APP_STOP, OnAppStop)
 	ON_UPDATE_COMMAND_UI(ID_APP_RUN, OnUpdateAppRun)
+	ON_COMMAND(ID_APP_BOTTOMPANE, OnAppBottompane)
+	ON_UPDATE_COMMAND_UI(ID_APP_BOTTOMPANE, OnUpdateAppBottompane)
+	ON_COMMAND(ID_APP_SPEED1, OnAppSpeed1)
+	ON_UPDATE_COMMAND_UI(ID_APP_SPEED1, OnUpdateAppSpeed1)
+	ON_COMMAND(ID_APP_SPEED2, OnAppSpeed2)
+	ON_UPDATE_COMMAND_UI(ID_APP_SPEED2, OnUpdateAppSpeed2)
+	ON_COMMAND(ID_APP_SPEEDMAX, OnAppSpeedmax)
+	ON_UPDATE_COMMAND_UI(ID_APP_SPEEDMAX, OnUpdateAppSpeedmax)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -50,6 +57,10 @@ static UINT indicators[] =
 	ID_INDICATOR_SCRL,
 };
 
+const LONG CMainFrame::SPEED2WAITTICK_TBL[3] = {
+	0, 128, 16
+};
+
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame クラスの構築/消滅
 
@@ -57,6 +68,7 @@ CMainFrame::CMainFrame()
 {
 	// TODO: この位置にメンバの初期化処理コードを追加してください。
 	m_bRunning = FALSE;
+	m_dwRunningSpeed = SPEED_2;
 	m_tick = GetTickCount();
 }
 
@@ -200,6 +212,13 @@ void CMainFrame::OnAppRightpane()
 	this->ShowControlBar(&m_wndDialogBar_R, bVisible^1, FALSE);
 }
 
+void CMainFrame::OnAppBottompane() 
+{
+	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
+	BOOL bVisible = m_wndCpuOutput.IsWindowVisible();
+	this->ShowControlBar(&m_wndCpuOutput, bVisible^1, FALSE);
+}
+
 void CMainFrame::OnAppDebug() 
 {
 	CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(GetActiveView()->GetDocument());
@@ -256,6 +275,13 @@ void CMainFrame::OnUpdateAppRightpane(CCmdUI* pCmdUI)
 	pCmdUI->SetCheck(bVisible);	
 }
 
+void CMainFrame::OnUpdateAppBottompane(CCmdUI* pCmdUI) 
+{
+	// TODO: この位置に command update UI ハンドラ用のコードを追加してください
+	BOOL bVisible = m_wndCpuOutput.IsWindowVisible();
+	pCmdUI->SetCheck(bVisible);
+}
+
 void CMainFrame::OnUpdateAppVm(CCmdUI* pCmdUI) 
 {
 	// 未 Create (Destroy 後) であれば FALSE.
@@ -285,6 +311,8 @@ void CMainFrame::OnAppTest()
 UINT MyThreadProc(LPVOID pParam)
 {
 	CMainFrame* self = (CMainFrame*)pParam;
+//	HWND hWnd = (HWND)pParam;
+//	CMainFrame* self = (CMainFrame*)CWnd::FromHandle(hWnd);
 	self->m_tick = GetTickCount();
 
 	// 実行ループ
@@ -305,7 +333,15 @@ UINT MyThreadProc(LPVOID pParam)
 		}
 		
 		// 停止ボタン確認.
-		Sleep(0);
+		DWORD dwRunWaitTicks = self->SPEED2WAITTICK_TBL[self->m_dwRunningSpeed];
+		Sleep(dwRunWaitTicks);
+/*		if (self->m_dwRunningSpeed != self->SPEED_MAX)
+		{
+			CWinDeKikaigoV2Doc* pDoc = (CWinDeKikaigoV2Doc*)(self->GetActiveView()->GetDocument());
+			pDoc->UpdateAllViews(NULL);
+		}
+*/
+
 		if (self->m_bRunning == FALSE)
 			break;
 	}
@@ -341,4 +377,44 @@ void CMainFrame::OnUpdateAppRun(CCmdUI* pCmdUI)
 {
 	// TODO: この位置に command update UI ハンドラ用のコードを追加してください
 	pCmdUI->SetCheck(m_bRunning);
+}
+
+
+void CMainFrame::OnAppSpeed1() 
+{
+	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
+	m_dwRunningSpeed = SPEED_1;
+}
+
+void CMainFrame::OnAppSpeed2() 
+{
+	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
+	m_dwRunningSpeed = SPEED_2;
+}
+
+void CMainFrame::OnAppSpeedmax() 
+{
+	// TODO: この位置にコマンド ハンドラ用のコードを追加してください
+	m_dwRunningSpeed = SPEED_MAX;
+}
+
+void CMainFrame::OnUpdateAppSpeed1(CCmdUI* pCmdUI) 
+{
+	// TODO: この位置に command update UI ハンドラ用のコードを追加してください
+	BOOL bCheck = (m_dwRunningSpeed == SPEED_1);
+	pCmdUI->SetCheck(bCheck);
+}
+
+void CMainFrame::OnUpdateAppSpeed2(CCmdUI* pCmdUI) 
+{
+	// TODO: この位置に command update UI ハンドラ用のコードを追加してください
+	BOOL bCheck = (m_dwRunningSpeed == SPEED_2);
+	pCmdUI->SetCheck(bCheck);
+}
+
+void CMainFrame::OnUpdateAppSpeedmax(CCmdUI* pCmdUI) 
+{
+	// TODO: この位置に command update UI ハンドラ用のコードを追加してください
+	BOOL bCheck = (m_dwRunningSpeed == SPEED_MAX);
+	pCmdUI->SetCheck(bCheck);	
 }

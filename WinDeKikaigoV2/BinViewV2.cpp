@@ -320,11 +320,14 @@ void CBinViewV2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	// TODO: この位置にメッセージ ハンドラ用のコードを追加するかまたはデフォルトの処理を呼び出してください
 	switch (nChar) {
+/* ******************************************
+	// 桁変更、バイト数変更機能.
+	// 結局 16bit CPU は実装できていない. なのでこの機能は寝かせておく.
 	case 'I': m_nMaxColumn--; break;
 	case 'O': m_nMaxColumn++; break;
 	case 'U': DigitDown(); break;
 	case 'P': DigitUp(); break;
-
+****************************************** */
 	case VK_LEFT:  m_nSel--; break;
 	case VK_RIGHT: m_nSel++; break;
 	case VK_UP:    m_nSel -= m_nMaxColumn*m_eDigit; break;
